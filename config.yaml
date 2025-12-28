@@ -1,0 +1,17 @@
+seasons:
+  - 2022
+  - 2023
+  - 2024
+  - 2025
+
+monte_carlo:
+  n_simulations: 2000
+  driver_form_sigma: 0.05
+  weather_sigma: 0.1
+  strategy_delta: 0.1
+  random_seed: 42
+
+key_circuits:
+  - Monza
+  - Monaco
+  - Silverstone

@@ -1,0 +1,119 @@
+# ============================================
+# F1 2026 Simulator - .gitignore
+# ============================================
+
+# --------------------------------------------
+# Python
+# --------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --------------------------------------------
+# Virtual Environments
+# --------------------------------------------
+venv/
+ENV/
+env/
+.venv/
+
+# --------------------------------------------
+# Jupyter Notebooks
+# --------------------------------------------
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# --------------------------------------------
+# IDE / Editor Settings
+# --------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# --------------------------------------------
+# Data - Raw (Large dataset files)
+# --------------------------------------------
+# Ignore raw data folder (829 files - too large)
+data/raw/
+data  
+docs
+notebooks/f1_2026.ipynb
+
+# --------------------------------------------
+# Outputs (Generated files - can be recreated)
+# --------------------------------------------
+outputs/
+*.html
+*.json
+!config.yaml
+
+# --------------------------------------------
+# Logs and Error Files
+# --------------------------------------------
+*.log
+error_log.txt
+debug.log
+
+# --------------------------------------------
+# OS Generated Files
+# --------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# --------------------------------------------
+# Temporary Files
+# --------------------------------------------
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# --------------------------------------------
+# Model Artifacts (if any)
+# --------------------------------------------
+*.pkl
+*.pickle
+*.h5
+*.model
+*.joblib
+
+# ============================================
+# WHAT TO KEEP (tracked in git):
+# ============================================
+# ✅ src/ - All Python source code
+# ✅ notebooks/ - Jupyter notebooks (code, not outputs)
+# ✅ docs/ - Documentation files
+# ✅ data/processed/ - Processed/cleaned data (small)
+# ✅ config.yaml - Configuration
+# ✅ requirements.txt - Dependencies
+# ✅ main.py - Entry point
+# ✅ QUICK_START_GUIDE.md - User guide
+# ✅ README.md (create one for GitHub)
