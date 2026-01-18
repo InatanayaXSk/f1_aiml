@@ -30,7 +30,7 @@ export const BarChart = ({ data, height = 400, onBarClick }: BarChartProps) => {
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const margin = { top: 20, right: 30, bottom: 80, left: 60 };
+    const margin = { top: 20, right: 30, bottom: 120, left: 60 };
     const width = svgRef.current.clientWidth;
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -57,9 +57,11 @@ export const BarChart = ({ data, height = 400, onBarClick }: BarChartProps) => {
       .selectAll('text')
       .attr('transform', 'rotate(-45)')
       .style('text-anchor', 'end')
-      .style('font-size', '11px')
+      .style('font-size', '10px')
       .attr('dx', '-.8em')
-      .attr('dy', '.15em');
+      .attr('dy', '.15em')
+      .append('title')
+      .text((d) => String(d));
 
     g.append('g')
       .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.0%')))
