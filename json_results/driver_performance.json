@@ -1,0 +1,146 @@
+{
+  "title": "Driver Performance Summary",
+  "total_drivers": 31,
+  "drivers": [
+    {
+      "driver": "Pierre Gasly",
+      "races": 92,
+      "avg_position_current": 12.11,
+      "avg_position_2026": 12.13,
+      "position_change": -0.01
+    },
+    {
+      "driver": "Max Verstappen",
+      "races": 92,
+      "avg_position_current": 3.39,
+      "avg_position_2026": 3.41,
+      "position_change": -0.02
+    },
+    {
+      "driver": "Fernando Alonso",
+      "races": 92,
+      "avg_position_current": 9.45,
+      "avg_position_2026": 9.47,
+      "position_change": -0.02
+    },
+    {
+      "driver": "Nico Hulkenberg",
+      "races": 72,
+      "avg_position_current": 12.38,
+      "avg_position_2026": 12.41,
+      "position_change": -0.02
+    },
+    {
+      "driver": "Carlos Sainz",
+      "races": 91,
+      "avg_position_current": 7.96,
+      "avg_position_2026": 7.99,
+      "position_change": -0.02
+    },
+    {
+      "driver": "Oscar Piastri",
+      "races": 70,
+      "avg_position_current": 6.36,
+      "avg_position_2026": 6.38,
+      "position_change": -0.02
+    },
+    {
+      "driver": "Gabriel Bortoleto",
+      "races": 24,
+      "avg_position_current": 13.6,
+      "avg_position_2026": 13.62,
+      "position_change": -0.02
+    },
+    {
+      "driver": "Daniel Ricciardo",
+      "races": 47,
+      "avg_position_current": 12.33,
+      "avg_position_2026": 12.36,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Lando Norris",
+      "races": 92,
+      "avg_position_current": 6.08,
+      "avg_position_2026": 6.1,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Nicholas Latifi",
+      "races": 22,
+      "avg_position_current": 15.45,
+      "avg_position_2026": 15.48,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Yuki Tsunoda",
+      "races": 92,
+      "avg_position_current": 12.74,
+      "avg_position_2026": 12.77,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Logan Sargeant",
+      "races": 36,
+      "avg_position_current": 15.52,
+      "avg_position_2026": 15.56,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Jack Doohan",
+      "races": 7,
+      "avg_position_current": 15.46,
+      "avg_position_2026": 15.49,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Isack Hadjar",
+      "races": 24,
+      "avg_position_current": 11.24,
+      "avg_position_2026": 11.27,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Kimi Antonelli",
+      "races": 23,
+      "avg_position_current": 9.79,
+      "avg_position_2026": 9.82,
+      "position_change": -0.03
+    },
+    {
+      "driver": "Sergio Perez",
+      "races": 68,
+      "avg_position_current": 6.67,
+      "avg_position_2026": 6.71,
+      "position_change": -0.04
+    },
+    {
+      "driver": "Charles Leclerc",
+      "races": 92,
+      "avg_position_current": 6.07,
+      "avg_position_2026": 6.11,
+      "position_change": -0.04
+    },
+    {
+      "driver": "Lance Stroll",
+      "races": 91,
+      "avg_position_current": 11.97,
+      "avg_position_2026": 12.01,
+      "position_change": -0.04
+    },
+    {
+      "driver": "Kevin Magnussen",
+      "races": 66,
+      "avg_position_current": 13.66,
+      "avg_position_2026": 13.7,
+      "position_change": -0.04
+    },
+    {
+      "driver": "Alexander Albon",
+      "races": 91,
+      "avg_position_current": 12.33,
+      "avg_position_2026": 12.37,
+      "position_change": -0.04
+    }
+  ]
+}

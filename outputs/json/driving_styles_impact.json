@@ -1,0 +1,231 @@
+{
+  "analysis_date": "2026-01-18",
+  "total_drivers": 31,
+  "drivers": [
+    {
+      "driver_name": "Pierre Gasly",
+      "avg_position_improvement": -0.014,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 92,
+      "avg_current_position": 12.11,
+      "avg_2026_position": 12.13,
+      "podium_probability_gain": -0.0
+    },
+    {
+      "driver_name": "Fernando Alonso",
+      "avg_position_improvement": -0.02,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 92,
+      "avg_current_position": 9.45,
+      "avg_2026_position": 9.47,
+      "podium_probability_gain": -0.0
+    },
+    {
+      "driver_name": "Max Verstappen",
+      "avg_position_improvement": -0.023,
+      "consistency": 0.97,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 92,
+      "avg_current_position": 3.39,
+      "avg_2026_position": 3.41,
+      "podium_probability_gain": -0.007
+    },
+    {
+      "driver_name": "Oscar Piastri",
+      "avg_position_improvement": -0.023,
+      "consistency": 0.97,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 70,
+      "avg_current_position": 6.36,
+      "avg_2026_position": 6.38,
+      "podium_probability_gain": -0.006
+    },
+    {
+      "driver_name": "Carlos Sainz",
+      "avg_position_improvement": -0.024,
+      "consistency": 0.97,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 91,
+      "avg_current_position": 7.96,
+      "avg_2026_position": 7.99,
+      "podium_probability_gain": 0.005
+    },
+    {
+      "driver_name": "Gabriel Bortoleto",
+      "avg_position_improvement": -0.024,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 24,
+      "avg_current_position": 13.6,
+      "avg_2026_position": 13.62,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Nico Hulkenberg",
+      "avg_position_improvement": -0.025,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 72,
+      "avg_current_position": 12.38,
+      "avg_2026_position": 12.41,
+      "podium_probability_gain": -0.0
+    },
+    {
+      "driver_name": "Kimi Antonelli",
+      "avg_position_improvement": -0.026,
+      "consistency": 0.97,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 23,
+      "avg_current_position": 9.79,
+      "avg_2026_position": 9.82,
+      "podium_probability_gain": -0.006
+    },
+    {
+      "driver_name": "Lando Norris",
+      "avg_position_improvement": -0.027,
+      "consistency": 0.97,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 92,
+      "avg_current_position": 6.08,
+      "avg_2026_position": 6.1,
+      "podium_probability_gain": -0.001
+    },
+    {
+      "driver_name": "Yuki Tsunoda",
+      "avg_position_improvement": -0.028,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 92,
+      "avg_current_position": 12.74,
+      "avg_2026_position": 12.77,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Daniel Ricciardo",
+      "avg_position_improvement": -0.029,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 47,
+      "avg_current_position": 12.33,
+      "avg_2026_position": 12.36,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Nicholas Latifi",
+      "avg_position_improvement": -0.029,
+      "consistency": 0.99,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 22,
+      "avg_current_position": 15.45,
+      "avg_2026_position": 15.48,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Jack Doohan",
+      "avg_position_improvement": -0.033,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 7,
+      "avg_current_position": 15.46,
+      "avg_2026_position": 15.49,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Isack Hadjar",
+      "avg_position_improvement": -0.034,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 24,
+      "avg_current_position": 11.24,
+      "avg_2026_position": 11.27,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Logan Sargeant",
+      "avg_position_improvement": -0.035,
+      "consistency": 0.99,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 36,
+      "avg_current_position": 15.52,
+      "avg_2026_position": 15.56,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Charles Leclerc",
+      "avg_position_improvement": -0.036,
+      "consistency": 0.96,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 92,
+      "avg_current_position": 6.07,
+      "avg_2026_position": 6.11,
+      "podium_probability_gain": 0.001
+    },
+    {
+      "driver_name": "Sergio Perez",
+      "avg_position_improvement": -0.038,
+      "consistency": 0.97,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 68,
+      "avg_current_position": 6.67,
+      "avg_2026_position": 6.71,
+      "podium_probability_gain": -0.003
+    },
+    {
+      "driver_name": "Valtteri Bottas",
+      "avg_position_improvement": -0.038,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 68,
+      "avg_current_position": 13.31,
+      "avg_2026_position": 13.35,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Mick Schumacher",
+      "avg_position_improvement": -0.039,
+      "consistency": 0.99,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 22,
+      "avg_current_position": 13.75,
+      "avg_2026_position": 13.79,
+      "podium_probability_gain": 0.0
+    },
+    {
+      "driver_name": "Kevin Magnussen",
+      "avg_position_improvement": -0.04,
+      "consistency": 0.98,
+      "adaptation_level": "neutral",
+      "beneficiary": false,
+      "races_analyzed": 66,
+      "avg_current_position": 13.66,
+      "avg_2026_position": 13.7,
+      "podium_probability_gain": 0.0
+    }
+  ],
+  "overall_trends": {
+    "avg_improvement": -0.039,
+    "beneficiaries_count": 0,
+    "top_beneficiary": "Pierre Gasly"
+  }
+}

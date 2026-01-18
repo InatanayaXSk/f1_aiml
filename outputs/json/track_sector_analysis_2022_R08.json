@@ -1,0 +1,85 @@
+{
+  "circuit_name": "2022_R08",
+  "circuit_key": "2022_R08",
+  "circuit_type": "mixed",
+  "boost_effectiveness": 0.5,
+  "lap_summary": {
+    "current_avg_lap_time": 9.93,
+    "2026_avg_lap_time": 9.949,
+    "delta_seconds": 0.019,
+    "improvement_pct": 0.19,
+    "boost_contribution": 0.3
+  },
+  "driver_impacts": [
+    {
+      "driver": "Max Verstappen",
+      "current_avg_position": 1.09,
+      "2026_avg_position": 1.08,
+      "position_change": 0.01,
+      "improvement": true
+    },
+    {
+      "driver": "Daniel Ricciardo",
+      "current_avg_position": 7.59,
+      "2026_avg_position": 7.69,
+      "position_change": -0.1,
+      "improvement": false
+    },
+    {
+      "driver": "Lando Norris",
+      "current_avg_position": 8.68,
+      "2026_avg_position": 8.79,
+      "position_change": -0.11,
+      "improvement": false
+    },
+    {
+      "driver": "Sebastian Vettel",
+      "current_avg_position": 6.24,
+      "2026_avg_position": 6.26,
+      "position_change": -0.01,
+      "improvement": false
+    },
+    {
+      "driver": "Nicholas Latifi",
+      "current_avg_position": 13.99,
+      "2026_avg_position": 14.03,
+      "position_change": -0.04,
+      "improvement": false
+    },
+    {
+      "driver": "Pierre Gasly",
+      "current_avg_position": 4.83,
+      "2026_avg_position": 4.82,
+      "position_change": 0.01,
+      "improvement": true
+    },
+    {
+      "driver": "Sergio Perez",
+      "current_avg_position": 1.74,
+      "2026_avg_position": 1.73,
+      "position_change": 0.01,
+      "improvement": true
+    },
+    {
+      "driver": "Fernando Alonso",
+      "current_avg_position": 6.76,
+      "2026_avg_position": 6.79,
+      "position_change": -0.03,
+      "improvement": false
+    },
+    {
+      "driver": "Charles Leclerc",
+      "current_avg_position": 18.14,
+      "2026_avg_position": 18.0,
+      "position_change": 0.15,
+      "improvement": true
+    },
+    {
+      "driver": "Lance Stroll",
+      "current_avg_position": 15.01,
+      "2026_avg_position": 15.09,
+      "position_change": -0.08,
+      "improvement": false
+    }
+  ]
+}

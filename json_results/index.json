@@ -1,0 +1,52 @@
+{
+  "title": "F1 2026 Regulation Impact - Data Export",
+  "generated_at": "2026-01-18T12:10:00",
+  "total_files": 9,
+  "files": [
+    {
+      "filename": "cumulative_impact.json",
+      "path": "json_results\\cumulative_impact.json",
+      "size_kb": 0.16
+    },
+    {
+      "filename": "driver_performance.json",
+      "path": "json_results\\driver_performance.json",
+      "size_kb": 3.48
+    },
+    {
+      "filename": "factor_impact.json",
+      "path": "json_results\\factor_impact.json",
+      "size_kb": 0.68
+    },
+    {
+      "filename": "feature_statistics.json",
+      "path": "json_results\\feature_statistics.json",
+      "size_kb": 0.08
+    },
+    {
+      "filename": "race_comparison.json",
+      "path": "json_results\\race_comparison.json",
+      "size_kb": 1.5
+    },
+    {
+      "filename": "regulation_summary.json",
+      "path": "json_results\\regulation_summary.json",
+      "size_kb": 0.32
+    },
+    {
+      "filename": "team_heatmap.json",
+      "path": "json_results\\team_heatmap.json",
+      "size_kb": 0.12
+    },
+    {
+      "filename": "top_features.json",
+      "path": "json_results\\top_features.json",
+      "size_kb": 0.14
+    },
+    {
+      "filename": "track_by_track.json",
+      "path": "json_results\\track_by_track.json",
+      "size_kb": 0.14
+    }
+  ]
+}

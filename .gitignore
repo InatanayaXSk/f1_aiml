@@ -56,18 +56,12 @@ env/
 # Data - Raw (Large dataset files)
 # --------------------------------------------
 # Ignore raw data folder (829 files - too large)
-data/raw/
-data  
-docs
-notebooks/f1_2026.ipynb
 
+notebooks/f1_2026.ipynb
+data/raw
 # --------------------------------------------
 # Outputs (Generated files - can be recreated)
-# --------------------------------------------
-outputs/
-*.html
-*.json
-!config.yaml
+
 
 # --------------------------------------------
 # Logs and Error Files

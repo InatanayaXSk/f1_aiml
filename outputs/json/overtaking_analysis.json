@@ -1,0 +1,941 @@
+{
+  "analysis_type": "overtaking_opportunities",
+  "circuits": [
+    {
+      "circuit": "2022_R01",
+      "circuit_key": "2022_R01",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R02",
+      "circuit_key": "2022_R02",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R03",
+      "circuit_key": "2022_R03",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R04",
+      "circuit_key": "2022_R04",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R05",
+      "circuit_key": "2022_R05",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R06",
+      "circuit_key": "2022_R06",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R07",
+      "circuit_key": "2022_R07",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R08",
+      "circuit_key": "2022_R08",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R09",
+      "circuit_key": "2022_R09",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R10",
+      "circuit_key": "2022_R10",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R11",
+      "circuit_key": "2022_R11",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R12",
+      "circuit_key": "2022_R12",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R13",
+      "circuit_key": "2022_R13",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R14",
+      "circuit_key": "2022_R14",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R15",
+      "circuit_key": "2022_R15",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R16",
+      "circuit_key": "2022_R16",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R17",
+      "circuit_key": "2022_R17",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R18",
+      "circuit_key": "2022_R18",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R19",
+      "circuit_key": "2022_R19",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R20",
+      "circuit_key": "2022_R20",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R21",
+      "circuit_key": "2022_R21",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2022_R22",
+      "circuit_key": "2022_R22",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R01",
+      "circuit_key": "2023_R01",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R02",
+      "circuit_key": "2023_R02",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R03",
+      "circuit_key": "2023_R03",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R04",
+      "circuit_key": "2023_R04",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R05",
+      "circuit_key": "2023_R05",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R06",
+      "circuit_key": "2023_R06",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R07",
+      "circuit_key": "2023_R07",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R08",
+      "circuit_key": "2023_R08",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R09",
+      "circuit_key": "2023_R09",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R10",
+      "circuit_key": "2023_R10",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R11",
+      "circuit_key": "2023_R11",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R12",
+      "circuit_key": "2023_R12",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R13",
+      "circuit_key": "2023_R13",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R14",
+      "circuit_key": "2023_R14",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R15",
+      "circuit_key": "2023_R15",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R16",
+      "circuit_key": "2023_R16",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R17",
+      "circuit_key": "2023_R17",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R18",
+      "circuit_key": "2023_R18",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R19",
+      "circuit_key": "2023_R19",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R20",
+      "circuit_key": "2023_R20",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R21",
+      "circuit_key": "2023_R21",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2023_R22",
+      "circuit_key": "2023_R22",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R01",
+      "circuit_key": "2024_R01",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R02",
+      "circuit_key": "2024_R02",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R03",
+      "circuit_key": "2024_R03",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R04",
+      "circuit_key": "2024_R04",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R05",
+      "circuit_key": "2024_R05",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R06",
+      "circuit_key": "2024_R06",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R07",
+      "circuit_key": "2024_R07",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R08",
+      "circuit_key": "2024_R08",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R09",
+      "circuit_key": "2024_R09",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R10",
+      "circuit_key": "2024_R10",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R11",
+      "circuit_key": "2024_R11",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R12",
+      "circuit_key": "2024_R12",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R13",
+      "circuit_key": "2024_R13",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R14",
+      "circuit_key": "2024_R14",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R15",
+      "circuit_key": "2024_R15",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R16",
+      "circuit_key": "2024_R16",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R17",
+      "circuit_key": "2024_R17",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R18",
+      "circuit_key": "2024_R18",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R19",
+      "circuit_key": "2024_R19",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R20",
+      "circuit_key": "2024_R20",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R21",
+      "circuit_key": "2024_R21",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R22",
+      "circuit_key": "2024_R22",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R23",
+      "circuit_key": "2024_R23",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2024_R24",
+      "circuit_key": "2024_R24",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R01",
+      "circuit_key": "2025_R01",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R02",
+      "circuit_key": "2025_R02",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R03",
+      "circuit_key": "2025_R03",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R04",
+      "circuit_key": "2025_R04",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R05",
+      "circuit_key": "2025_R05",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R06",
+      "circuit_key": "2025_R06",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R07",
+      "circuit_key": "2025_R07",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R08",
+      "circuit_key": "2025_R08",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R09",
+      "circuit_key": "2025_R09",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R10",
+      "circuit_key": "2025_R10",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R11",
+      "circuit_key": "2025_R11",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R12",
+      "circuit_key": "2025_R12",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R13",
+      "circuit_key": "2025_R13",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R14",
+      "circuit_key": "2025_R14",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R15",
+      "circuit_key": "2025_R15",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R16",
+      "circuit_key": "2025_R16",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R17",
+      "circuit_key": "2025_R17",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R18",
+      "circuit_key": "2025_R18",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R19",
+      "circuit_key": "2025_R19",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R20",
+      "circuit_key": "2025_R20",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R21",
+      "circuit_key": "2025_R21",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R22",
+      "circuit_key": "2025_R22",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R23",
+      "circuit_key": "2025_R23",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    },
+    {
+      "circuit": "2025_R24",
+      "circuit_key": "2025_R24",
+      "track_type": "mixed",
+      "boost_effectiveness": 0.5,
+      "current_avg_overtakes": 40.0,
+      "2026_avg_overtakes": 48.0,
+      "overtake_increase_pct": 20.0,
+      "overtake_mode_benefit": "medium"
+    }
+  ],
+  "summary": {
+    "avg_overtake_increase": 20.0,
+    "best_circuits": [
+      "2022_R01",
+      "2022_R02",
+      "2022_R03",
+      "2022_R04",
+      "2022_R05"
+    ],
+    "worst_circuits": [
+      "2025_R22",
+      "2025_R23",
+      "2025_R24"
+    ],
+    "overall_trend": "Overtaking opportunities increase significantly on high-speed tracks"
+  }
+}

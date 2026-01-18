@@ -1,0 +1,66 @@
+{
+  "title": "Race Comparison Summary",
+  "total_races": 92,
+  "races": [
+    {
+      "race_id": "2022_R01",
+      "race_name": "Bahrain Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R02",
+      "race_name": "Saudi Arabian Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R03",
+      "race_name": "Australian Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R04",
+      "race_name": "Emilia Romagna Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R05",
+      "race_name": "Miami Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R06",
+      "race_name": "Spanish Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R07",
+      "race_name": "Monaco Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R08",
+      "race_name": "Azerbaijan Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R09",
+      "race_name": "Canadian Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    },
+    {
+      "race_id": "2022_R10",
+      "race_name": "British Grand Prix",
+      "drivers_count": 20,
+      "has_2026_data": true
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "circuit_name": "2022_R03",
+  "circuit_key": "2022_R03",
+  "circuit_type": "mixed",
+  "boost_effectiveness": 0.5,
+  "lap_summary": {
+    "current_avg_lap_time": 10.275,
+    "2026_avg_lap_time": 10.333,
+    "delta_seconds": 0.058,
+    "improvement_pct": 0.57,
+    "boost_contribution": 0.3
+  },
+  "driver_impacts": [
+    {
+      "driver": "Max Verstappen",
+      "current_avg_position": 18.34,
+      "2026_avg_position": 18.11,
+      "position_change": 0.23,
+      "improvement": true
+    },
+    {
+      "driver": "Daniel Ricciardo",
+      "current_avg_position": 5.56,
+      "2026_avg_position": 5.57,
+      "position_change": -0.0,
+      "improvement": false
+    },
+    {
+      "driver": "Lando Norris",
+      "current_avg_position": 5.27,
+      "2026_avg_position": 5.16,
+      "position_change": 0.1,
+      "improvement": true
+    },
+    {
+      "driver": "Sebastian Vettel",
+      "current_avg_position": 18.79,
+      "2026_avg_position": 18.77,
+      "position_change": 0.02,
+      "improvement": true
+    },
+    {
+      "driver": "Nicholas Latifi",
+      "current_avg_position": 15.05,
+      "2026_avg_position": 15.05,
+      "position_change": -0.0,
+      "improvement": false
+    },
+    {
+      "driver": "Pierre Gasly",
+      "current_avg_position": 8.53,
+      "2026_avg_position": 8.98,
+      "position_change": -0.44,
+      "improvement": false
+    },
+    {
+      "driver": "Sergio Perez",
+      "current_avg_position": 2.55,
+      "2026_avg_position": 2.44,
+      "position_change": 0.1,
+      "improvement": true
+    },
+    {
+      "driver": "Fernando Alonso",
+      "current_avg_position": 16.3,
+      "2026_avg_position": 16.21,
+      "position_change": 0.09,
+      "improvement": true
+    },
+    {
+      "driver": "Charles Leclerc",
+      "current_avg_position": 2.18,
+      "2026_avg_position": 2.23,
+      "position_change": -0.04,
+      "improvement": false
+    },
+    {
+      "driver": "Lance Stroll",
+      "current_avg_position": 11.04,
+      "2026_avg_position": 11.15,
+      "position_change": -0.11,
+      "improvement": false
+    }
+  ]
+}

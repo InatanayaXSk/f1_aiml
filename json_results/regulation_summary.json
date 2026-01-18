@@ -1,0 +1,15 @@
+{
+  "title": "2026 Regulation Impact Summary",
+  "summary": {
+    "total_drivers_analyzed": 20,
+    "races_simulated": 23,
+    "regulation_changes": [
+      "Hybrid Power (3.33x)",
+      "Boost Mode (NEW)",
+      "Weight Reduction",
+      "Tire Changes",
+      "Fuel Efficiency"
+    ]
+  },
+  "chart_data": {}
+}

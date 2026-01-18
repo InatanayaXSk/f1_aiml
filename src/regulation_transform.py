@@ -8,25 +8,23 @@ import pandas as pd
 
 REGULATION_MULTIPLIERS: Dict[str, Dict[str, float]] = {
     "hybrid_power": {
-        "power_ratio": 3.33
+        "power_ratio": 3.33  # 100% hybrid power (up from 30%)
     },
-    "ers_recovery": {
-        "power_ratio": 3.33,
-        "fuel_efficiency_rating": 1.05
-    },
-    "active_aero": {
-        "aero_coeff": 0.70,
-        "straight_fraction": 1.05
+    "boost_mode": {
+        "power_ratio": 1.25,              # Boost button power increase
+        "fuel_efficiency_rating": 1.05,   # Improved energy recovery
+        "overtake_power_boost": 1.15,     # Extra 0.5MJ for overtake mode
+        "ers_deployment_flexibility": 1.4 # Deploy anywhere vs fixed DRS zones
     },
     "chassis": {
-        "weight_ratio": 0.962
+        "weight_ratio": 0.962  # 768kg (down from 798kg)
     },
     "tyres": {
-        "tire_grip_ratio": 0.94
+        "tire_grip_ratio": 0.94  # Reduced grip with new compounds
     },
     "fuel": {
-        "fuel_flow_ratio": 0.75,
-        "fuel_efficiency_rating": 1.15
+        "fuel_flow_ratio": 0.75,         # Lower flow rate
+        "fuel_efficiency_rating": 1.15   # Better efficiency
     }
 }
 

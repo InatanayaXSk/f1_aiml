@@ -1,0 +1,31 @@
+{
+  "title": "Regulation Factor Impact by Track Type",
+  "factors": {
+    "hybrid_power": {
+      "name": "Hybrid Power Enhancement",
+      "multiplier": 3.33,
+      "impact_score": 0.4
+    },
+    "boost_mode": {
+      "name": "Boost Button & Overtake Mode",
+      "multiplier": 1.25,
+      "impact_score": 0.35
+    },
+    "chassis": {
+      "name": "Weight Reduction",
+      "multiplier": 0.962,
+      "impact_score": 0.15
+    },
+    "fuel": {
+      "name": "Fuel Efficiency",
+      "multiplier": 1.15,
+      "impact_score": 0.08
+    },
+    "tyres": {
+      "name": "Tire Changes",
+      "multiplier": 0.94,
+      "impact_score": 0.02
+    }
+  },
+  "chart_data": {}
+}
