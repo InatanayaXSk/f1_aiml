@@ -111,3 +111,5 @@ desktop.ini
 # ✅ main.py - Entry point
 # ✅ QUICK_START_GUIDE.md - User guide
 # ✅ README.md (create one for GitHub)
+*.docx
+cache/
