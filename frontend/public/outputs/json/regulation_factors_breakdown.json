@@ -1,0 +1,67 @@
+{
+  "regulation_year": 2026,
+  "factors": [
+    {
+      "factor_id": "hybrid_power",
+      "factor_name": "Hybrid Power",
+      "multipliers": {
+        "power_ratio": 3.33
+      },
+      "impact_score": 0.4,
+      "description": "100% hybrid power (up from 30%)"
+    },
+    {
+      "factor_id": "boost_mode",
+      "factor_name": "Boost Mode",
+      "multipliers": {
+        "power_ratio": 1.25,
+        "fuel_efficiency_rating": 1.05,
+        "overtake_power_boost": 1.15,
+        "ers_deployment_flexibility": 1.4
+      },
+      "impact_score": 0.35,
+      "description": "Boost Button + Overtake Mode mechanics"
+    },
+    {
+      "factor_id": "chassis",
+      "factor_name": "Chassis",
+      "multipliers": {
+        "weight_ratio": 0.962
+      },
+      "impact_score": 0.15,
+      "description": "Weight reduction to 768kg"
+    },
+    {
+      "factor_id": "tyres",
+      "factor_name": "Tyres",
+      "multipliers": {
+        "tire_grip_ratio": 0.94
+      },
+      "impact_score": 0.02,
+      "description": "Reduced tire grip"
+    },
+    {
+      "factor_id": "fuel",
+      "factor_name": "Fuel",
+      "multipliers": {
+        "fuel_flow_ratio": 0.75,
+        "fuel_efficiency_rating": 1.15
+      },
+      "impact_score": 0.08,
+      "description": "Improved fuel efficiency"
+    }
+  ],
+  "boost_mode_details": {
+    "boost_button": "Driver-activated at any lap point",
+    "overtake_mode": "Auto-available within 1 second of car ahead",
+    "strategic_flexibility": "Deploy anywhere vs fixed DRS zones"
+  },
+  "overall_impact": {
+    "total_factors": 5,
+    "primary_drivers": [
+      "Hybrid Power",
+      "Boost Mode"
+    ],
+    "estimated_lap_time_improvement": "-0.5 to -1.5 seconds depending on track type"
+  }
+}

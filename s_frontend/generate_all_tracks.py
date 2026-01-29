@@ -4,16 +4,36 @@ Helper script to generate track data for all circuits in the dropdown
 import subprocess
 import sys
 
-# Map of track IDs to their FastF1 names
+# Map of track IDs to their FastF1 names (2025 Season)
 TRACK_MAPPINGS = {
+    # 2025 F1 Calendar (24 races)
+    'australia': 'Australia',
+    'china': 'China',
+    'japan': 'Japan',
     'bahrain': 'Bahrain',
+    'saudi-arabia': 'Saudi Arabia',
+    'miami': 'Miami',
+    'emilia-romagna': 'Emilia Romagna',
     'monaco': 'Monaco',
-    'monza': 'Monza',
-    'silverstone': 'Silverstone',
-    'spa': 'Spa',
+    'spain': 'Spain',
+    'canada': 'Canada',
+    'austria': 'Austria',
+    'great-britain': 'Great Britain',
+    'belgium': 'Belgium',
+    'hungary': 'Hungary',
+    'netherlands': 'Netherlands',
+    'italy': 'Italy',
+    'azerbaijan': 'Azerbaijan',
+    'singapore': 'Singapore',
+    'united-states': 'United States',
+    'mexico': 'Mexico',
+    'brazil': 'Brazil',
+    'las-vegas': 'Las Vegas',
+    'qatar': 'Qatar',
+    'abu-dhabi': 'Abu Dhabi',
 }
 
-def generate_track_data(track_id, gp_name, year=2024, session='Q'):
+def generate_track_data(track_id, gp_name, year=2025, session='Q'):
     """Generate track data for a specific circuit"""
     print(f"\n{'='*60}")
     print(f"Generating data for {gp_name} ({track_id})...")

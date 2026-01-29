@@ -1,8 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Settings, MapPin, Users } from 'lucide-react';
+import { Home, Settings, MapPin, Users, Presentation } from 'lucide-react';
 
 const tabs = [
   { path: '/', label: 'Home', icon: Home },
+  { path: '/presentation', label: '🎯 Presentation', icon: Presentation },
   { path: '/regulations', label: 'Regulation Explorer', icon: Settings },
   { path: '/circuits', label: 'Circuit Analyzer', icon: MapPin },
   { path: '/teams', label: 'Team Comparison', icon: Users },

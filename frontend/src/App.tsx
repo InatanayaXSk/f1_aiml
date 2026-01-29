@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { RegulationExplorer } from './pages/RegulationExplorer';
 import { CircuitAnalyzer } from './pages/CircuitAnalyzer';
 import { TeamComparison } from './pages/TeamComparison';
+import { PresentationSummary } from './pages/PresentationSummary';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,6 +24,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/presentation" element={<PresentationSummary />} />
             <Route path="/regulations" element={<RegulationExplorer />} />
             <Route path="/circuits" element={<CircuitAnalyzer />} />
             <Route path="/teams" element={<TeamComparison />} />

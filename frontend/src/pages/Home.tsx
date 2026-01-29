@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { MetricCard } from '../components/MetricCard';
 import { Loading } from '../components/Loading';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { PodiumProbability } from '../components/PodiumProbability';
 import { useSimulations } from '../hooks/useSimulations';
 import { useTeamPerformance } from '../hooks/useTeams';
 import { useTracks } from '../hooks/useTracks';
@@ -90,6 +91,11 @@ export const Home = () => {
           </div>
         </div>
       )}
+
+      {/* Podium Probability Component */}
+      <div className="mb-8">
+        <PodiumProbability />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">

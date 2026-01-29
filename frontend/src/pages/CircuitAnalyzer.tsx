@@ -15,8 +15,7 @@ export const CircuitAnalyzer = () => {
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [compareTrack, setCompareTrack] = useState<Track | null>(null);
 
-  const { data: selectedTrackSVG } = useTrackSVG(selectedTrack?.id || '');
-  const { data: compareTrackSVG } = useTrackSVG(compareTrack?.id || '');
+  // Track SVG paths are handled by the TrackVisualizer component internally
 
   const isLoading = tracksLoading || comparisonsLoading;
 
@@ -32,7 +31,7 @@ export const CircuitAnalyzer = () => {
     return comparisons?.find((c) => c.trackId === trackId);
   };
 
-  const renderTrackDetails = (track: Track, svg: string | null | undefined) => {
+  const renderTrackDetails = (track: Track) => {
     const comparison = getComparisonForTrack(track.id);
     const impactDelta = comparison?.impactDelta || 0;
 
@@ -45,13 +44,12 @@ export const CircuitAnalyzer = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400">{track.country}</p>
             </div>
             <div
-              className={`flex items-center gap-1 px-3 py-1 rounded-full ${
-                impactDelta > 0
-                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                  : impactDelta < 0
+              className={`flex items-center gap-1 px-3 py-1 rounded-full ${impactDelta > 0
+                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                : impactDelta < 0
                   ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-              }`}
+                }`}
             >
               {impactDelta > 0 ? (
                 <TrendingUp className="w-4 h-4" />
@@ -82,7 +80,7 @@ export const CircuitAnalyzer = () => {
             </div>
           </div>
 
-          <TrackVisualizer trackId={track.id} />
+          <TrackVisualizer trackId={track.id} features={track.features} />
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 border border-gray-200 dark:border-gray-700">
@@ -228,10 +226,10 @@ export const CircuitAnalyzer = () => {
       {selectedTrack || compareTrack ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {selectedTrack && (
-            <div>{renderTrackDetails(selectedTrack, selectedTrackSVG)}</div>
+            <div>{renderTrackDetails(selectedTrack)}</div>
           )}
           {compareTrack && (
-            <div>{renderTrackDetails(compareTrack, compareTrackSVG)}</div>
+            <div>{renderTrackDetails(compareTrack)}</div>
           )}
         </div>
       ) : (

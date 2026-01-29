@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { RotateCw, RefreshCcw } from 'lucide-react';
+import { RotateCw } from 'lucide-react';
+
+import type { TrackFeatures } from '../types';
 
 interface SectorDetail {
   type: string;
@@ -44,6 +46,7 @@ interface TrackData {
 
 interface TrackVisualizerProps {
   trackId?: string;
+  features?: TrackFeatures;
 }
 
 const REGULATION_DATA: Record<string, any> = {
@@ -116,13 +119,39 @@ const getTrackZones = (trackId: string, totalPoints: number): TrackZone[] => {
 };
 
 const SIMULATION_MAPPING: Record<string, string> = {
+  // Legacy mappings
   monza: "2022_R16",
-  monaco: "2022_R07",
-  silverstone: "2022_R10",
-  spa: "2022_R14"
+  monaco: "2022_R08",
+  silverstone: "2022_R12",
+  spa: "2022_R13",
+  bahrain: "2022_R04",
+
+  // Full 2025 Season Mappings
+  'australia': "2022_R01",
+  'china': "2022_R02",
+  'japan': "2022_R03",
+  'saudi-arabia': "2022_R05",
+  'miami': "2022_R06",
+  'emilia-romagna': "2022_R07",
+  'spain': "2022_R09",
+  'canada': "2022_R10",
+  'austria': "2022_R11",
+  'great-britain': "2022_R12",
+  'belgium': "2022_R13",
+  'hungary': "2022_R14",
+  'netherlands': "2022_R15",
+  'italy': "2022_R16",
+  'azerbaijan': "2022_R17",
+  'singapore': "2022_R18",
+  'united-states': "2022_R19",
+  'mexico': "2022_R20",
+  'brazil': "2022_R21",
+  'las-vegas': "2022_R22",
+  'qatar': "2022_R23",
+  'abu-dhabi': "2022_R24"
 };
 
-const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza' }) => {
+const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza', features }) => {
   const [hoveredSector, setHoveredSector] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [trackData, setTrackData] = useState<TrackData | null>(null);
@@ -138,8 +167,10 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
         const data = await import(`../../../track_data_${trackId}.json`);
         const baseData = data.default || data;
 
-        // Load simulation data
-        const simKey = SIMULATION_MAPPING[trackId];
+        // Load simulation data with fallback year detection
+        const preferredKey = SIMULATION_MAPPING[trackId];
+        const simKey = await findAvailableSimKey(trackId, preferredKey);
+        
         let overtakingInfo = null;
         let sectorAnalysis = null;
 
@@ -147,10 +178,11 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
           const overtakingData = await import(`../../../outputs/json/overtaking_analysis.json`);
           overtakingInfo = overtakingData.circuits.find((c: any) => c.circuit_key === simKey);
 
-          // Try to load specific sector analysis if it exists
+          // Try to load specific sector analysis with found key
           try {
             const analysisData = await import(`../../../outputs/json/track_sector_analysis_${simKey}.json`);
             sectorAnalysis = analysisData.default || analysisData;
+            console.log(`✅ Loaded sector analysis for ${trackId} using ${simKey}`);
           } catch (e) {
             console.warn(`No sector analysis found for ${simKey}`);
           }
@@ -219,17 +251,6 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
   const getTrackTypeColor = (index: number): string => {
     const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6'];
     return colors[index] || '#6b7280';
-  };
-
-  const getOvertakingColor = (difficulty: number): string => {
-    const colors: Record<number, string> = {
-      1: '#22c55e',
-      2: '#84cc16',
-      3: '#eab308',
-      4: '#f97316',
-      5: '#ef4444'
-    };
-    return colors[difficulty] || '#6b7280';
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGElement>): void => {
@@ -451,18 +472,61 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
                     </>
                   )}
 
-                  {simData?.overtaking && (
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-400">Overtaking Change:</span>
-                      <span className="text-emerald-400 font-bold">+{simData.overtaking.overtake_increase_pct}%</span>
+                  {features && (
+                    <div className="flex justify-between items-center text-xs pb-1 mb-1 border-b border-blue-500/10">
+                      <span className="text-gray-400">Sector Difficulty:</span>
+                      <span className="text-white font-bold">
+                        {hoveredSector === 1 ? features.sector1Difficulty :
+                          hoveredSector === 2 ? features.sector2Difficulty :
+                            features.sector3Difficulty}/10
+                      </span>
                     </div>
                   )}
 
-                  {simData?.analysis && (
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-400">Projected Lap Delta:</span>
+                  {simData?.analysis?.sectors && simData.analysis.sectors[hoveredSector - 1] && (
+                    <>
+                      <div className="flex justify-between items-center text-xs pb-1 mb-1 border-b border-blue-500/10">
+                        <span className="text-gray-400">Sector Time Delta:</span>
+                        <span className={`font-bold ${
+                          simData.analysis.sectors[hoveredSector - 1].delta_seconds < 0 
+                            ? 'text-emerald-400' 
+                            : 'text-red-400'
+                        }`}>
+                          {simData.analysis.sectors[hoveredSector - 1].delta_seconds > 0 ? '+' : ''}
+                          {simData.analysis.sectors[hoveredSector - 1].delta_seconds.toFixed(2)}s
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs pb-1 mb-1 border-b border-blue-500/10">
+                        <span className="text-gray-400">Position Spread:</span>
+                        <span className="text-blue-300 font-bold">
+                          ±{(simData.analysis.sectors[hoveredSector - 1].position_variance || 0).toFixed(1)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-gray-400">2026 Impact Level:</span>
+                        <span className={`font-bold px-2 py-0.5 rounded ${
+                          Math.abs(simData.analysis.sectors[hoveredSector - 1].delta_seconds) > 0.5 
+                            ? 'bg-red-500/20 text-red-400' 
+                            : Math.abs(simData.analysis.sectors[hoveredSector - 1].delta_seconds) > 0.2
+                            ? 'bg-yellow-500/20 text-yellow-400'
+                            : 'bg-green-500/20 text-green-400'
+                        }`}>
+                          {Math.abs(simData.analysis.sectors[hoveredSector - 1].delta_seconds) > 0.5 
+                            ? 'High' 
+                            : Math.abs(simData.analysis.sectors[hoveredSector - 1].delta_seconds) > 0.2
+                            ? 'Medium'
+                            : 'Low'}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  {simData?.analysis?.lap_summary && (
+                    <div className="flex justify-between items-center text-xs mt-1 pt-1 border-t border-blue-500/10">
+                      <span className="text-gray-400">Full Lap Delta:</span>
                       <span className={`${simData.analysis.lap_summary.delta_seconds < 0 ? 'text-emerald-400' : 'text-red-400'} font-bold`}>
-                        {simData.analysis.lap_summary.delta_seconds}s
+                        {simData.analysis.lap_summary.delta_seconds > 0 ? '+' : ''}
+                        {simData.analysis.lap_summary.delta_seconds.toFixed(3)}s
                       </span>
                     </div>
                   )}
@@ -496,7 +560,7 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
           ))}
         </div>
 
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4">
             <p className="text-gray-400 text-xs mb-1">Track Type</p>
             <p className="text-white font-bold text-lg">{trackData.characteristics.track_type_name}</p>
@@ -513,6 +577,18 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
             <p className="text-gray-400 text-xs mb-1">Overtaking</p>
             <p className="text-white font-bold text-lg">{trackData.characteristics.overtaking_difficulty}/5</p>
           </div>
+          {simData?.overtaking && (
+            <div className="bg-gray-800/50 rounded-lg border border-emerald-700 p-4">
+              <p className="text-gray-400 text-xs mb-1">2026 Overtaking</p>
+              <p className="text-emerald-400 font-bold text-lg">+{simData.overtaking.overtake_increase_pct}%</p>
+            </div>
+          )}
+          {simData?.overtaking && (
+            <div className="bg-gray-800/50 rounded-lg border border-emerald-700 p-4">
+              <p className="text-gray-400 text-xs mb-1">2026 Overtaking</p>
+              <p className="text-emerald-400 font-bold text-lg">+{simData.overtaking.overtake_increase_pct}%</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
