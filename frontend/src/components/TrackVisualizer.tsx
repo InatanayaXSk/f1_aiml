@@ -151,6 +151,30 @@ const SIMULATION_MAPPING: Record<string, string> = {
   'abu-dhabi': "2022_R24"
 };
 
+const SECTOR_ANALYSIS_MODULES = import.meta.glob(
+  '../../../outputs/json/track_sector_analysis_*.json'
+);
+
+const AVAILABLE_SIM_KEYS = new Set(
+  Object.keys(SECTOR_ANALYSIS_MODULES)
+    .map((path) => path.match(/track_sector_analysis_(.+)\.json$/)?.[1])
+    .filter(Boolean) as string[]
+);
+
+const findAvailableSimKey = async (trackId: string, preferredKey?: string): Promise<string> => {
+  if (preferredKey && AVAILABLE_SIM_KEYS.has(preferredKey)) {
+    return preferredKey;
+  }
+
+  const fallbackKey = SIMULATION_MAPPING[trackId];
+  if (fallbackKey && AVAILABLE_SIM_KEYS.has(fallbackKey)) {
+    return fallbackKey;
+  }
+
+  const firstAvailable = AVAILABLE_SIM_KEYS.values().next().value as string | undefined;
+  return preferredKey || firstAvailable || '2022_R01';
+};
+
 const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza', features }) => {
   const [hoveredSector, setHoveredSector] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -175,8 +199,9 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
         let sectorAnalysis = null;
 
         try {
-          const overtakingData = await import(`../../../outputs/json/overtaking_analysis.json`);
-          overtakingInfo = overtakingData.circuits.find((c: any) => c.circuit_key === simKey);
+          const overtakingModule = await import(`../../../outputs/json/overtaking_analysis.json`);
+          const overtakingData = overtakingModule.default || overtakingModule;
+          overtakingInfo = overtakingData.circuits?.find((c: any) => c.circuit_key === simKey);
 
           // Try to load specific sector analysis with found key
           try {
@@ -578,15 +603,23 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
             <p className="text-white font-bold text-lg">{trackData.characteristics.overtaking_difficulty}/5</p>
           </div>
           {simData?.overtaking && (
-            <div className="bg-gray-800/50 rounded-lg border border-emerald-700 p-4">
+            <div className="bg-gray-800/50 rounded-lg border-2 border-emerald-700 p-4">
               <p className="text-gray-400 text-xs mb-1">2026 Overtaking</p>
-              <p className="text-emerald-400 font-bold text-lg">+{simData.overtaking.overtake_increase_pct}%</p>
+              <p className="text-emerald-400 font-bold text-lg">
+                +{simData.overtaking.overtake_increase_pct.toFixed(1)}%
+              </p>
             </div>
           )}
           {simData?.overtaking && (
-            <div className="bg-gray-800/50 rounded-lg border border-emerald-700 p-4">
-              <p className="text-gray-400 text-xs mb-1">2026 Overtaking</p>
-              <p className="text-emerald-400 font-bold text-lg">+{simData.overtaking.overtake_increase_pct}%</p>
+            <div className="bg-gray-800/50 rounded-lg border border-blue-700 p-4">
+              <p className="text-gray-400 text-xs mb-1">Current Overtakes</p>
+              <p className="text-white font-bold text-lg">{simData.overtaking.current_avg_overtakes.toFixed(0)}</p>
+            </div>
+          )}
+          {simData?.overtaking && (
+            <div className="bg-gray-800/50 rounded-lg border border-green-700 p-4">
+              <p className="text-gray-400 text-xs mb-1">2026 Overtakes</p>
+              <p className="text-green-400 font-bold text-lg">{simData.overtaking['2026_avg_overtakes'].toFixed(0)}</p>
             </div>
           )}
         </div>

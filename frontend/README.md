@@ -48,7 +48,7 @@ A comprehensive React-based dashboard for analyzing and visualizing the impact o
 ```
 src/
 ├── api/
-│   └── client.ts              # API client with mock data fallback
+│   └── client.ts              # API client and local data loader
 ├── components/
 │   ├── BarChart.tsx           # D3 bar chart visualization
 │   ├── ErrorMessage.tsx       # Error state component
@@ -59,8 +59,8 @@ src/
 │   ├── NavTabs.tsx            # Main navigation tabs
 │   ├── TeamProfile.tsx        # Team profile card
 │   └── TrackSVG.tsx           # Circuit visualization with tooltips
-├── data/
-│   └── mockData.ts            # Mock data for development
+├── utils/
+│   └── dataAdapter.ts         # Adapters for simulation outputs
 ├── hooks/
 │   ├── useRegulations.ts      # Regulation data hook
 │   ├── useSimulations.ts      # Simulation data hook
@@ -168,13 +168,6 @@ interface TeamPerformance {
 
 // See src/types/index.ts for complete type definitions
 ```
-
-### Mock Data
-
-When `VITE_API_BASE_URL` is not set, the application automatically uses mock data from `src/data/mockData.ts`. This allows for:
-- Development without backend dependencies
-- UI/UX testing and demonstrations
-- Frontend development in parallel with backend work
 
 ## Features & Interactions
 

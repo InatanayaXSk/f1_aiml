@@ -5,7 +5,7 @@ import { ErrorMessage } from '../components/ErrorMessage';
 import { useRegulations } from '../hooks/useRegulations';
 import { useFilterStore } from '../store/useFilterStore';
 import type { RegulationFactor } from '../types';
-import { Filter, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 const categoryLabels: Record<string, string> = {
   power: 'Power Unit',
@@ -51,47 +51,6 @@ export const RegulationExplorer = () => {
         <p className="text-gray-600 dark:text-gray-400">
           Analyze the impact of 2026 F1 regulations on team performance
         </p>
-      </div>
-
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Filters</h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">Season:</label>
-            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm font-semibold">
-              {selectedSeason}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setCategoryFilter(null)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              categoryFilter === null
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-            }`}
-          >
-            All Categories
-          </button>
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setCategoryFilter(category)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                categoryFilter === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-              }`}
-            >
-              {categoryLabels[category] || category}
-            </button>
-          ))}
-        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">

@@ -101,7 +101,8 @@ export const PodiumProbability: React.FC = () => {
         worstPos: stats.max,
         color: TEAM_COLORS[driver] || "#6B7280"
       }))
-      .sort((a, b) => b.top3 - a.top3)
+      .filter((driver) => driver.top3 > 0)
+      .sort((a, b) => a.expectedPos - b.expectedPos)
       .slice(0, 10);
   }, [monteCarloData, selectedRace, viewMode]);
 
@@ -207,7 +208,7 @@ export const PodiumProbability: React.FC = () => {
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-emerald-400" />
-            Top 10 Podium Contenders
+            Top Podium Contenders
           </h3>
           <div className="text-sm text-gray-400">
             Hover bars for details

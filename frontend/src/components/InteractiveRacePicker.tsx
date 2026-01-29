@@ -215,7 +215,7 @@ export function InteractiveRacePicker() {
           <ResponsiveContainer width="100%" height={viewMode === 'top10' ? 400 : 600}>
             <BarChart
               data={raceData.drivers}
-              margin={{ top: 20, right: 30, left: 50, bottom: 80 }}
+              margin={{ top: 20, right: 30, left: 50, bottom: 5 }}
               layout="vertical"
             >
               <XAxis
@@ -224,7 +224,7 @@ export function InteractiveRacePicker() {
                 label={{
                   value: 'Finishing Position',
                   position: 'insideBottom',
-                  offset: -10,
+                  offset: -5,
                   style: { fill: '#9CA3AF', fontWeight: 600, fontSize: 12 }
                 }}
                 tick={{ fill: '#9CA3AF', fontSize: 11 }}

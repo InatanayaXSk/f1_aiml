@@ -248,10 +248,50 @@ function getDownforceLevel(trackTypeName: string): 'low' | 'medium' | 'high' {
   return 'medium';
 }
 
+const DRIVER_TEAM_MAP: Record<string, string> = {
+  // Red Bull Racing
+  'Max Verstappen': 'Red Bull Racing',
+  'Sergio Perez': 'Red Bull Racing',
+  // Ferrari
+  'Charles Leclerc': 'Ferrari',
+  'Carlos Sainz': 'Ferrari',
+  // Mercedes
+  'Lewis Hamilton': 'Mercedes',
+  'George Russell': 'Mercedes',
+  // McLaren
+  'Lando Norris': 'McLaren',
+  'Daniel Ricciardo': 'McLaren',
+  'Oscar Piastri': 'McLaren',
+  // Aston Martin
+  'Fernando Alonso': 'Aston Martin',
+  'Lance Stroll': 'Aston Martin',
+  'Sebastian Vettel': 'Aston Martin',
+  // Alpine
+  'Esteban Ocon': 'Alpine',
+  'Pierre Gasly': 'Alpine',
+  // AlphaTauri / RB
+  'Yuki Tsunoda': 'RB',
+  'Nyck de Vries': 'RB',
+  'Liam Lawson': 'RB',
+  // Alfa Romeo / Sauber
+  'Valtteri Bottas': 'Sauber',
+  'Guanyu Zhou': 'Sauber',
+  // Haas
+  'Kevin Magnussen': 'Haas',
+  'Mick Schumacher': 'Haas',
+  'Nico Hulkenberg': 'Haas',
+  // Williams
+  'Alexander Albon': 'Williams',
+  'Nicholas Latifi': 'Williams',
+  'Logan Sargeant': 'Williams',
+};
+
+export function getTeamNameForDriver(driverName: string): string {
+  return DRIVER_TEAM_MAP[driverName] || 'Unknown Team';
+}
+
 function extractTeamName(driverName: string): string {
-  // This is a placeholder - you'll need proper team mapping
-  // For now, return a generic team name
-  return 'Unknown Team';
+  return getTeamNameForDriver(driverName);
 }
 
 function average(arr: number[]): number {

@@ -69,13 +69,13 @@ export const CircuitAnalyzer = () => {
             <div className="bg-gray-50 dark:bg-gray-900/50 rounded p-3">
               <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Length</p>
               <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {track.length.toFixed(3)} km
+                {track.length > 0 ? `${track.length.toFixed(3)} km` : 'N/A'}
               </p>
             </div>
             <div className="bg-gray-50 dark:bg-gray-900/50 rounded p-3">
               <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Laps</p>
               <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {track.laps}
+                {track.laps > 0 ? track.laps : 'N/A'}
               </p>
             </div>
           </div>
