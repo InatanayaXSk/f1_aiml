@@ -72,127 +72,182 @@ TRACK_MAPPINGS = {
     'abu-dhabi': 'Abu Dhabi',
 }
 
-def get_official_corners(gp_name):
-    key = gp_name.lower().replace(" ", "-")
-    return OFFICIAL_CORNERS.get(key, None)
+# Map of GP names to their official corner counts
+CORNER_MAPPINGS = {
+    'Australia': 14,
+    'China': 16,
+    'Japan': 18,
+    'Bahrain': 15,
+    'Saudi Arabia': 27,
+    'Miami': 19,
+    'Emilia Romagna': 19,
+    'Monaco': 19,
+    'Spain': 14,
+    'Canada': 14,
+    'Austria': 10,
+    'Great Britain': 18,
+    'Belgium': 19,
+    'Hungary': 14,
+    'Netherlands': 14,
+    'Italy': 11,
+    'Azerbaijan': 20,
+    'Singapore': 19,
+    'United States': 20,
+    'Mexico': 17,
+    'Brazil': 15,
+    'Las Vegas': 17,
+    'Qatar': 16,
+    'Abu Dhabi': 16,
+}
 
 # ------------------ MAIN FUNCTION ------------------
 def extract_track_coordinates(year, gp_name, session_type='R'):
-    cache_dir = 'cache'
-    os.makedirs(cache_dir, exist_ok=True)
-    fastf1.Cache.enable_cache(cache_dir)
-
-    session = fastf1.get_session(year, gp_name, session_type)
-    session.load()
-
-    fastest_lap = session.laps.pick_fastest()
-    telemetry = fastest_lap.get_telemetry().add_distance()
-
+    """
+    Extract track coordinates from FastF1 telemetry data with sector information
+    
+    Args:
+        year: Season year (e.g., 2024)
+        gp_name: Grand Prix name (e.g., 'Monza', 'Monaco')
+        session_type: 'R' for Race, 'Q' for Quali, 'FP1', etc.
+    """
+    try:
+        # Enable cache for faster loading
+        cache_dir = 'cache'
+        if not os.path.exists(cache_dir):
+            os.makedirs(cache_dir)
+        fastf1.Cache.enable_cache(cache_dir)
+        
+        # Load session
+        session = fastf1.get_session(year, gp_name, session_type)
+        session.load()
+    except Exception as e:
+        print(f"Error loading session: {e}")
+        raise
+    
+    # Get fastest lap telemetry (cleanest racing line)
+    try:
+        fastest_lap = session.laps.pick_fastest()
+        if fastest_lap is None:
+            raise ValueError("No valid laps found in session")
+        telemetry = fastest_lap.get_telemetry().add_distance()
+    except Exception as e:
+        print(f"Error getting telemetry: {e}")
+        raise
+    
+    # Extract coordinates
     x_coords = telemetry['X'].values
     y_coords = telemetry['Y'].values
     z_coords = telemetry['Z'].values if 'Z' in telemetry.columns else None
-
-    # ------------------ SECTORS ------------------
+    
+    # Get sector information - sectors are 1, 2, 3 in the data
     sectors = []
-    try:
-        s1 = fastest_lap['Sector1Time']
-        s2 = fastest_lap['Sector2Time']
-        session_time = telemetry['SessionTime']
-        lap_start = session_time.iloc[0]
-
-        s1_end = lap_start + s1
-        s2_end = lap_start + s1 + s2
-
-        i1 = (session_time - s1_end).abs().idxmin()
-        i2 = (session_time - s2_end).abs().idxmin()
-
-        p1 = telemetry.index.get_loc(i1)
-        p2 = telemetry.index.get_loc(i2)
-
-        sectors = [
-            {"sector": 1, "start": 0, "end": p1},
-            {"sector": 2, "start": p1, "end": p2},
-            {"sector": 3, "start": p2, "end": len(telemetry)-1}
-        ]
-    except:
-        n = len(telemetry)
-        sectors = [
-            {"sector": 1, "start": 0, "end": n//3},
-            {"sector": 2, "start": n//3, "end": 2*n//3},
-            {"sector": 3, "start": 2*n//3, "end": n-1}
-        ]
-
-    # ------------------ NORMALIZE COORDS ------------------
+    if 'SessionTime' in telemetry.columns:
+        try:
+            # Get sector times from the lap
+            sector1_time = fastest_lap['Sector1Time']
+            sector2_time = fastest_lap['Sector2Time']
+            
+            # Find indices where sectors change
+            session_time = telemetry['SessionTime']
+            lap_start_time = session_time.iloc[0]
+            
+            # Calculate sector boundaries
+            sector1_end_time = lap_start_time + sector1_time
+            sector2_end_time = lap_start_time + sector1_time + sector2_time
+            
+            # Find closest indices
+            sector1_end_idx = (session_time - sector1_end_time).abs().idxmin()
+            sector2_end_idx = (session_time - sector2_end_time).abs().idxmin()
+            
+            # Get positions in the telemetry array
+            sector1_end_pos = telemetry.index.get_loc(sector1_end_idx)
+            sector2_end_pos = telemetry.index.get_loc(sector2_end_idx)
+            
+            sectors = [
+                {"sector": 1, "start": 0, "end": sector1_end_pos},
+                {"sector": 2, "start": sector1_end_pos, "end": sector2_end_pos},
+                {"sector": 3, "start": sector2_end_pos, "end": len(telemetry) - 1}
+            ]
+            
+            print(f"Sector 1: 0 to {sector1_end_pos}")
+            print(f"Sector 2: {sector1_end_pos} to {sector2_end_pos}")
+            print(f"Sector 3: {sector2_end_pos} to {len(telemetry) - 1}")
+            
+        except Exception as e:
+            print(f"Warning: Could not extract sector times: {e}")
+            total_points = len(telemetry)
+            sectors = [{"sector": 1, "start": 0, "end": total_points // 3},
+                       {"sector": 2, "start": total_points // 3, "end": 2 * total_points // 3},
+                       {"sector": 3, "start": 2 * total_points // 3, "end": total_points - 1}]
+    else:
+        total_points = len(telemetry)
+        sectors = [{"sector": 1, "start": 0, "end": total_points // 3},
+                   {"sector": 2, "start": total_points // 3, "end": 2 * total_points // 3},
+                   {"sector": 3, "start": 2 * total_points // 3, "end": total_points - 1}]
+    
+    # Normalize to 0-500 range for SVG viewBox
     x_min, x_max = x_coords.min(), x_coords.max()
     y_min, y_max = y_coords.min(), y_coords.max()
-
-    x_norm = ((x_coords - x_min)/(x_max-x_min)*450+25).tolist()
-    y_norm = ((y_coords - y_min)/(y_max-y_min)*350+25).tolist()
-
-    step = max(1, len(x_norm)//200)
-
-    # ------------------ SVG PATHS ------------------
+    
+    x_norm = ((x_coords - x_min) / (x_max - x_min) * 450 + 25).tolist()
+    y_norm = ((y_coords - y_min) / (y_max - y_min) * 350 + 25).tolist()
+    
+    # Sample points to reduce complexity
+    step = max(1, len(x_norm) // 200)
+    
+    # Create sector-specific paths
     sector_paths = []
-    for s in sectors:
-        xs = x_norm[s["start"]:s["end"]:step]
-        ys = y_norm[s["start"]:s["end"]:step]
-        if not xs:
-            continue
-        path = f"M {xs[0]:.2f} {ys[0]:.2f}"
-        for i in range(1, len(xs)):
-            path += f" L {xs[i]:.2f} {ys[i]:.2f}"
-        sector_paths.append({"sector": s["sector"], "path": path})
-
+    for sector_info in sectors:
+        start_idx = sector_info["start"]
+        end_idx = sector_info["end"]
+        sector_x = x_norm[start_idx:end_idx:step]
+        sector_y = y_norm[start_idx:end_idx:step]
+        
+        if len(sector_x) == 0: continue
+            
+        path_data = f"M {sector_x[0]:.2f} {sector_y[0]:.2f}"
+        for i in range(1, len(sector_x)):
+            path_data += f" L {sector_x[i]:.2f} {sector_y[i]:.2f}"
+        
+        sector_paths.append({"sector": sector_info["sector"], "path": path_data})
+    
+    # Create full path for reference
     full_path = f"M {x_norm[0]:.2f} {y_norm[0]:.2f}"
     for i in range(step, len(x_norm), step):
         full_path += f" L {x_norm[i]:.2f} {y_norm[i]:.2f}"
     full_path += " Z"
+    
+    # Calculate elevation change
+    elevation_change = float(np.max(z_coords) - np.min(z_coords)) if z_coords is not None else 0.0
 
-    # ------------------ ELEVATION ------------------
-    elevation_change = None
-    if z_coords is not None:
-        elevation_change = float(np.max(z_coords) - np.min(z_coords))
-
-    # ------------------ BANKING (approx curvature proxy) ------------------
+    # Banking/Curvature proxy
     dx = np.gradient(x_coords)
     dy = np.gradient(y_coords)
     curvature = np.abs(np.gradient(np.arctan2(dy, dx)))
     banking_estimate = float(np.mean(curvature))
 
-    # ------------------ DRS ZONES (Use hardcoded data) ------------------
-    drs_zones = []
+    # DRS Zones
     track_key = gp_name.lower().replace(" ", "-")
-    if track_key in OFFICIAL_DRS_ZONES:
-        drs_zones = OFFICIAL_DRS_ZONES[track_key]
-    else:
-        # Fallback: try FastF1 API
-        try:
-            circuit_info = session.get_circuit_info()
-            for zone in circuit_info.drs_zones:
-                drs_zones.append({
-                    "start_distance": float(zone.start),
-                    "end_distance": float(zone.end)
-                })
-        except:
-            pass
+    drs_zones = OFFICIAL_DRS_ZONES.get(track_key, [])
 
-    # ------------------ OVERTAKING DIFFICULTY (CALCULATED) ------------------
+    # Official corner count
+    official_corners = CORNER_MAPPINGS.get(gp_name)
+    corners_count = official_corners if official_corners is not None else count_corners(telemetry)
+
+    # Track classification
     straight_frac = calculate_straight_fraction(telemetry)
-    corners_count = get_official_corners(gp_name) or 14
     track_type_idx = calculate_track_type(telemetry)
-    num_drs = len(drs_zones)
     
-    # Calculate overtaking difficulty (1=easy, 5=very difficult)
-    # Based on: low straight fraction + high corners + street circuits = harder overtaking
+    num_drs = len(drs_zones)
     overtaking_score = (
-        (1 - straight_frac) * 2.0 +  # Less straights = harder
-        (corners_count / 20.0) * 1.5 +  # More corners = harder
-        (1 if track_type_idx == 0 else 0) * 1.5 +  # Street circuit penalty
-        (max(0, 2 - num_drs) * 0.5)  # Fewer DRS zones = harder
+        (1 - straight_frac) * 2.0 + 
+        (corners_count / 20.0) * 1.5 + 
+        (1 if track_type_idx == 0 else 0) * 1.5 + 
+        (max(0, 2 - num_drs) * 0.5)
     )
     overtaking_difficulty = int(np.clip(overtaking_score, 1, 5))
 
-    # ------------------ CHARACTERISTICS ------------------
+    # Calculate track characteristics
     track_data = {
         "name": gp_name,
         "fullName": session.event['EventName'],
@@ -211,7 +266,7 @@ def extract_track_coordinates(year, gp_name, session_type='R'):
         "sectors": sectors,
         "coordinates": {"x": x_norm, "y": y_norm}
     }
-
+    
     return track_data
 
 # ------------------ HELPERS ------------------
