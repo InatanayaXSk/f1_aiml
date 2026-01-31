@@ -12,6 +12,8 @@ Does NOT regenerate simulations or retrain models.
 
 Usage:
     python src/benchmarking/run_monte_carlo_benchmark.py
+    python src/benchmarking/run_monte_carlo_benchmark.py outputs/monte_carlo_results.json
+    python src/benchmarking/run_monte_carlo_benchmark.py outputs/monte_carlo_results_calibrated.json
 """
 
 import sys
@@ -192,8 +194,9 @@ def find_mc_outputs() -> pd.DataFrame:
     
     Looks for:
     1. outputs/monte_carlo_results.json (standard pipeline output)
-    2. json_results/index.json
-    3. outputs/benchmarking/mc_outputs.csv
+    2. outputs/monte_carlo_results_calibrated.json (calibrated variant)
+    3. json_results/index.json
+    4. outputs/benchmarking/mc_outputs.csv
     
     Returns:
         DataFrame with MC outputs
@@ -203,6 +206,7 @@ def find_mc_outputs() -> pd.DataFrame:
     """
     candidates = [
         PROJECT_ROOT / "outputs" / "monte_carlo_results.json",
+        PROJECT_ROOT / "outputs" / "monte_carlo_results_calibrated.json",
         PROJECT_ROOT / "json_results" / "index.json",
         PROJECT_ROOT / "outputs" / "benchmarking" / "mc_outputs.csv"
     ]
@@ -223,6 +227,8 @@ def find_mc_outputs() -> pd.DataFrame:
 def main():
     """
     Main runner for Monte Carlo benchmarking.
+    
+    Accepts optional command-line argument specifying MC output file path.
     """
     print("=" * 80)
     print("Monte Carlo Benchmarking - Uncertainty Calibration Validation")
@@ -234,17 +240,35 @@ def main():
         actual_results = load_actual_race_results()
         print()
         
-        # Load MC outputs
-        LOGGER.info("Attempting to load MC outputs...")
-        try:
-            mc_outputs = find_mc_outputs()
-        except FileNotFoundError as e:
-            print(f"\nERROR: {e}")
-            print("\nTo run this benchmark, you need MC output files.")
-            print("Options:")
-            print("  1. Run the main pipeline: python main.py")
-            print("  2. Generate MC outputs separately using MonteCarloSimulator")
-            sys.exit(1)
+        # Load MC outputs (from command line arg or auto-detect)
+        if len(sys.argv) > 1:
+            mc_file = Path(sys.argv[1])
+            LOGGER.info("Loading MC outputs from command line: %s", mc_file)
+            
+            if not mc_file.exists():
+                print(f"\nERROR: File not found: {mc_file}")
+                sys.exit(1)
+            
+            if mc_file.suffix == ".json":
+                mc_outputs = load_mc_outputs_from_json(mc_file)
+            elif mc_file.suffix == ".csv":
+                mc_outputs = load_mc_outputs_from_csv(mc_file)
+            else:
+                print(f"\nERROR: Unsupported file type: {mc_file.suffix}")
+                print("Expected .json or .csv")
+                sys.exit(1)
+        else:
+            LOGGER.info("Attempting to auto-detect MC outputs...")
+            try:
+                mc_outputs = find_mc_outputs()
+            except FileNotFoundError as e:
+                print(f"\nERROR: {e}")
+                print("\nTo run this benchmark, you need MC output files.")
+                print("Options:")
+                print("  1. Run the main pipeline: python main.py")
+                print("  2. Generate MC outputs separately using MonteCarloSimulator")
+                print("  3. Specify file path: python src/benchmarking/run_monte_carlo_benchmark.py <path>")
+                sys.exit(1)
         
         print()
         
@@ -288,12 +312,16 @@ def main():
         print("=" * 80)
         print()
         
-        # Save results for inspection
+        # Save results for inspection (with suffix if calibrated)
         output_dir = PROJECT_ROOT / "outputs" / "benchmarking"
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        coverage_df.to_csv(output_dir / "mc_coverage.csv", index=False)
-        per_race_coverage.to_csv(output_dir / "mc_per_race_coverage.csv", index=False)
+        suffix = ""
+        if len(sys.argv) > 1 and "calibrated" in str(sys.argv[1]).lower():
+            suffix = "_calibrated"
+        
+        coverage_df.to_csv(output_dir / f"mc_coverage{suffix}.csv", index=False)
+        per_race_coverage.to_csv(output_dir / f"mc_per_race_coverage{suffix}.csv", index=False)
         
         LOGGER.info("Saved coverage results to %s", output_dir)
         
