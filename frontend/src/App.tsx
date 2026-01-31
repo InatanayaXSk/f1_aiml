@@ -6,6 +6,7 @@ import { RegulationExplorer } from './pages/RegulationExplorer';
 import { CircuitAnalyzer } from './pages/CircuitAnalyzer';
 import { TeamComparison } from './pages/TeamComparison';
 import { PresentationSummary } from './pages/PresentationSummary';
+import ModelValidation from './pages/ModelValidation';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/presentation" element={<PresentationSummary />} />
+            <Route path="/validation" element={<ModelValidation />} />
             <Route path="/regulations" element={<RegulationExplorer />} />
             <Route path="/circuits" element={<CircuitAnalyzer />} />
             <Route path="/teams" element={<TeamComparison />} />

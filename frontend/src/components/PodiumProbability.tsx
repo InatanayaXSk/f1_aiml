@@ -59,7 +59,7 @@ export const PodiumProbability: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await import('../../../outputs/monte_carlo_results.json');
+        const data = await import('../../../outputs/monte_carlo_results_calibrated_0.12.json');
         const loadedData = data.default || data;
         setMonteCarloData(loadedData);
         

@@ -52,6 +52,34 @@ def export_track_sector_analysis(
     
     Shows regulation impact per sector with boost/overtake zones.
     """
+    # Event name to track key mapping
+    EVENT_TO_TRACK = {
+        "Bahrain Grand Prix": "bahrain",
+        "Saudi Arabian Grand Prix": "jeddah",
+        "Australian Grand Prix": "melbourne",
+        "Japanese Grand Prix": "suzuka",
+        "Chinese Grand Prix": "shanghai",
+        "Miami Grand Prix": "miami",
+        "Emilia Romagna Grand Prix": "imola",
+        "Monaco Grand Prix": "monaco",
+        "Spanish Grand Prix": "barcelona",
+        "Canadian Grand Prix": "montreal",
+        "Austrian Grand Prix": "spielberg",
+        "British Grand Prix": "silverstone",
+        "Hungarian Grand Prix": "hungary",
+        "Belgian Grand Prix": "spa",
+        "Dutch Grand Prix": "zandvoort",
+        "Italian Grand Prix": "monza",
+        "Azerbaijan Grand Prix": "baku",
+        "Singapore Grand Prix": "singapore",
+        "United States Grand Prix": "cota",
+        "Mexico City Grand Prix": "mexico",
+        "São Paulo Grand Prix": "sao_paulo",
+        "Las Vegas Grand Prix": "las_vegas",
+        "Qatar Grand Prix": "qatar",
+        "Abu Dhabi Grand Prix": "abu_dhabi",
+    }
+    
     if track_key not in results:
         raise ValueError(f"Track '{track_key}' not found in results")
     
@@ -64,12 +92,15 @@ def export_track_sector_analysis(
     avg_lap_2026 = future["mean"].mean()
     lap_delta = avg_lap_2026 - avg_lap_current
     
-    boost_effect = get_boost_effectiveness(track_key)
+    # Get proper track name for boost effectiveness lookup
+    event_name = race_data.get("event_name", track_key)
+    track_name = EVENT_TO_TRACK.get(event_name, track_key.lower())
+    boost_effect = get_boost_effectiveness(track_name)
     
     output = {
-        "circuit_name": get_track_name(track_key),
+        "circuit_name": event_name,
         "circuit_key": track_key,
-        "circuit_type": get_track_type(track_key),
+        "circuit_type": get_track_type(track_name),
         "boost_effectiveness": boost_effect,
         "lap_summary": {
             "current_avg_lap_time": round(avg_lap_current, 3),
@@ -254,11 +285,42 @@ def export_overtaking_analysis(results: Dict[str, Dict], output_dir: Path) -> Pa
     
     Before/after overtaking frequency by track type.
     """
+    # Event name to track key mapping
+    EVENT_TO_TRACK = {
+        "Bahrain Grand Prix": "bahrain",
+        "Saudi Arabian Grand Prix": "jeddah",
+        "Australian Grand Prix": "melbourne",
+        "Japanese Grand Prix": "suzuka",
+        "Chinese Grand Prix": "shanghai",
+        "Miami Grand Prix": "miami",
+        "Emilia Romagna Grand Prix": "imola",
+        "Monaco Grand Prix": "monaco",
+        "Spanish Grand Prix": "barcelona",
+        "Canadian Grand Prix": "montreal",
+        "Austrian Grand Prix": "spielberg",
+        "British Grand Prix": "silverstone",
+        "Hungarian Grand Prix": "hungary",
+        "Belgian Grand Prix": "spa",
+        "Dutch Grand Prix": "zandvoort",
+        "Italian Grand Prix": "monza",
+        "Azerbaijan Grand Prix": "baku",
+        "Singapore Grand Prix": "singapore",
+        "United States Grand Prix": "cota",
+        "Mexico City Grand Prix": "mexico",
+        "São Paulo Grand Prix": "sao_paulo",
+        "Las Vegas Grand Prix": "las_vegas",
+        "Qatar Grand Prix": "qatar",
+        "Abu Dhabi Grand Prix": "abu_dhabi",
+    }
+    
     track_analysis = []
     
-    for track_key in results.keys():
-        boost_eff = get_boost_effectiveness(track_key)
-        track_type = get_track_type(track_key)
+    for track_key, race_data in results.items():
+        event_name = race_data.get("event_name", track_key)
+        track_name = EVENT_TO_TRACK.get(event_name, track_key.lower())
+        
+        boost_eff = get_boost_effectiveness(track_name)
+        track_type = get_track_type(track_name)
         
         # Estimate overtaking increase based on boost effectiveness
         current_overtakes = 30 + (boost_eff * 20)  # Base assumption
@@ -334,9 +396,10 @@ def export_uncertainty_analysis(results: Dict[str, Dict], model_mae: float, outp
     
     output = {
         "model_metrics": {
-            "mean_absolute_error": round(model_mae, 2),
-            "simulation_runs": 10000,
-            "confidence_level": "90%"
+            "mean_absolute_error": round(model_mae, 2) if model_mae > 0 else None,
+            "simulation_runs": 1000,
+            "confidence_level": "90%",
+            "note": "MAE from base XGBoost model (2022-2025 validation)" if model_mae > 0 else "MAE not provided"
         },
         "feature_importance": {
             "hybrid_power": 0.38,

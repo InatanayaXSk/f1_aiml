@@ -1,8 +1,9 @@
 {
   "model_metrics": {
-    "mean_absolute_error": 0.0,
-    "simulation_runs": 10000,
-    "confidence_level": "90%"
+    "mean_absolute_error": 0.6,
+    "simulation_runs": 1000,
+    "confidence_level": "90%",
+    "note": "MAE from base XGBoost model (2022-2025 validation)"
   },
   "feature_importance": {
     "hybrid_power": 0.38,
@@ -14,241 +15,241 @@
   "driver_uncertainty": [
     {
       "driver": "Max Verstappen",
-      "predicted_position_current": 18.4,
-      "predicted_position_2026": 18.25,
-      "std_dev_current": 0.38,
-      "std_dev_2026": 0.32,
+      "predicted_position_current": 18.27,
+      "predicted_position_2026": 18.22,
+      "std_dev_current": 0.56,
+      "std_dev_2026": 0.53,
       "confidence_90_current": [
-        17.8,
+        17.3,
         19.0
       ],
       "confidence_90_2026": [
-        17.7,
-        18.8
+        17.4,
+        18.9
       ],
       "uncertainty_level": "low"
     },
     {
       "driver": "Daniel Ricciardo",
-      "predicted_position_current": 13.05,
-      "predicted_position_2026": 13.04,
-      "std_dev_current": 0.74,
-      "std_dev_2026": 0.73,
+      "predicted_position_current": 12.81,
+      "predicted_position_2026": 12.83,
+      "std_dev_current": 1.44,
+      "std_dev_2026": 1.5,
       "confidence_90_current": [
-        11.5,
-        14.4
+        10.2,
+        14.7
       ],
       "confidence_90_2026": [
-        11.8,
-        14.4
+        10.2,
+        14.9
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Lando Norris",
       "predicted_position_current": 13.95,
-      "predicted_position_2026": 13.98,
-      "std_dev_current": 0.83,
-      "std_dev_2026": 0.88,
+      "predicted_position_2026": 13.97,
+      "std_dev_current": 1.54,
+      "std_dev_2026": 1.56,
       "confidence_90_current": [
-        12.7,
-        14.9
+        11.6,
+        16.1
       ],
       "confidence_90_2026": [
-        12.7,
-        15.2
+        11.5,
+        16.1
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Nicholas Latifi",
-      "predicted_position_current": 14.81,
-      "predicted_position_2026": 14.81,
-      "std_dev_current": 0.5,
-      "std_dev_2026": 0.49,
+      "predicted_position_current": 14.19,
+      "predicted_position_2026": 14.25,
+      "std_dev_current": 1.22,
+      "std_dev_2026": 1.23,
       "confidence_90_current": [
-        13.9,
+        11.3,
         15.3
       ],
       "confidence_90_2026": [
-        13.9,
+        11.7,
         15.3
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Pierre Gasly",
-      "predicted_position_current": 19.35,
-      "predicted_position_2026": 19.24,
-      "std_dev_current": 0.51,
-      "std_dev_2026": 0.54,
+      "predicted_position_current": 18.91,
+      "predicted_position_2026": 18.86,
+      "std_dev_current": 1.3,
+      "std_dev_2026": 1.38,
       "confidence_90_current": [
-        18.8,
+        17.4,
         19.9
       ],
       "confidence_90_2026": [
-        18.5,
-        20.0
+        17.0,
+        19.9
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Sergio Perez",
-      "predicted_position_current": 17.66,
-      "predicted_position_2026": 17.52,
-      "std_dev_current": 0.38,
-      "std_dev_2026": 0.32,
+      "predicted_position_current": 17.54,
+      "predicted_position_2026": 17.49,
+      "std_dev_current": 1.1,
+      "std_dev_2026": 1.07,
       "confidence_90_current": [
-        17.0,
-        18.2
+        16.4,
+        18.6
       ],
       "confidence_90_2026": [
-        17.0,
-        18.1
+        16.4,
+        18.5
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Fernando Alonso",
-      "predicted_position_current": 8.14,
-      "predicted_position_2026": 8.1,
-      "std_dev_current": 0.94,
-      "std_dev_2026": 0.93,
+      "predicted_position_current": 8.13,
+      "predicted_position_2026": 8.13,
+      "std_dev_current": 1.27,
+      "std_dev_2026": 1.29,
       "confidence_90_current": [
-        7.1,
-        9.1
+        6.5,
+        9.9
       ],
       "confidence_90_2026": [
-        7.1,
-        9.1
+        6.5,
+        9.9
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Charles Leclerc",
       "predicted_position_current": 1.59,
       "predicted_position_2026": 1.6,
-      "std_dev_current": 0.4,
-      "std_dev_2026": 0.4,
+      "std_dev_current": 0.41,
+      "std_dev_2026": 0.39,
       "confidence_90_current": [
         1.0,
         2.1
       ],
       "confidence_90_2026": [
-        1.0,
+        1.1,
         2.1
       ],
       "uncertainty_level": "low"
     },
     {
       "driver": "Lance Stroll",
-      "predicted_position_current": 11.12,
-      "predicted_position_2026": 11.08,
-      "std_dev_current": 0.61,
-      "std_dev_2026": 0.65,
+      "predicted_position_current": 10.86,
+      "predicted_position_2026": 10.86,
+      "std_dev_current": 0.98,
+      "std_dev_2026": 1.09,
       "confidence_90_current": [
-        9.8,
-        12.1
+        9.2,
+        12.2
       ],
       "confidence_90_2026": [
-        9.8,
-        12.1
+        9.0,
+        12.4
       ],
       "uncertainty_level": "low"
     },
     {
       "driver": "Kevin Magnussen",
-      "predicted_position_current": 4.05,
-      "predicted_position_2026": 4.02,
-      "std_dev_current": 0.14,
-      "std_dev_2026": 0.16,
+      "predicted_position_current": 4.11,
+      "predicted_position_2026": 4.12,
+      "std_dev_current": 0.7,
+      "std_dev_2026": 0.77,
       "confidence_90_current": [
-        3.9,
-        4.2
+        3.4,
+        6.1
       ],
       "confidence_90_2026": [
-        3.9,
-        4.2
+        3.3,
+        6.2
       ],
       "uncertainty_level": "low"
     },
     {
       "driver": "Yuki Tsunoda",
-      "predicted_position_current": 7.48,
-      "predicted_position_2026": 7.48,
-      "std_dev_current": 0.46,
-      "std_dev_2026": 0.43,
+      "predicted_position_current": 7.61,
+      "predicted_position_2026": 7.55,
+      "std_dev_current": 1.13,
+      "std_dev_2026": 1.15,
       "confidence_90_current": [
-        6.7,
-        8.4
+        5.5,
+        9.6
       ],
       "confidence_90_2026": [
-        6.7,
-        8.4
+        5.5,
+        9.6
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Alexander Albon",
-      "predicted_position_current": 12.36,
-      "predicted_position_2026": 12.44,
-      "std_dev_current": 0.52,
-      "std_dev_2026": 0.54,
+      "predicted_position_current": 12.42,
+      "predicted_position_2026": 12.41,
+      "std_dev_current": 1.32,
+      "std_dev_2026": 1.35,
       "confidence_90_current": [
-        11.1,
-        13.3
+        10.5,
+        14.7
       ],
       "confidence_90_2026": [
-        11.1,
-        13.4
+        10.5,
+        14.8
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Guanyu Zhou",
-      "predicted_position_current": 8.92,
-      "predicted_position_2026": 8.98,
-      "std_dev_current": 0.47,
-      "std_dev_2026": 0.45,
+      "predicted_position_current": 9.04,
+      "predicted_position_2026": 9.04,
+      "std_dev_current": 1.13,
+      "std_dev_2026": 1.11,
       "confidence_90_current": [
-        7.7,
-        9.6
+        7.1,
+        11.0
       ],
       "confidence_90_2026": [
-        7.7,
-        9.6
+        7.1,
+        10.9
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Nico Hulkenberg",
-      "predicted_position_current": 16.51,
-      "predicted_position_2026": 16.56,
-      "std_dev_current": 0.94,
-      "std_dev_2026": 0.9,
+      "predicted_position_current": 16.37,
+      "predicted_position_2026": 16.43,
+      "std_dev_current": 1.82,
+      "std_dev_2026": 1.81,
       "confidence_90_current": [
-        14.7,
-        18.3
+        13.0,
+        18.9
       ],
       "confidence_90_2026": [
-        14.9,
-        18.3
+        13.2,
+        19.3
       ],
-      "uncertainty_level": "low"
+      "uncertainty_level": "medium"
     },
     {
       "driver": "Esteban Ocon",
-      "predicted_position_current": 6.27,
-      "predicted_position_2026": 6.29,
-      "std_dev_current": 0.19,
-      "std_dev_2026": 0.22,
+      "predicted_position_current": 6.31,
+      "predicted_position_2026": 6.35,
+      "std_dev_current": 0.77,
+      "std_dev_2026": 0.8,
       "confidence_90_current": [
-        6.1,
-        6.4
+        5.3,
+        8.0
       ],
       "confidence_90_2026": [
-        6.1,
-        6.4
+        5.2,
+        8.0
       ],
       "uncertainty_level": "low"
     }

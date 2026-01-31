@@ -6,6 +6,8 @@ import json
 import logging
 from pathlib import Path
 from typing import Dict, Iterable
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from functools import partial
 
 import numpy as np
 import pandas as pd
@@ -94,31 +96,95 @@ def train_model(features: pd.DataFrame, target: pd.Series, feature_columns: Iter
     return model, mae
 
 
+def simulate_single_race(
+    race_key: str,
+    race_data: pd.DataFrame,
+    feature_columns: list,
+    model,
+    mc_config: dict
+) -> tuple[str, dict]:
+    """Simulate a single race (for parallel execution)."""
+    from src.monte_carlo import MonteCarloSimulator, SimulationConfig
+    
+    race_features = race_data[feature_columns].fillna(race_data[feature_columns].mean())
+    drivers = race_data["driver_name"].tolist()
+    
+    simulator = MonteCarloSimulator(model, feature_columns, SimulationConfig(**mc_config))
+    
+    current_stats = simulator.run(race_features, drivers)
+    future_frame = apply_2026_regulations(race_features)
+    future_stats = simulator.run(future_frame, drivers)
+    
+    event_name = race_data.get("event_name", pd.Series([race_key])).iloc[0]
+    
+    return race_key, {
+        "event_name": event_name,
+        "current": current_stats,
+        "2026": future_stats
+    }
+
+
 def simulate_races(
     simulator: MonteCarloSimulator,
     race_frame: pd.DataFrame,
-    feature_columns: Iterable[str]
+    feature_columns: Iterable[str],
+    use_parallel: bool = True,
+    max_workers: int = None
 ) -> Dict[str, Dict[str, Dict]]:
     grouped = race_frame.groupby(["season", "round"], sort=True)
+    
+    if not use_parallel:
+        # Original sequential execution
+        results: Dict[str, Dict[str, Dict]] = {}
+        for (season, round_number), race_data in grouped:
+            race_features = race_data[feature_columns].fillna(race_data[feature_columns].mean())
+            drivers = race_data["driver_name"].tolist()
 
+            current_stats = simulator.run(race_features, drivers)
+            future_frame = apply_2026_regulations(race_features)
+            future_stats = simulator.run(future_frame, drivers)
+
+            race_key = f"{season}_R{round_number:02d}"
+            event_name = race_data.get("event_name", pd.Series([race_key])).iloc[0]
+            results[race_key] = {
+                "event_name": event_name,
+                "current": current_stats,
+                "2026": future_stats
+            }
+            LOGGER.info("Simulated race %s - %s", race_key, event_name)
+        return results
+    
+    # Parallel execution
     results: Dict[str, Dict[str, Dict]] = {}
-
+    
+    # Prepare race data
+    race_data_list = []
     for (season, round_number), race_data in grouped:
-        race_features = race_data[feature_columns].fillna(race_data[feature_columns].mean())
-        drivers = race_data["driver_name"].tolist()
-
-        current_stats = simulator.run(race_features, drivers)
-        future_frame = apply_2026_regulations(race_features)
-        future_stats = simulator.run(future_frame, drivers)
-
         race_key = f"{season}_R{round_number:02d}"
-        event_name = race_data.get("event_name", pd.Series([race_key])).iloc[0]
-        results[race_key] = {
-            "event_name": event_name,
-            "current": current_stats,
-            "2026": future_stats
+        race_data_list.append((race_key, race_data, feature_columns, simulator.model, simulator.config.__dict__))
+    
+    worker_info = f"{max_workers} workers" if max_workers else "all available CPUs"
+    LOGGER.info("Starting parallel simulation of %d races using %s", 
+                len(race_data_list), worker_info)
+    
+    # Use ProcessPoolExecutor for CPU-bound tasks
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all races
+        future_to_race = {
+            executor.submit(simulate_single_race, race_key, race_data.copy(), 
+                          feature_cols, model, mc_config): race_key
+            for race_key, race_data, feature_cols, model, mc_config in race_data_list
         }
-        LOGGER.info("Simulated race %s - %s", race_key, event_name)
+        
+        # Collect results as they complete
+        for future in as_completed(future_to_race):
+            race_key = future_to_race[future]
+            try:
+                key, result = future.result()
+                results[key] = result
+                LOGGER.info("Completed race %s - %s", key, result["event_name"])
+            except Exception as exc:
+                LOGGER.error("Race %s generated an exception: %s", race_key, exc)
 
     return results
 
@@ -142,9 +208,10 @@ def generate_visualisations(results: Dict[str, Dict], sample_key: str, circuits:
         violins.write_html(CHART_DIR / "monte_carlo_distributions.html")
 
 
-def save_results(results: Dict[str, Dict]) -> Path:
+def save_results(results: Dict[str, Dict], suffix: str = "") -> Path:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    results_path = OUTPUT_DIR / "monte_carlo_results.json"
+    filename = f"monte_carlo_results{suffix}.json"
+    results_path = OUTPUT_DIR / filename
     with results_path.open("w", encoding="utf-8") as handle:
         json.dump(results, handle, indent=2)
     LOGGER.info("Saved Monte Carlo outputs to %s", results_path)
@@ -164,15 +231,39 @@ def main() -> None:
     feature_columns = [col for col in features.columns if col not in {"position", "driver_name", "team_name", "season", "round", "event_name"}]
     model, mae = train_model(features, features["position"], feature_columns)
 
-    simulator = MonteCarloSimulator(model, feature_columns, SimulationConfig(**config.get("monte_carlo", {})))
-    results = simulate_races(simulator, features, feature_columns)
+    # --- BASELINE Monte Carlo --- SKIPPED
+    # LOGGER.info("Running BASELINE Monte Carlo simulation")
+    # simulator = MonteCarloSimulator(model, feature_columns, SimulationConfig(**config.get("monte_carlo", {})))
+    # results = simulate_races(simulator, features, feature_columns)
+    # save_results(results)
+    
+    # --- CALIBRATED Monte Carlo ---
+    LOGGER.info("Running CALIBRATED Monte Carlo simulation (driver_form_sigma=0.12)")
+    calibrated_config = SimulationConfig(
+        n_simulations=config.get("monte_carlo", {}).get("n_simulations", 1000),
+        driver_form_sigma=0.12,  # Increased from baseline 0.05
+        weather_sigma=config.get("monte_carlo", {}).get("weather_sigma", 0.10),
+        strategy_delta=config.get("monte_carlo", {}).get("strategy_delta", 0.10),
+        random_seed=config.get("monte_carlo", {}).get("random_seed", 42)
+    )
+    calibrated_simulator = MonteCarloSimulator(model, feature_columns, calibrated_config)
+    
+    # Run with parallelization (set use_parallel=False to disable, max_workers to control CPUs)
+    calibrated_results = simulate_races(
+        calibrated_simulator, 
+        features, 
+        feature_columns,
+        use_parallel=True,
+        max_workers=None  # None = use all available CPUs
+    )
+    save_results(calibrated_results, suffix="_calibrated_0.12")
 
-    save_results(results)
-    sample_key = next(iter(results)) if results else ""
-    generate_visualisations(results, sample_key, config.get("key_circuits", []))
-    create_summary_report(OUTPUT_DIR, mae, len(results))
+    sample_key = next(iter(calibrated_results)) if calibrated_results else ""
+    generate_visualisations(calibrated_results, sample_key, config.get("key_circuits", []))
+    create_summary_report(OUTPUT_DIR, mae, len(calibrated_results))
 
     LOGGER.info("Pipeline complete. Outputs available under %s", OUTPUT_DIR)
+    LOGGER.info("Calibrated results (sigma=0.12): outputs/monte_carlo_results_calibrated_0.12.json")
 
 
 if __name__ == "__main__":
