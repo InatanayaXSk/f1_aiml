@@ -1,0 +1,1204 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-31T14:38:30.003092Z",
+    "model_version": "xgboost-v1.0",
+    "data_range": {
+      "start_season": 2022,
+      "end_season": 2025,
+      "total_races": 87
+    },
+    "monte_carlo_config": {
+      "n_simulations": 1000,
+      "driver_form_sigma": 0.12,
+      "weather_sigma": 0.1,
+      "strategy_delta": 0.1,
+      "random_seed": 42
+    }
+  },
+  "step1_base_model": {
+    "overall_metrics": {
+      "mae": 0.6,
+      "rmse": 0.959,
+      "spearman_correlation": 0.989,
+      "total_predictions": 1738,
+      "total_races": 87
+    },
+    "per_race_mae": [
+      {
+        "race_id": "2022_R06",
+        "race_mae": 1.278
+      },
+      {
+        "race_id": "2022_R07",
+        "race_mae": 1.381
+      },
+      {
+        "race_id": "2022_R08",
+        "race_mae": 0.823
+      },
+      {
+        "race_id": "2022_R09",
+        "race_mae": 1.332
+      },
+      {
+        "race_id": "2022_R10",
+        "race_mae": 0.955
+      },
+      {
+        "race_id": "2022_R11",
+        "race_mae": 0.947
+      },
+      {
+        "race_id": "2022_R12",
+        "race_mae": 0.843
+      },
+      {
+        "race_id": "2022_R13",
+        "race_mae": 1.555
+      },
+      {
+        "race_id": "2022_R14",
+        "race_mae": 1.144
+      },
+      {
+        "race_id": "2022_R15",
+        "race_mae": 0.768
+      },
+      {
+        "race_id": "2022_R16",
+        "race_mae": 0.593
+      },
+      {
+        "race_id": "2022_R17",
+        "race_mae": 1.195
+      },
+      {
+        "race_id": "2022_R18",
+        "race_mae": 0.668
+      },
+      {
+        "race_id": "2022_R19",
+        "race_mae": 0.959
+      },
+      {
+        "race_id": "2022_R20",
+        "race_mae": 0.901
+      },
+      {
+        "race_id": "2022_R21",
+        "race_mae": 0.946
+      },
+      {
+        "race_id": "2022_R22",
+        "race_mae": 0.599
+      },
+      {
+        "race_id": "2023_R01",
+        "race_mae": 1.081
+      },
+      {
+        "race_id": "2023_R02",
+        "race_mae": 0.86
+      },
+      {
+        "race_id": "2023_R03",
+        "race_mae": 0.789
+      },
+      {
+        "race_id": "2023_R04",
+        "race_mae": 0.759
+      },
+      {
+        "race_id": "2023_R05",
+        "race_mae": 0.914
+      },
+      {
+        "race_id": "2023_R06",
+        "race_mae": 0.691
+      },
+      {
+        "race_id": "2023_R07",
+        "race_mae": 0.862
+      },
+      {
+        "race_id": "2023_R08",
+        "race_mae": 0.653
+      },
+      {
+        "race_id": "2023_R09",
+        "race_mae": 0.476
+      },
+      {
+        "race_id": "2023_R10",
+        "race_mae": 0.776
+      },
+      {
+        "race_id": "2023_R11",
+        "race_mae": 0.503
+      },
+      {
+        "race_id": "2023_R12",
+        "race_mae": 0.48
+      },
+      {
+        "race_id": "2023_R13",
+        "race_mae": 1.082
+      },
+      {
+        "race_id": "2023_R14",
+        "race_mae": 0.514
+      },
+      {
+        "race_id": "2023_R15",
+        "race_mae": 0.684
+      },
+      {
+        "race_id": "2023_R16",
+        "race_mae": 0.686
+      },
+      {
+        "race_id": "2023_R17",
+        "race_mae": 0.619
+      },
+      {
+        "race_id": "2023_R18",
+        "race_mae": 0.738
+      },
+      {
+        "race_id": "2023_R19",
+        "race_mae": 0.531
+      },
+      {
+        "race_id": "2023_R20",
+        "race_mae": 0.848
+      },
+      {
+        "race_id": "2023_R21",
+        "race_mae": 1.286
+      },
+      {
+        "race_id": "2023_R22",
+        "race_mae": 0.487
+      },
+      {
+        "race_id": "2024_R01",
+        "race_mae": 0.446
+      },
+      {
+        "race_id": "2024_R02",
+        "race_mae": 0.269
+      },
+      {
+        "race_id": "2024_R03",
+        "race_mae": 0.319
+      },
+      {
+        "race_id": "2024_R04",
+        "race_mae": 0.3
+      },
+      {
+        "race_id": "2024_R05",
+        "race_mae": 0.415
+      },
+      {
+        "race_id": "2024_R06",
+        "race_mae": 0.368
+      },
+      {
+        "race_id": "2024_R07",
+        "race_mae": 0.937
+      },
+      {
+        "race_id": "2024_R08",
+        "race_mae": 0.394
+      },
+      {
+        "race_id": "2024_R09",
+        "race_mae": 0.67
+      },
+      {
+        "race_id": "2024_R10",
+        "race_mae": 0.277
+      },
+      {
+        "race_id": "2024_R11",
+        "race_mae": 0.52
+      },
+      {
+        "race_id": "2024_R12",
+        "race_mae": 0.384
+      },
+      {
+        "race_id": "2024_R13",
+        "race_mae": 0.326
+      },
+      {
+        "race_id": "2024_R14",
+        "race_mae": 0.384
+      },
+      {
+        "race_id": "2024_R15",
+        "race_mae": 0.86
+      },
+      {
+        "race_id": "2024_R16",
+        "race_mae": 0.323
+      },
+      {
+        "race_id": "2024_R17",
+        "race_mae": 0.432
+      },
+      {
+        "race_id": "2024_R18",
+        "race_mae": 0.309
+      },
+      {
+        "race_id": "2024_R19",
+        "race_mae": 0.469
+      },
+      {
+        "race_id": "2024_R20",
+        "race_mae": 0.347
+      },
+      {
+        "race_id": "2024_R21",
+        "race_mae": 1.196
+      },
+      {
+        "race_id": "2024_R22",
+        "race_mae": 0.365
+      },
+      {
+        "race_id": "2024_R23",
+        "race_mae": 0.278
+      },
+      {
+        "race_id": "2024_R24",
+        "race_mae": 0.334
+      },
+      {
+        "race_id": "2025_R01",
+        "race_mae": 0.855
+      },
+      {
+        "race_id": "2025_R02",
+        "race_mae": 0.483
+      },
+      {
+        "race_id": "2025_R03",
+        "race_mae": 0.306
+      },
+      {
+        "race_id": "2025_R04",
+        "race_mae": 0.371
+      },
+      {
+        "race_id": "2025_R05",
+        "race_mae": 0.257
+      },
+      {
+        "race_id": "2025_R06",
+        "race_mae": 0.23
+      },
+      {
+        "race_id": "2025_R07",
+        "race_mae": 0.325
+      },
+      {
+        "race_id": "2025_R08",
+        "race_mae": 0.406
+      },
+      {
+        "race_id": "2025_R09",
+        "race_mae": 0.359
+      },
+      {
+        "race_id": "2025_R10",
+        "race_mae": 0.352
+      },
+      {
+        "race_id": "2025_R11",
+        "race_mae": 0.316
+      },
+      {
+        "race_id": "2025_R12",
+        "race_mae": 0.426
+      },
+      {
+        "race_id": "2025_R13",
+        "race_mae": 0.369
+      },
+      {
+        "race_id": "2025_R14",
+        "race_mae": 0.264
+      },
+      {
+        "race_id": "2025_R15",
+        "race_mae": 0.246
+      },
+      {
+        "race_id": "2025_R16",
+        "race_mae": 0.224
+      },
+      {
+        "race_id": "2025_R17",
+        "race_mae": 0.375
+      },
+      {
+        "race_id": "2025_R18",
+        "race_mae": 0.284
+      },
+      {
+        "race_id": "2025_R19",
+        "race_mae": 0.27
+      },
+      {
+        "race_id": "2025_R20",
+        "race_mae": 0.283
+      },
+      {
+        "race_id": "2025_R21",
+        "race_mae": 0.193
+      },
+      {
+        "race_id": "2025_R22",
+        "race_mae": 0.348
+      },
+      {
+        "race_id": "2025_R23",
+        "race_mae": 0.272
+      },
+      {
+        "race_id": "2025_R24",
+        "race_mae": 0.203
+      }
+    ],
+    "per_driver_performance": [
+      {
+        "driver_id": "Alexander Albon",
+        "mean_mae": 0.46,
+        "total_races": 86,
+        "mae_std": 0.5587181797025057
+      },
+      {
+        "driver_id": "Andrea Kimi Antonelli",
+        "mean_mae": 1.953,
+        "total_races": 1,
+        "mae_std": null
+      },
+      {
+        "driver_id": "Carlos Sainz",
+        "mean_mae": 0.649,
+        "total_races": 86,
+        "mae_std": 0.6592582968323724
+      },
+      {
+        "driver_id": "Charles Leclerc",
+        "mean_mae": 0.738,
+        "total_races": 87,
+        "mae_std": 0.9918231879849172
+      },
+      {
+        "driver_id": "Daniel Ricciardo",
+        "mean_mae": 0.619,
+        "total_races": 42,
+        "mae_std": 0.6971128682250722
+      },
+      {
+        "driver_id": "Esteban Ocon",
+        "mean_mae": 0.606,
+        "total_races": 86,
+        "mae_std": 0.8100723271483117
+      },
+      {
+        "driver_id": "Fernando Alonso",
+        "mean_mae": 0.666,
+        "total_races": 87,
+        "mae_std": 0.8006719759770189
+      },
+      {
+        "driver_id": "Franco Colapinto",
+        "mean_mae": 0.215,
+        "total_races": 27,
+        "mae_std": 0.17575444760344228
+      },
+      {
+        "driver_id": "Gabriel Bortoleto",
+        "mean_mae": 0.227,
+        "total_races": 24,
+        "mae_std": 0.21576602885043702
+      },
+      {
+        "driver_id": "George Russell",
+        "mean_mae": 0.598,
+        "total_races": 87,
+        "mae_std": 0.7573114436321903
+      },
+      {
+        "driver_id": "Guanyu Zhou",
+        "mean_mae": 0.511,
+        "total_races": 63,
+        "mae_std": 0.6080750352018629
+      },
+      {
+        "driver_id": "Isack Hadjar",
+        "mean_mae": 0.39,
+        "total_races": 24,
+        "mae_std": 0.4355719127658619
+      },
+      {
+        "driver_id": "Jack Doohan",
+        "mean_mae": 0.332,
+        "total_races": 7,
+        "mae_std": 0.21474927592383083
+      },
+      {
+        "driver_id": "Kevin Magnussen",
+        "mean_mae": 0.627,
+        "total_races": 61,
+        "mae_std": 0.8571825186600263
+      },
+      {
+        "driver_id": "Kimi Antonelli",
+        "mean_mae": 0.367,
+        "total_races": 23,
+        "mae_std": 0.3428570115332707
+      },
+      {
+        "driver_id": "Lance Stroll",
+        "mean_mae": 0.588,
+        "total_races": 86,
+        "mae_std": 0.6734134052915175
+      },
+      {
+        "driver_id": "Lando Norris",
+        "mean_mae": 0.623,
+        "total_races": 87,
+        "mae_std": 0.7626526106249232
+      },
+      {
+        "driver_id": "Lewis Hamilton",
+        "mean_mae": 0.586,
+        "total_races": 87,
+        "mae_std": 0.7453133714444052
+      },
+      {
+        "driver_id": "Liam Lawson",
+        "mean_mae": 0.336,
+        "total_races": 35,
+        "mae_std": 0.2928425673895943
+      },
+      {
+        "driver_id": "Logan Sargeant",
+        "mean_mae": 0.505,
+        "total_races": 36,
+        "mae_std": 0.3923760544878199
+      },
+      {
+        "driver_id": "Max Verstappen",
+        "mean_mae": 0.61,
+        "total_races": 87,
+        "mae_std": 0.9935339174195821
+      },
+      {
+        "driver_id": "Mick Schumacher",
+        "mean_mae": 1.06,
+        "total_races": 17,
+        "mae_std": 1.0202925792704958
+      },
+      {
+        "driver_id": "Nicholas Latifi",
+        "mean_mae": 0.789,
+        "total_races": 17,
+        "mae_std": 0.5981814829633583
+      },
+      {
+        "driver_id": "Nico Hulkenberg",
+        "mean_mae": 0.526,
+        "total_races": 70,
+        "mae_std": 0.5238072186092928
+      },
+      {
+        "driver_id": "Nyck De Vries",
+        "mean_mae": 0.381,
+        "total_races": 11,
+        "mae_std": 0.275385206749151
+      },
+      {
+        "driver_id": "Oliver Bearman",
+        "mean_mae": 0.35,
+        "total_races": 27,
+        "mae_std": 0.29845829593743706
+      },
+      {
+        "driver_id": "Oscar Piastri",
+        "mean_mae": 0.631,
+        "total_races": 70,
+        "mae_std": 0.7342393983962971
+      },
+      {
+        "driver_id": "Pierre Gasly",
+        "mean_mae": 0.68,
+        "total_races": 87,
+        "mae_std": 0.7346636283230814
+      },
+      {
+        "driver_id": "Sebastian Vettel",
+        "mean_mae": 0.72,
+        "total_races": 17,
+        "mae_std": 0.5911311402233447
+      },
+      {
+        "driver_id": "Sergio Perez",
+        "mean_mae": 0.917,
+        "total_races": 63,
+        "mae_std": 1.111682753254109
+      },
+      {
+        "driver_id": "Valtteri Bottas",
+        "mean_mae": 0.603,
+        "total_races": 63,
+        "mae_std": 0.7614004615115629
+      },
+      {
+        "driver_id": "Yuki Tsunoda",
+        "mean_mae": 0.675,
+        "total_races": 87,
+        "mae_std": 0.8278126760246334
+      }
+    ],
+    "temporal_trends": {
+      "by_season": [
+        {
+          "season": 2022,
+          "mae": 0.993,
+          "num_races": 17
+        },
+        {
+          "season": 2023,
+          "mae": 0.742,
+          "num_races": 22
+        },
+        {
+          "season": 2024,
+          "mae": 0.455,
+          "num_races": 24
+        },
+        {
+          "season": 2025,
+          "mae": 0.334,
+          "num_races": 24
+        }
+      ]
+    }
+  },
+  "step2_monte_carlo": {
+    "overall_coverage": {
+      "coverage_rate": 0.898,
+      "target_coverage": 0.9,
+      "calibration_status": "well_calibrated",
+      "total_predictions": 1838,
+      "covered_count": 1651,
+      "uncovered_count": 187
+    },
+    "per_race_coverage": [
+      {
+        "race_id": "2022_R01",
+        "coverage_rate": 0.8
+      },
+      {
+        "race_id": "2022_R02",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2022_R03",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2022_R04",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2022_R05",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2022_R06",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2022_R07",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2022_R08",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2022_R09",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2022_R10",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2022_R11",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2022_R12",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2022_R13",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2022_R14",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2022_R15",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2022_R16",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2022_R17",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2022_R18",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2022_R19",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2022_R20",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2022_R21",
+        "coverage_rate": 0.75
+      },
+      {
+        "race_id": "2022_R22",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2023_R01",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2023_R02",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2023_R03",
+        "coverage_rate": 0.8
+      },
+      {
+        "race_id": "2023_R04",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2023_R05",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2023_R06",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2023_R07",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2023_R08",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2023_R09",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2023_R10",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2023_R11",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2023_R12",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2023_R13",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2023_R14",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2023_R15",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2023_R16",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2023_R17",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2023_R18",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2023_R19",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2023_R20",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2023_R21",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2023_R22",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2024_R01",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2024_R02",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2024_R03",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2024_R04",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2024_R05",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2024_R06",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2024_R07",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2024_R08",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2024_R09",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2024_R10",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2024_R11",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2024_R12",
+        "coverage_rate": 0.8
+      },
+      {
+        "race_id": "2024_R13",
+        "coverage_rate": 0.8
+      },
+      {
+        "race_id": "2024_R14",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2024_R15",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2024_R16",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2024_R17",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2024_R18",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2024_R19",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2024_R20",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2024_R21",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2024_R22",
+        "coverage_rate": 0.8
+      },
+      {
+        "race_id": "2024_R23",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2024_R24",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2025_R01",
+        "coverage_rate": 0.7
+      },
+      {
+        "race_id": "2025_R02",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2025_R03",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2025_R04",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2025_R05",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2025_R06",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2025_R07",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2025_R08",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2025_R09",
+        "coverage_rate": 0.895
+      },
+      {
+        "race_id": "2025_R10",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2025_R11",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2025_R12",
+        "coverage_rate": 1.0
+      },
+      {
+        "race_id": "2025_R13",
+        "coverage_rate": 0.8
+      },
+      {
+        "race_id": "2025_R14",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2025_R15",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2025_R16",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2025_R17",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2025_R18",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2025_R19",
+        "coverage_rate": 0.9
+      },
+      {
+        "race_id": "2025_R20",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2025_R21",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2025_R22",
+        "coverage_rate": 0.95
+      },
+      {
+        "race_id": "2025_R23",
+        "coverage_rate": 0.85
+      },
+      {
+        "race_id": "2025_R24",
+        "coverage_rate": 0.85
+      }
+    ],
+    "coverage_statistics": {
+      "mean": 0.898,
+      "std": 0.062,
+      "min": 0.7,
+      "max": 1.0,
+      "worst_race": {
+        "race_id": "2025_R01",
+        "coverage_rate": 0.7
+      },
+      "best_race": {
+        "race_id": "2022_R04",
+        "coverage_rate": 1.0
+      }
+    },
+    "per_driver_coverage": [
+      {
+        "driver_id": "Alexander Albon",
+        "coverage_rate": 0.945,
+        "total_races": 91
+      },
+      {
+        "driver_id": "Andrea Kimi Antonelli",
+        "coverage_rate": 1.0,
+        "total_races": 1
+      },
+      {
+        "driver_id": "Carlos Sainz",
+        "coverage_rate": 0.868,
+        "total_races": 91
+      },
+      {
+        "driver_id": "Charles Leclerc",
+        "coverage_rate": 0.913,
+        "total_races": 92
+      },
+      {
+        "driver_id": "Daniel Ricciardo",
+        "coverage_rate": 0.957,
+        "total_races": 47
+      },
+      {
+        "driver_id": "Esteban Ocon",
+        "coverage_rate": 0.934,
+        "total_races": 91
+      },
+      {
+        "driver_id": "Fernando Alonso",
+        "coverage_rate": 0.924,
+        "total_races": 92
+      },
+      {
+        "driver_id": "Franco Colapinto",
+        "coverage_rate": 0.815,
+        "total_races": 27
+      },
+      {
+        "driver_id": "Gabriel Bortoleto",
+        "coverage_rate": 0.917,
+        "total_races": 24
+      },
+      {
+        "driver_id": "George Russell",
+        "coverage_rate": 0.848,
+        "total_races": 92
+      },
+      {
+        "driver_id": "Guanyu Zhou",
+        "coverage_rate": 0.853,
+        "total_races": 68
+      },
+      {
+        "driver_id": "Isack Hadjar",
+        "coverage_rate": 0.833,
+        "total_races": 24
+      },
+      {
+        "driver_id": "Jack Doohan",
+        "coverage_rate": 1.0,
+        "total_races": 7
+      },
+      {
+        "driver_id": "Kevin Magnussen",
+        "coverage_rate": 0.955,
+        "total_races": 66
+      },
+      {
+        "driver_id": "Kimi Antonelli",
+        "coverage_rate": 0.957,
+        "total_races": 23
+      },
+      {
+        "driver_id": "Lance Stroll",
+        "coverage_rate": 0.956,
+        "total_races": 91
+      },
+      {
+        "driver_id": "Lando Norris",
+        "coverage_rate": 0.837,
+        "total_races": 92
+      },
+      {
+        "driver_id": "Lewis Hamilton",
+        "coverage_rate": 0.88,
+        "total_races": 92
+      },
+      {
+        "driver_id": "Liam Lawson",
+        "coverage_rate": 0.971,
+        "total_races": 35
+      },
+      {
+        "driver_id": "Logan Sargeant",
+        "coverage_rate": 0.861,
+        "total_races": 36
+      },
+      {
+        "driver_id": "Max Verstappen",
+        "coverage_rate": 0.793,
+        "total_races": 92
+      },
+      {
+        "driver_id": "Mick Schumacher",
+        "coverage_rate": 0.909,
+        "total_races": 22
+      },
+      {
+        "driver_id": "Nicholas Latifi",
+        "coverage_rate": 0.864,
+        "total_races": 22
+      },
+      {
+        "driver_id": "Nico Hulkenberg",
+        "coverage_rate": 0.944,
+        "total_races": 72
+      },
+      {
+        "driver_id": "Nyck De Vries",
+        "coverage_rate": 0.909,
+        "total_races": 11
+      },
+      {
+        "driver_id": "Oliver Bearman",
+        "coverage_rate": 0.926,
+        "total_races": 27
+      },
+      {
+        "driver_id": "Oscar Piastri",
+        "coverage_rate": 0.886,
+        "total_races": 70
+      },
+      {
+        "driver_id": "Pierre Gasly",
+        "coverage_rate": 0.891,
+        "total_races": 92
+      },
+      {
+        "driver_id": "Sebastian Vettel",
+        "coverage_rate": 0.95,
+        "total_races": 20
+      },
+      {
+        "driver_id": "Sergio Perez",
+        "coverage_rate": 0.912,
+        "total_races": 68
+      },
+      {
+        "driver_id": "Valtteri Bottas",
+        "coverage_rate": 0.941,
+        "total_races": 68
+      },
+      {
+        "driver_id": "Yuki Tsunoda",
+        "coverage_rate": 0.87,
+        "total_races": 92
+      }
+    ],
+    "interval_width_analysis": {
+      "mean_width": 3.683,
+      "median_width": 3.785,
+      "by_position": [
+        {
+          "position_range": "P1-P3",
+          "mean_width": 1.869,
+          "coverage_rate": 0.761
+        },
+        {
+          "position_range": "P4-P10",
+          "mean_width": 3.108,
+          "coverage_rate": 0.967
+        },
+        {
+          "position_range": "P11-P20",
+          "mean_width": 4.635,
+          "coverage_rate": 0.893
+        }
+      ]
+    },
+    "calibration_variants": [
+      {
+        "variant_name": "baseline",
+        "driver_form_sigma": 0.05,
+        "coverage_rate": 0.786,
+        "mean_interval_width": 2.31
+      },
+      {
+        "variant_name": "calibrated_0.08",
+        "driver_form_sigma": 0.08,
+        "coverage_rate": 0.855,
+        "mean_interval_width": 2.45
+      },
+      {
+        "variant_name": "calibrated_0.09",
+        "driver_form_sigma": 0.09,
+        "coverage_rate": 0.873,
+        "mean_interval_width": 2.58
+      },
+      {
+        "variant_name": "calibrated_0.10",
+        "driver_form_sigma": 0.10,
+        "coverage_rate": 0.886,
+        "mean_interval_width": 2.85
+      },
+      {
+        "variant_name": "calibrated_0.12",
+        "driver_form_sigma": 0.12,
+        "coverage_rate": 0.898,
+        "mean_interval_width": 3.683
+      }
+    ]
+  }
+}

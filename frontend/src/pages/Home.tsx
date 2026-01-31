@@ -6,7 +6,7 @@ import { PodiumProbability } from '../components/PodiumProbability';
 import { useSimulations } from '../hooks/useSimulations';
 import { useTeamPerformance } from '../hooks/useTeams';
 import { useTracks } from '../hooks/useTracks';
-import { Activity, Calendar, Flag, TrendingUp } from 'lucide-react';
+import { Activity, Calendar, Flag, TrendingUp, CheckCircle, ArrowRight } from 'lucide-react';
 
 export const Home = () => {
   const { data: simulations, isLoading: simulationsLoading, error: simulationsError } = useSimulations();
@@ -72,6 +72,30 @@ export const Home = () => {
           description="2025 to 2026 forecast"
         />
       </div>
+
+      {/* Model Validation Info Card */}
+      <Link
+        to="/validation"
+        className="block bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
+      >
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-3">
+            <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                Model Validated
+              </h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                MAE 0.60 · Coverage 89.8%
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Rolling-origin evaluation
+              </p>
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+        </div>
+      </Link>
 
       {topTeam && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-lg p-6 border border-blue-200 dark:border-gray-600">
