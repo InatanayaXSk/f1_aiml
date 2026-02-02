@@ -120,35 +120,35 @@ const getTrackZones = (trackId: string, totalPoints: number): TrackZone[] => {
 
 const SIMULATION_MAPPING: Record<string, string> = {
   // Legacy mappings
-  monza: "2022_R16",
-  monaco: "2022_R08",
-  silverstone: "2022_R12",
-  spa: "2022_R13",
-  bahrain: "2022_R04",
+  monza: "2025_R16",
+  monaco: "2025_R08",
+  silverstone: "2025_R12",
+  spa: "2025_R13",
+  bahrain: "2025_R04",
 
   // Full 2025 Season Mappings
-  'australia': "2022_R01",
-  'china': "2022_R02",
-  'japan': "2022_R03",
-  'saudi-arabia': "2022_R05",
-  'miami': "2022_R06",
-  'emilia-romagna': "2022_R07",
-  'spain': "2022_R09",
-  'canada': "2022_R10",
-  'austria': "2022_R11",
-  'great-britain': "2022_R12",
-  'belgium': "2022_R13",
-  'hungary': "2022_R14",
-  'netherlands': "2022_R15",
-  'italy': "2022_R16",
-  'azerbaijan': "2022_R17",
-  'singapore': "2022_R18",
-  'united-states': "2022_R19",
-  'mexico': "2022_R20",
-  'brazil': "2022_R21",
-  'las-vegas': "2022_R22",
-  'qatar': "2022_R23",
-  'abu-dhabi': "2022_R24"
+  'australia': "2025_R01",
+  'china': "2025_R02",
+  'japan': "2025_R03",
+  'saudi-arabia': "2025_R05",
+  'miami': "2025_R06",
+  'emilia-romagna': "2025_R07",
+  'spain': "2025_R09",
+  'canada': "2025_R10",
+  'austria': "2025_R11",
+  'great-britain': "2025_R12",
+  'belgium': "2025_R13",
+  'hungary': "2025_R14",
+  'netherlands': "2025_R15",
+  'italy': "2025_R16",
+  'azerbaijan': "2025_R17",
+  'singapore': "2025_R18",
+  'united-states': "2025_R19",
+  'mexico': "2025_R20",
+  'brazil': "2025_R21",
+  'las-vegas': "2025_R22",
+  'qatar': "2025_R23",
+  'abu-dhabi': "2025_R24"
 };
 
 const SECTOR_ANALYSIS_MODULES = import.meta.glob(
@@ -172,7 +172,7 @@ const findAvailableSimKey = async (trackId: string, preferredKey?: string): Prom
   }
 
   const firstAvailable = AVAILABLE_SIM_KEYS.values().next().value as string | undefined;
-  return preferredKey || firstAvailable || '2022_R01';
+  return preferredKey || firstAvailable || '2025_R01';
 };
 
 const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza', features }) => {

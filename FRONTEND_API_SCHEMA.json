@@ -1,0 +1,418 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "F1 Monte Carlo Benchmarking Frontend API Schema",
+  "description": "Consolidated JSON schema for Step 1 (Base Model) and Step 2 (Monte Carlo) benchmarking outputs suitable for frontend dashboard consumption",
+  
+  "definitions": {
+    "step1_summary": {
+      "type": "object",
+      "title": "Step 1: Base Model Performance Summary",
+      "description": "XGBoost regression model performance metrics from time-aware benchmarking",
+      "properties": {
+        "overall_metrics": {
+          "type": "object",
+          "properties": {
+            "mae": {
+              "type": "number",
+              "description": "Mean Absolute Error (positions)",
+              "minimum": 0,
+              "example": 0.673
+            },
+            "rmse": {
+              "type": "number",
+              "description": "Root Mean Squared Error (positions)",
+              "minimum": 0,
+              "example": 1.082
+            },
+            "spearman_correlation": {
+              "type": "number",
+              "description": "Mean Spearman rank correlation across all races",
+              "minimum": -1,
+              "maximum": 1,
+              "example": 0.892
+            },
+            "total_predictions": {
+              "type": "integer",
+              "description": "Total number of driver-race predictions evaluated",
+              "minimum": 0,
+              "example": 1740
+            },
+            "total_races": {
+              "type": "integer",
+              "description": "Total number of races in evaluation",
+              "minimum": 0,
+              "example": 87
+            }
+          },
+          "required": ["mae", "rmse", "spearman_correlation"]
+        },
+        
+        "per_race_mae": {
+          "type": "array",
+          "description": "MAE breakdown by individual race",
+          "items": {
+            "type": "object",
+            "properties": {
+              "race_id": {
+                "type": "string",
+                "pattern": "^\\d{4}_R\\d{2}$",
+                "example": "2024_R08"
+              },
+              "race_mae": {
+                "type": "number",
+                "minimum": 0,
+                "example": 0.394
+              }
+            },
+            "required": ["race_id", "race_mae"]
+          }
+        },
+        
+        "per_driver_performance": {
+          "type": "array",
+          "description": "Aggregated performance statistics per driver across all races",
+          "items": {
+            "type": "object",
+            "properties": {
+              "driver_id": {
+                "type": "string",
+                "example": "Max Verstappen"
+              },
+              "mean_mae": {
+                "type": "number",
+                "description": "Average MAE for this driver",
+                "minimum": 0
+              },
+              "total_races": {
+                "type": "integer",
+                "description": "Number of races driver participated in",
+                "minimum": 0
+              },
+              "mae_std": {
+                "type": "number",
+                "description": "Standard deviation of MAE across races",
+                "minimum": 0
+              }
+            },
+            "required": ["driver_id", "mean_mae"]
+          }
+        },
+        
+        "temporal_trends": {
+          "type": "object",
+          "description": "Model performance trends over time (by season)",
+          "properties": {
+            "by_season": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "season": {
+                    "type": "integer",
+                    "minimum": 2022,
+                    "example": 2024
+                  },
+                  "mae": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "num_races": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": ["season", "mae"]
+              }
+            }
+          }
+        }
+      },
+      "required": ["overall_metrics", "per_race_mae"]
+    },
+    
+    "step2_summary": {
+      "type": "object",
+      "title": "Step 2: Monte Carlo Coverage Summary",
+      "description": "Monte Carlo uncertainty quantification validation metrics",
+      "properties": {
+        "overall_coverage": {
+          "type": "object",
+          "properties": {
+            "coverage_rate": {
+              "type": "number",
+              "description": "Proportion of actual outcomes within [p5, p95] interval",
+              "minimum": 0,
+              "maximum": 1,
+              "example": 0.783
+            },
+            "target_coverage": {
+              "type": "number",
+              "description": "Nominal coverage target (90% for [p5, p95])",
+              "const": 0.90
+            },
+            "calibration_status": {
+              "type": "string",
+              "enum": ["under_coverage", "well_calibrated", "over_coverage"],
+              "description": "Whether coverage meets expectations"
+            },
+            "total_predictions": {
+              "type": "integer",
+              "description": "Total driver-race predictions evaluated",
+              "minimum": 0,
+              "example": 1840
+            },
+            "covered_count": {
+              "type": "integer",
+              "description": "Number of predictions within interval",
+              "minimum": 0
+            },
+            "uncovered_count": {
+              "type": "integer",
+              "description": "Number of predictions outside interval",
+              "minimum": 0
+            }
+          },
+          "required": ["coverage_rate", "target_coverage", "calibration_status"]
+        },
+        
+        "per_race_coverage": {
+          "type": "array",
+          "description": "Coverage rate breakdown by individual race",
+          "items": {
+            "type": "object",
+            "properties": {
+              "race_id": {
+                "type": "string",
+                "pattern": "^\\d{4}_R\\d{2}$",
+                "example": "2024_R08"
+              },
+              "coverage_rate": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "example": 0.75
+              },
+              "num_drivers": {
+                "type": "integer",
+                "description": "Number of drivers in this race",
+                "minimum": 0
+              }
+            },
+            "required": ["race_id", "coverage_rate"]
+          }
+        },
+        
+        "coverage_statistics": {
+          "type": "object",
+          "description": "Statistical summary of per-race coverage",
+          "properties": {
+            "mean": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "std": {
+              "type": "number",
+              "minimum": 0
+            },
+            "min": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "max": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "worst_race": {
+              "type": "object",
+              "properties": {
+                "race_id": {"type": "string"},
+                "coverage_rate": {"type": "number"}
+              }
+            },
+            "best_race": {
+              "type": "object",
+              "properties": {
+                "race_id": {"type": "string"},
+                "coverage_rate": {"type": "number"}
+              }
+            }
+          }
+        },
+        
+        "per_driver_coverage": {
+          "type": "array",
+          "description": "Aggregated coverage per driver across all races",
+          "items": {
+            "type": "object",
+            "properties": {
+              "driver_id": {
+                "type": "string",
+                "example": "Max Verstappen"
+              },
+              "coverage_rate": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "total_races": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": ["driver_id", "coverage_rate"]
+          }
+        },
+        
+        "interval_width_analysis": {
+          "type": "object",
+          "description": "Analysis of prediction interval widths",
+          "properties": {
+            "mean_width": {
+              "type": "number",
+              "description": "Average width of [p5, p95] interval",
+              "minimum": 0,
+              "example": 2.45
+            },
+            "median_width": {
+              "type": "number",
+              "minimum": 0
+            },
+            "by_position": {
+              "type": "array",
+              "description": "Interval width by finishing position bin",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "position_range": {
+                    "type": "string",
+                    "example": "P1-P3"
+                  },
+                  "mean_width": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "coverage_rate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        
+        "calibration_variants": {
+          "type": "array",
+          "description": "Comparison of different calibration configurations",
+          "items": {
+            "type": "object",
+            "properties": {
+              "variant_name": {
+                "type": "string",
+                "enum": ["baseline", "calibrated_0.08", "calibrated_0.09", "calibrated_0.10", "calibrated_0.12"],
+                "example": "calibrated_0.09"
+              },
+              "driver_form_sigma": {
+                "type": "number",
+                "minimum": 0,
+                "example": 0.09
+              },
+              "coverage_rate": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "mean_interval_width": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": ["variant_name", "driver_form_sigma", "coverage_rate"]
+          }
+        }
+      },
+      "required": ["overall_coverage", "per_race_coverage"]
+    },
+    
+    "monte_carlo_prediction": {
+      "type": "object",
+      "title": "Monte Carlo Prediction Output (for reference)",
+      "description": "Structure of individual MC predictions (not necessarily exposed to frontend)",
+      "properties": {
+        "race_id": {
+          "type": "string",
+          "pattern": "^\\d{4}_R\\d{2}$"
+        },
+        "driver_id": {
+          "type": "string"
+        },
+        "statistics": {
+          "type": "object",
+          "properties": {
+            "mean": {"type": "number", "minimum": 1, "maximum": 20},
+            "std": {"type": "number", "minimum": 0},
+            "median": {"type": "number", "minimum": 1, "maximum": 20},
+            "min": {"type": "number", "minimum": 1, "maximum": 20},
+            "max": {"type": "number", "minimum": 1, "maximum": 20},
+            "percentile_5": {"type": "number", "minimum": 1, "maximum": 20},
+            "percentile_95": {"type": "number", "minimum": 1, "maximum": 20},
+            "top3_probability": {"type": "number", "minimum": 0, "maximum": 1},
+            "top5_probability": {"type": "number", "minimum": 0, "maximum": 1}
+          },
+          "required": ["mean", "std", "percentile_5", "percentile_95"]
+        }
+      }
+    }
+  },
+  
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2026-01-31T12:00:00Z"
+        },
+        "model_version": {
+          "type": "string",
+          "example": "xgboost-v1.0"
+        },
+        "data_range": {
+          "type": "object",
+          "properties": {
+            "start_season": {"type": "integer", "example": 2022},
+            "end_season": {"type": "integer", "example": 2025},
+            "total_races": {"type": "integer", "example": 92}
+          }
+        },
+        "monte_carlo_config": {
+          "type": "object",
+          "properties": {
+            "n_simulations": {"type": "integer", "example": 1000},
+            "driver_form_sigma": {"type": "number", "example": 0.09},
+            "weather_sigma": {"type": "number", "example": 0.10},
+            "strategy_delta": {"type": "number", "example": 0.10},
+            "random_seed": {"type": "integer", "example": 42}
+          }
+        }
+      },
+      "required": ["generated_at"]
+    },
+    
+    "step1_base_model": {
+      "$ref": "#/definitions/step1_summary"
+    },
+    
+    "step2_monte_carlo": {
+      "$ref": "#/definitions/step2_summary"
+    }
+  },
+  
+  "required": ["metadata", "step1_base_model", "step2_monte_carlo"]
+}
