@@ -138,6 +138,13 @@ def export_driving_styles(results: Dict[str, Dict], output_dir: Path) -> Path:
     
     Shows which drivers adapt best to Boost Button mechanics.
     """
+    # Import driver status filtering
+    try:
+        from .driver_status import is_driver_active
+        filter_drivers = True
+    except ImportError:
+        filter_drivers = False
+    
     all_drivers = {}
     
     # Aggregate across all races
@@ -146,6 +153,10 @@ def export_driving_styles(results: Dict[str, Dict], output_dir: Path) -> Path:
         future = pd.DataFrame(race_data["2026"]).T
         
         for driver in current.index:
+            # Filter out retired drivers
+            if filter_drivers and not is_driver_active(driver):
+                continue
+            
             if driver not in future.index:
                 continue
             
@@ -364,6 +375,13 @@ def export_uncertainty_analysis(results: Dict[str, Dict], model_mae: float, outp
     
     Model confidence and prediction intervals.
     """
+    # Import driver status filtering
+    try:
+        from .driver_status import is_driver_active
+        filter_drivers = True
+    except ImportError:
+        filter_drivers = False
+    
     all_uncertainties = []
     
     # Sample from first available race for driver uncertainty
@@ -373,7 +391,14 @@ def export_uncertainty_analysis(results: Dict[str, Dict], model_mae: float, outp
         current = pd.DataFrame(race_data["current"]).T
         future = pd.DataFrame(race_data["2026"]).T
         
-        for driver in current.index[:15]:  # Top 15
+        # Get top drivers, then filter by active status
+        top_drivers = current.index[:15].tolist()
+        
+        for driver in top_drivers:
+            # Filter out retired drivers
+            if filter_drivers and not is_driver_active(driver):
+                continue
+            
             if driver not in future.index:
                 continue
             

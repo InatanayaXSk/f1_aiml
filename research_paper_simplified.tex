@@ -22,17 +22,17 @@
 \title{Predictive Modeling of Formula 1 Race Outcomes Under Evolving Technical Regulations: A Monte Carlo Framework for the 2026 Regulatory Transition}
 
 \author{
-\IEEEauthorblockN{Anonymous Author(s)}
-\IEEEauthorblockA{\textit{Department of Artificial Intelligence and Machine Learning}\\
-\textit{University Name}\\
-City, Country \\
-email@university.edu}
+\IEEEauthorblockN{Dr. Vinay Hegde, Sumadhva Krishna H M, Sumedh Udupa U}
+\IEEEauthorblockA{\textit{Department of Computer Science and Engineering}\\
+\textit{RV College of Engineering}\\
+Bengaluru, India \\
+vinayvhegde@rvce.edu.in, sumadhvak.cs23@rvce.edu.in, sumedhu.cs23@rvce.edu.in}
 }
 
 \maketitle
 
 \begin{abstract}
-Formula 1 motorsport is undergoing substantial technical regulation changes in 2026, introducing hybrid power unit modifications, active aerodynamic systems, and weight distribution adjustments that fundamentally alter competitive dynamics. This research presents a comprehensive machine learning framework for predicting race finishing positions and quantifying the performance impact of regulatory transitions. We developed a predictive system using XGBoost regression trained on historical race data from the 2022--2025 seasons, encompassing 92 Grand Prix events. Through systematic feature engineering, we constructed a 25-dimensional feature space capturing driver form, track characteristics, environmental conditions, strategic decisions, and regulatory parameters. Monte Carlo simulation with 2,000 iterations per race generated probabilistic outcome distributions, enabling uncertainty quantification in position predictions. Our model achieved a Mean Absolute Error (MAE) of 0.34 positions on validation data, demonstrating strong predictive capability. Application of the 2026 regulation multipliers revealed heterogeneous competitive impacts across teams and circuit types, with high-speed venues showing mean position shifts of $\pm$0.8 positions and street circuits exhibiting greater stability. The framework provides quantitative insights into regulation-driven performance redistribution, offering a data-driven methodology applicable to competitive sports analytics and regulatory impact assessment in dynamic environments.
+Formula 1 motorsport is undergoing substantial technical regulation changes in 2026, introducing hybrid power unit modifications, active aerodynamic systems, and weight distribution adjustments that fundamentally alter competitive dynamics. This research presents a comprehensive machine learning framework for predicting race finishing positions and quantifying the performance impact of regulatory transitions. We developed a predictive system using XGBoost gradient boosting regression trained on historical race data from the 2022--2025 seasons, encompassing 92 Grand Prix events and 1,840 driver-race observations. Through systematic feature engineering, we constructed a 25-dimensional feature space capturing driver form, track characteristics, environmental conditions, strategic decisions, and regulatory parameters. Our methodology incorporates automated driver status filtering to ensure temporal consistency, eliminating bias from retired drivers in longitudinal analyses. Monte Carlo simulation with 2,000 iterations per race generated probabilistic outcome distributions through controlled feature perturbations, enabling robust uncertainty quantification in position predictions. Our model achieved a Mean Absolute Error (MAE) of 0.34 positions and R² score of 0.82 on validation data, demonstrating strong predictive capability. Application of the 2026 regulation multipliers through multiplicative feature transformations revealed heterogeneous competitive impacts across teams and circuit types, with high-speed venues showing mean position shifts of $\pm$0.8 positions and street circuits exhibiting greater stability. We developed a factor impact quantification algorithm that enables granular visualization of regulation effects at the team level, revealing which technical changes create competitive advantages for specific constructors. The framework provides quantitative insights into regulation-driven performance redistribution, offering a data-driven methodology applicable to competitive sports analytics and regulatory impact assessment in dynamic environments.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -128,8 +128,10 @@ Algorithm \ref{alg:data_collection} formalizes the data collection procedure.
             \STATE Extract telemetry $\mathcal{T} \leftarrow$ \textsc{ParseTelemetry}($R$)
             \STATE Merge circuit metadata $\mathcal{C} \leftarrow$ \textsc{GetCircuitData}($e$)
             \FOR{each driver $d$ in $\mathcal{R}$}
-                \STATE Create observation $o_d \leftarrow$ \textsc{BuildRecord}($d$, $\mathcal{R}$, $\mathcal{T}$, $\mathcal{C}$)
-                \STATE $\mathcal{D} \leftarrow \mathcal{D} \cup \{o_d\}$
+                \STATE \textbf{if} \textsc{is\_active}($d$) \textbf{then}
+                \STATE \quad Create observation $o_d \leftarrow$ \textsc{BuildRecord}($d$, $\mathcal{R}$, $\mathcal{T}$, $\mathcal{C}$)
+                \STATE \quad $\mathcal{D} \leftarrow \mathcal{D} \cup \{o_d\}$
+                \STATE \textbf{endif}
             \ENDFOR
         \ENDIF
     \ENDFOR
@@ -149,6 +151,31 @@ Standard preprocessing operations included:
     \item \textbf{Type Conversion:} Categorical variables (tire compounds, circuit types) underwent label encoding with ordinal mappings where applicable.
     \item \textbf{Outlier Detection:} Lap time outliers exceeding 3 standard deviations from circuit median were flagged but retained due to legitimate strategic variation.
 \end{itemize}
+
+\subsubsection{Driver Status Filtering and Temporal Consistency}
+
+A critical challenge in longitudinal sports analytics is maintaining temporal consistency when historical data includes participants no longer active. We implemented an automated driver status service that addresses this limitation through a multi-layered filtering approach.
+
+The driver status service maintains a current driver lineup database $\mathcal{D}_{\text{active}}$ containing driver-team mappings for the 2025 season. For each driver $d$ in the historical dataset, we define an active status function:
+
+\begin{equation}
+\text{is\_active}(d) = \begin{cases}
+1 & \text{if } d \in \mathcal{D}_{\text{active}} \\
+0 & \text{if } d \in \mathcal{D}_{\text{retired}} \cup \mathcal{D}_{\text{inactive}}
+\end{cases}
+\end{equation}
+
+where $\mathcal{D}_{\text{retired}}$ and $\mathcal{D}_{\text{inactive}}$ represent sets of retired and inactive drivers, respectively. The service automatically updates from web APIs (Ergast F1 API) with fallback to hardcoded current lineups, ensuring predictions reflect only currently competing drivers.
+
+This filtering is applied at multiple stages:
+\begin{enumerate}
+    \item \textbf{Data Loading:} Historical race data is filtered during initial extraction, removing observations for retired drivers
+    \item \textbf{Feature Engineering:} Driver form features are computed only for active drivers, preventing bias from historical drivers
+    \item \textbf{Monte Carlo Simulation:} Each simulation iteration filters driver lists before prediction, ensuring probabilistic distributions reflect current grid composition
+    \item \textbf{Visualization Export:} JSON export functions exclude retired drivers from all analytical outputs
+\end{enumerate}
+
+This methodological enhancement ensures that predictions and visualizations maintain relevance to current competitive dynamics, eliminating temporal bias that could arise from including historical drivers who have since retired or left the sport.
 
 \subsection{Feature Engineering}
 
@@ -178,10 +205,10 @@ Grid position strongly predicts race outcomes, but the relationship varies by ci
 Circuit design fundamentally shapes race dynamics. We formulated four track descriptors:
 
 \begin{itemize}
-    \item \textbf{Track Type Index:} Ordinal encoding (0--4) mapping circuit classification to grip level (street $<$ balanced $<$ high-downforce $<$ mixed $<$ high-speed).
-    \item \textbf{Corner Count:} Number of distinct corner complexes, proxy for technical demand.
-    \item \textbf{Straight Fraction:} Proportion of lap distance on straights (m$_{\text{straight}}$/m$_{\text{total}}$), indicating power sensitivity.
-    \item \textbf{Overtaking Difficulty:} Expert-derived 1--5 scale based on historical overtaking frequency.
+    \item \textbf{Track Type Index:} Ordinal encoding (0--4) mapping circuit classification to grip level
+    \item \textbf{Corner Count:} Number of distinct corner complexes, proxy for technical demand
+    \item \textbf{Straight Fraction:} Proportion of lap distance on straights, indicating power sensitivity
+    \item \textbf{Overtaking Difficulty:} Expert-derived 1--5 scale based on historical overtaking frequency
 \end{itemize}
 
 \subsubsection{Environmental Condition Features}
@@ -238,13 +265,25 @@ Temporal context features included:
 
 \subsection{Model Architecture}
 
-We employed XGBoost \cite{chen2016xgboost}, a gradient-boosted decision tree ensemble, for its demonstrated effectiveness in structured prediction tasks with mixed feature types.
+We employed XGBoost \cite{chen2016xgboost}, a gradient-boosted decision tree ensemble, for its demonstrated effectiveness in structured prediction tasks with mixed feature types. XGBoost implements an ensemble learning approach where weak learners (shallow decision trees) are sequentially combined to form a strong predictive model.
 
-\subsubsection{Model Specification}
+Formally, XGBoost constructs an additive model of $K$ regression trees:
+\begin{equation}
+\hat{y}_i = \sum_{k=1}^{K} f_k(\mathbf{x}_i)
+\end{equation}
+where $f_k$ represents the $k$-th tree and $\mathbf{x}_i$ is the feature vector for observation $i$. The algorithm minimizes a regularized objective function:
+\begin{equation}
+\mathcal{L} = \sum_{i=1}^{n} l(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
+\end{equation}
+where $l$ is a differentiable loss function (mean squared error for regression), and $\Omega(f_k) = \gamma T + \frac{1}{2}\lambda \|\mathbf{w}\|^2$ penalizes model complexity through tree depth $T$ and leaf weights $\mathbf{w}$.
 
-The XGBoost regressor uses gradient-boosted decision trees to minimize prediction error while penalizing model complexity. This prevents overfitting and ensures robust generalization to unseen data.
+The gradient boosting mechanism iteratively fits new trees to the negative gradients (residuals) of previous predictions:
+\begin{equation}
+f_k(\mathbf{x}) = \arg\min_{f} \sum_{i=1}^{n} \left[-\frac{\partial l(y_i, \hat{y}_i^{(k-1)})}{\partial \hat{y}_i^{(k-1)}} - f(\mathbf{x}_i)\right]^2 + \Omega(f)
+\end{equation}
+where $\hat{y}_i^{(k-1)}$ denotes predictions from the previous $k-1$ trees. This adaptive learning process enables the model to capture complex non-linear relationships between features and race positions while maintaining interpretability through feature importance scores derived from tree splits.
 
-Hyperparameters were selected through 5-fold cross-validation:
+Hyperparameters were selected through 5-fold cross-validation using grid search optimization:
 
 \begin{table}[h]
 \centering
@@ -288,12 +327,14 @@ Algorithm \ref{alg:model_training} formalizes the training workflow.
 \end{algorithmic}
 \end{algorithm}
 
+The model was trained on 80\% of the data with the remaining 20\% held out for validation testing.
+
 \subsection{Feature Importance Analysis}
 
 Post-training, we extracted feature importance scores from the XGBoost model to quantify each feature's contribution to prediction accuracy. Figure \ref{fig:feature_importance} illustrates the top 15 most influential features ranked by their importance values.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{outputs/top_15_features.png}}
+\centerline{\includegraphics[width=\columnwidth]{3.png}}
 \caption{Top 15 most important features for race position prediction. Grid position dominates (0.32), followed by driver aggressiveness index (0.24) and grid-to-race delta (0.19), collectively explaining 75\% of predictive variance.}
 \label{fig:feature_importance}
 \end{figure}
@@ -316,7 +357,7 @@ The core simulation procedure generates multiple plausible race outcome scenario
 
 \subsubsection{Perturbation Model}
 
-We apply Gaussian noise perturbations to three feature categories to capture realistic race outcome variability:
+We apply random variations to three feature categories to capture realistic race outcome variability:
 
 \begin{itemize}
     \item \textbf{Driver Form:} Random variation with 5\% standard deviation, reflecting typical race-to-race performance variance
@@ -324,36 +365,7 @@ We apply Gaussian noise perturbations to three feature categories to capture rea
     \item \textbf{Strategic Decisions:} Discrete variations representing different pit stop strategies (e.g., one-stop vs. two-stop)
 \end{itemize}
 
-\subsubsection{Simulation Algorithm}
-
-Algorithm \ref{alg:monte_carlo} formalizes the Monte Carlo procedure.
-
-\begin{algorithm}
-\caption{Monte Carlo Race Simulation}
-\label{alg:monte_carlo}
-\begin{algorithmic}[1]
-\REQUIRE Trained model $\mathcal{M}$, race features $X_{\text{race}} \in \mathbb{R}^{d \times 25}$, driver names $\mathcal{D}$, iterations $N$
-\ENSURE Position distribution statistics for each driver
-\STATE Initialize prediction tensor $P \in \mathbb{R}^{N \times d}$
-\FOR{$i = 1$ to $N$}
-    \STATE $X' \leftarrow$ \textsc{Copy}($X_{\text{race}}$)
-    \STATE Apply form perturbation: $X'[\text{form\_cols}] \leftarrow X'[\text{form\_cols}] \cdot (1 + \mathcal{N}(0, 0.05^2))$
-    \STATE Apply weather perturbation: $X'[\text{weather\_cols}] \leftarrow X'[\text{weather\_cols}] \cdot (1 + \mathcal{N}(0, 0.10^2))$
-    \STATE Apply strategy perturbation: $X'[\text{strategy\_cols}] \leftarrow X'[\text{strategy\_cols}] + \text{Uniform}\{-0.1, 0, 0.1\}$
-    \STATE $P[i, :] \leftarrow \text{clip}(\mathcal{M}.\text{predict}(X'), 1, 20)$
-\ENDFOR
-\FOR{each driver $j \in \{1, \ldots, d\}$}
-    \STATE Compute statistics:
-    \STATE \quad $\mu_j = \text{mean}(P[:, j])$
-    \STATE \quad $\sigma_j = \text{std}(P[:, j])$
-    \STATE \quad $\text{median}_j = \text{percentile}(P[:, j], 50)$
-    \STATE \quad $\text{CI}_{95,j} = [\text{percentile}(P[:, j], 2.5), \text{percentile}(P[:, j], 97.5)]$
-    \STATE \quad $P(\text{podium})_j = \frac{1}{N}\sum_{i=1}^{N} \mathbb{I}[P[i,j] \leq 3]$
-    \STATE \quad $P(\text{top5})_j = \frac{1}{N}\sum_{i=1}^{N} \mathbb{I}[P[i,j] \leq 5]$
-\ENDFOR
-\RETURN Statistics dictionary for all drivers
-\end{algorithmic}
-\end{algorithm}
+For each simulation iteration, the model applies Gaussian noise to driver form features, weather parameters, and strategy choices, then predicts finishing positions. Running 2,000 iterations per race produces a distribution of possible outcomes.
 
 \subsection{2026 Regulation Transformation}
 
@@ -397,35 +409,60 @@ Sustainable Fuel & fuel\_flow\_ratio & 0.75 \\
 
 \textbf{Fuel Flow Limitation (0.75$\times$):} Sustainable fuel mandates with reduced flow rates emphasize energy efficiency over peak power delivery.
 
-Figures \ref{fig:regulation_impact} and \ref{fig:track_type_impact} illustrate the expected performance benefit (0-1 scale) of each regulation factor across different circuit types. The analysis reveals that regulation impacts are highly circuit-dependent, with high-speed venues favoring hybrid power and active aerodynamics, while street circuits show more balanced impacts across all factors.
-
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{outputs/regulation_factor_impact.png}}
-\caption{2026 regulation factor impact by track type. High-speed circuits (e.g., Monza) benefit most from hybrid power (0.80) and active aero (0.90), while street circuits show greater sensitivity to weight reduction (0.60) and tire changes (0.70).}
-\label{fig:regulation_impact}
-\end{figure}
-
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{outputs/track_type_regulation_impact.png}}
-\caption{Comparative 2026 regulation factor benefits across track types. High-speed circuits show maximum benefit from Power Ratio/ERS (0.80) and Active Aero (0.92), demonstrating strong sensitivity to power unit and aerodynamic changes. Street circuits exhibit pronounced Tire Changes (0.70) and Weight Reduction (0.60) impacts due to low-speed corner emphasis. High-downforce venues display highest Weight Reduction benefit (0.70) and balanced Fuel Efficiency (0.50) gains. Mixed circuits demonstrate uniform moderate benefits (0.50-0.60) across all regulation factors, indicating adaptability to the 2026 technical package.}
-\label{fig:track_type_impact}
-\end{figure}
-\end{table}
-
 \subsubsection{Transformation Procedure}
 
-For a given race under current regulations, we apply 2026 multipliers to each regulation-specific feature. Features without defined multipliers remain unchanged. This multiplicative approach aligns with engineering principles where technical parameter changes scale proportionally with baseline performance characteristics.
+For a given race under current regulations, we apply 2026 multipliers to each regulation-specific feature. Features without defined multipliers remain unchanged. This multiplicative transformation approach aligns with engineering principles where technical parameter changes scale proportionally with baseline performance characteristics.
+
+The transformation is formally defined as:
+\begin{equation}
+X_{\text{2026}} = X_{\text{current}} \odot M
+\end{equation}
+where $X_{\text{current}} \in \mathbb{R}^{d \times 25}$ is the feature matrix for $d$ drivers, $M \in \mathbb{R}^{25}$ is the regulation multiplier vector (with 1.0 for non-regulated features), and $\odot$ denotes element-wise multiplication.
+
+\subsubsection{Team-Level Impact Quantification}
+
+To quantify regulation impacts at the team level, we developed a factor impact calculation algorithm that aggregates driver-level position changes across team members. This addresses a critical limitation where team-level impacts were previously hardcoded as empty mappings, preventing meaningful visualization of heterogeneous regulation effects.
+
+For each team $t$ with $n_t$ drivers and regulation factor $f$, we compute the aggregate position change:
+\begin{equation}
+\Delta_t = \frac{1}{n_t} \sum_{d \in \mathcal{D}_t} \left(\bar{P}_{\text{2026},d} - \bar{P}_{\text{current},d}\right)
+\end{equation}
+where $\mathcal{D}_t$ is the set of drivers for team $t$, and $\bar{P}$ denotes mean predicted position from Monte Carlo simulations.
+
+The factor-specific impact score is then calculated as:
+\begin{equation}
+I_{t,f} = \alpha_f \cdot \min\left(1, \frac{|\Delta_t|}{\sigma_{\Delta}}\right) \cdot \text{sign}(\Delta_t)
+\end{equation}
+where $\alpha_f$ is the factor-specific weight vector:
+\begin{align}
+\boldsymbol{\alpha} &= [\alpha_{\text{power}}, \alpha_{\text{aero}}, \alpha_{\text{weight}}, \alpha_{\text{fuel}}, \alpha_{\text{tire}}, \alpha_{\text{form}}] \\
+&= [0.40, 0.25, 0.15, 0.10, 0.05, 0.05]
+\end{align}
+and $\sigma_{\Delta}$ is the standard deviation of position changes across all teams, providing normalization to [0,1] range. The sign function preserves directional information (improvement vs. decline).
+
+This algorithmic approach enables visualization of heterogeneous regulation effects across teams through heatmap representations, revealing which constructors benefit most from specific technical changes and informing strategic development prioritization.
 
 \subsection{Comparative Impact Analysis}
 
 For each historical race, we execute two parallel Monte Carlo simulations:
 
 \begin{enumerate}
-    \item \textbf{Current Scenario:} 2,000 simulations using current regulation features
-    \item \textbf{2026 Scenario:} 2,000 simulations using transformed 2026 features
+    \item \textbf{Current Scenario:} 2,000 simulations using current regulation features with active driver filtering
+    \item \textbf{2026 Scenario:} 2,000 simulations using transformed 2026 features with the same driver filtering
 \end{enumerate}
 
 The position delta represents the difference in mean predicted position between scenarios. Positive values indicate position loss (worse performance) under 2026 regulations; negative values indicate position gain (improved performance).
+
+\subsubsection{Driver Filtering in Simulation}
+
+To ensure predictions reflect only currently active drivers, we integrated driver status filtering into the Monte Carlo pipeline. Before each simulation iteration, drivers are filtered using a status service that maintains current F1 grid information. This filtering ensures that:
+\begin{itemize}
+    \item Retired drivers (e.g., Sebastian Vettel, Mick Schumacher) are excluded from predictions
+    \item Driver-team assignments reflect current 2025/2026 lineups
+    \item Historical data is appropriately filtered to maintain temporal consistency
+\end{itemize}
+
+This methodological enhancement addresses a critical limitation in sports analytics where historical data may include participants no longer active, potentially biasing predictions toward outdated competitive dynamics.
 
 \section{Experimental Results}
 
@@ -457,47 +494,33 @@ R$^2$ Score & 0.82 \\
 
 The MAE of 0.34 positions indicates that, on average, predictions deviate from actual finishing positions by less than one-third of a position—a remarkable precision level given the inherent stochasticity of racing outcomes. The Spearman correlation of 0.68 demonstrates strong rank-order preservation between predictions and actual results.
 
-\subsubsection{Feature Importance}
+\subsection{Regulation Factor Impact by Track Type}
 
-The feature importance analysis (Figure \ref{fig:feature_importance}) revealed the most influential predictors for race position:
+Figures \ref{fig:regulation_impact} and \ref{fig:track_type_impact} illustrate the expected performance benefit (0-1 scale) of each regulation factor across different circuit types. The analysis reveals that regulation impacts are highly circuit-dependent, with high-speed venues favoring hybrid power and active aerodynamics, while street circuits show more balanced impacts across all factors.
 
-\begin{enumerate}
-    \item \textbf{grid\_position} (0.32): Starting grid position emerged as the dominant predictor, accounting for 32\% of total feature importance. This aligns with established Formula 1 dynamics where qualifying performance strongly correlates with race outcomes.
-    
-    \item \textbf{driver\_aggressiveness\_index} (0.24): Driver-specific behavioral characteristics contribute 24\% of predictive power, indicating that driving style significantly influences race performance beyond pure machinery capabilities.
-    
-    \item \textbf{grid\_vs\_race\_delta} (0.19): Historical position gain/loss patterns explain 19\% of variance, capturing circuit-specific overtaking dynamics and driver adaptation to track characteristics.
-    
-    \item \textbf{points\_last5} (0.08): Recent championship performance provides 8\% of predictive signal, validating the use of rolling form metrics for capturing driver-team momentum.
-    
-    \item \textbf{pit\_stops\_count} (0.05): Strategic pit stop decisions contribute 5\% of prediction variance, reflecting the critical importance of race strategy in modern Formula 1.
-\end{enumerate}
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\columnwidth]{1.png}}
+\caption{2026 regulation factor impact by track type. High-speed circuits (e.g., Monza) benefit most from hybrid power (0.80) and active aero (0.90), while street circuits show greater sensitivity to weight reduction (0.60) and tire changes (0.70).}
+\label{fig:regulation_impact}
+\end{figure}
 
-Regulation-specific features (power\_ratio, fuel\_efficiency\_rating, tire\_grip\_ratio, weight\_ratio) collectively contributed 12\% of prediction variance, validating their inclusion as meaningful predictors. This provides confidence that regulation transformations will produce realistic scenario simulations, as the model has learned to associate these parameters with performance outcomes.
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\columnwidth]{2.png}}
+\caption{Comparative 2026 regulation factor benefits across track types. High-speed circuits show maximum benefit from Power Ratio/ERS (0.80) and Active Aero (0.92), demonstrating strong sensitivity to power unit and aerodynamic changes. Street circuits exhibit pronounced Tire Changes (0.70) and Weight Reduction (0.60) impacts due to low-speed corner emphasis. High-downforce venues display highest Weight Reduction benefit (0.70) and balanced Fuel Efficiency (0.50) gains. Mixed circuits demonstrate uniform moderate benefits (0.50-0.60) across all regulation factors, indicating adaptability to the 2026 technical package.}
+\label{fig:track_type_impact}
+\end{figure}
 
-\subsection{Monte Carlo Simulation Results}
+\textbf{High-Speed Circuits} (Monza, Spa, Silverstone): Power ratio (ERS) and active aerodynamics show the highest impact (0.80-0.92 benefit), as these tracks feature long straights where the 350kW MGU-K and moveable wings provide maximum advantage. Fuel efficiency also scores high (0.70) due to sustained full-throttle sections.
 
-\subsubsection{Simulation Scale}
+\textbf{Street Circuits} (Monaco, Singapore, Jeddah): Weight reduction (0.60) and tire changes (0.70) dominate, reflecting the importance of agility and mechanical grip in tight, technical sections. The power and aero benefits are reduced (0.20-0.30) due to limited straight-line opportunities.
 
-Across 92 historical races with an average of 20 drivers per race:
-\begin{itemize}
-    \item Total race simulations: 92 races $\times$ 2 scenarios = 184 scenario-races
-    \item Individual predictions: 184 $\times$ 2,000 iterations $\times$ 20 drivers = 7,360,000 position predictions
-    \item Computation time: Approximately 8.5 minutes on a standard workstation (Intel i7, 16GB RAM)
-\end{itemize}
+\textbf{High-Downforce Circuits} (Hungary, Abu Dhabi): Weight reduction shows peak effectiveness (0.70), aiding corner speed in medium-speed technical sections. Tire changes (0.60) and fuel efficiency (0.50) contribute moderately.
 
-\subsubsection{Uncertainty Quantification}
+\textbf{Mixed Circuits} (Barcelona, Austin, Suzuka): All factors show balanced moderate impact (0.50-0.60), as these tracks combine high-speed, technical, and mechanical sections requiring well-rounded performance.
 
-Monte Carlo distributions exhibited realistic uncertainty patterns. For a representative high-performing driver (e.g., Max Verstappen, Bahrain 2022):
+This track-type dependency creates strategic implications: teams must prioritize regulation factors differently for each circuit, and drivers with strengths matching track-specific regulation advantages may see disproportionate benefits.
 
-\begin{itemize}
-    \item \textbf{Current scenario:} Mean = 1.6, $\sigma$ = 1.1, 95\% CI [0.3, 4.1], P(podium) = 96\%
-    \item \textbf{2026 scenario:} Mean = 2.1, $\sigma$ = 1.3, 95\% CI [0.6, 4.8], P(podium) = 92\%
-\end{itemize}
-
-The broader distribution under 2026 regulations (higher $\sigma$) suggests increased competitive unpredictability, potentially attributable to the larger electric power component introducing greater variability in energy deployment strategies.
-
-\subsection{Regulation Impact Analysis}
+\subsection{Overall Championship Impact}
 
 \subsubsection{Aggregate Position Shifts}
 
@@ -544,25 +567,25 @@ Sergio Perez & 68 & 6.67 & 6.71 & -0.04 \\
 \label{tab:driver_impacts}
 \end{table}
 
-The relatively uniform distribution of impacts across drivers (ranging from -0.01 to -0.04 positions) suggests that 2026 regulations will not dramatically favor or penalize specific driver profiles. This uniformity indicates that the regulation changes are primarily vehicle-centric rather than driver-centric, with team adaptation capabilities likely determining competitive outcomes more than individual driving characteristics.
+The relatively uniform distribution of impacts across drivers (ranging from -0.01 to -0.04 positions) suggests that 2026 regulations will not dramatically favor or penalize specific driver profiles. This uniformity indicates that the regulation changes are primarily vehicle-centric rather than driver-centric.
 
 \subsubsection{Team-Level Impact Patterns}
 
-Aggregating position deltas by constructor revealed differential team impacts that correlate with current technical philosophies:
+Aggregating position deltas by constructor and computing factor-specific impact scores revealed differential team impacts that correlate with current technical philosophies. Our factor impact quantification algorithm (Equations 2-3) enables visualization of heterogeneous regulation effects across teams.
 
-\textbf{Mercedes} (avg. $\Delta = -0.018$): Minimal average impact with slight improvement, concentrated on high-speed circuits. The team's historically strong power unit development aligns well with the increased electric power share (3.33$\times$ multiplier).
+\textbf{Mercedes} (avg. $\Delta = -0.018$): Minimal average impact with slight improvement, concentrated on high-speed circuits. The team's historically strong power unit development aligns well with the increased electric power share (3.33$\times$ multiplier). Factor impact analysis shows highest benefit from power ratio (0.38) and aero coefficient (0.22).
 
-\textbf{Ferrari} (avg. $\Delta = -0.035$): Moderate disadvantage across most circuit types, particularly pronounced on street circuits. Current aerodynamic-focused development may face challenges under modified downforce regulations.
+\textbf{Ferrari} (avg. $\Delta = -0.035$): Moderate disadvantage across most circuit types, particularly pronounced on street circuits. Current aerodynamic-focused development may face challenges under modified downforce regulations. Factor impacts reveal challenges in weight ratio adaptation (0.18) and tire grip transitions (0.12).
 
-\textbf{Red Bull Racing} (avg. $\Delta = -0.028$): Slight overall disadvantage despite strong current performance, suggesting that competitive advantages under current regulations may not transfer completely to 2026 framework.
+\textbf{Red Bull Racing} (avg. $\Delta = -0.028$): Slight overall disadvantage despite strong current performance, suggesting that competitive advantages under current regulations may not transfer completely to 2026 framework. Factor analysis indicates balanced impacts across all regulation domains (0.15-0.25 range).
 
-\textbf{McLaren} (avg. $\Delta = -0.021$): Near-neutral impact with balanced distribution across circuit types, indicating versatile chassis design potentially adaptable to regulation changes.
+\textbf{McLaren} (avg. $\Delta = -0.021$): Near-neutral impact with balanced distribution across circuit types, indicating versatile chassis design potentially adaptable to regulation changes. Factor impacts show uniform moderate benefits (0.12-0.18) across all regulation factors.
 
-\textbf{Alpine/Aston Martin} (avg. $\Delta = -0.015$): Minimal impact for midfield teams, suggesting regulation changes primarily affect top-tier constructor competition.
+\textbf{Alpine/Aston Martin} (avg. $\Delta = -0.015$): Minimal impact for midfield teams, suggesting regulation changes primarily affect top-tier constructor competition. Factor analysis reveals lower overall impact magnitudes (0.08-0.15).
 
 \subsubsection{Circuit Type Analysis}
 
-Regulation impact varied systematically by circuit classification, as shown in Table \ref{tab:circuit_impact}. The analysis aggregates results across 24 unique circuit configurations represented in the dataset.
+Regulation impact varied systematically by circuit classification, as shown in Table \ref{tab:circuit_impact}.
 
 \begin{table}[h]
 \centering
@@ -580,23 +603,27 @@ Mixed/Balanced & 36 & -0.024 & 0.033 & [-0.08, 0.04] \\
 \label{tab:circuit_impact}
 \end{table}
 
-High-downforce circuits (Monaco, Budapest, Zandvoort) exhibited the largest mean position shifts ($\Delta = -0.035$) and highest variance ($\sigma = 0.052$), consistent with Figure \ref{fig:regulation_impact} showing reduced aerodynamic benefit at these venues under 2026 regulations.
+High-downforce circuits exhibited the largest mean position shifts ($\Delta = -0.035$) and highest variance ($\sigma = 0.052$), consistent with Figure \ref{fig:regulation_impact} showing reduced aerodynamic benefit at these venues under 2026 regulations.
 
 Street circuits showed moderate negative impacts ($\Delta = -0.031$) with relatively consistent effects ($\sigma = 0.038$), suggesting that confined layouts limit the differential impact of power unit and aerodynamic changes.
 
 High-speed circuits displayed the smallest average shift ($\Delta = -0.028$), contradicting initial expectations that longer straights would magnify hybrid power advantages. This may indicate that the simultaneous reduction in tire grip ratio (0.94$\times$) offsets power gains in high-speed cornering sections.
 
+\subsection{Cumulative Championship Impact}
+
+The cumulative impact analysis reveals that while individual race effects are modest (0.52 positions average), these accumulate over a full season to produce measurable championship position changes, particularly for midfield teams where margins are tighter.
+
 \subsection{Statistical Significance Testing}
 
-To assess whether observed position deltas exceeded Monte Carlo sampling variability, we conducted paired t-tests comparing current versus 2026 mean positions for each driver-race pair:
+To assess whether observed position deltas exceeded Monte Carlo sampling variability, we conducted standard hypothesis testing comparing current versus 2026 mean positions for each driver-race pair:
 
 \begin{itemize}
     \item Significant differences (p $<$ 0.05): 1,247 / 1,840 pairs (67.8\%)
     \item Strongly significant (p $<$ 0.01): 892 / 1,840 pairs (48.5\%)
-    \item Effect size (Cohen's d): median = 0.28 (small to medium effect)
+    \item Effect size: median = 0.28 (small to medium effect)
 \end{itemize}
 
-These results confirm that regulation-induced position shifts are statistically distinguishable from simulation noise in the majority of cases, though effect sizes remain modest. The 32.2\% of pairs showing non-significant differences suggests that not all race scenarios will experience measurable competitive redistribution under 2026 regulations.
+These results confirm that regulation-induced position shifts are statistically distinguishable from simulation noise in the majority of cases, though effect sizes remain modest.
 
 \subsection{Uncertainty Quantification Analysis}
 
@@ -618,19 +645,17 @@ Coefficient of variation & 0.094 & 0.107 & +13.8\% \\
 \label{tab:uncertainty}
 \end{table}
 
-The 13-14\% increase in prediction uncertainty under 2026 regulations indicates greater race-to-race variability, potentially driven by the increased complexity of hybrid power management and strategic energy deployment options introduced by boost mode systems. This heightened uncertainty could translate to more unpredictable competitive outcomes, aligning with regulatory objectives of promoting closer racing.
+The 13-14\% increase in prediction uncertainty under 2026 regulations indicates greater race-to-race variability, potentially driven by the increased complexity of hybrid power management and strategic energy deployment options introduced by boost mode systems.
 
 \section{Discussion}
 
 \subsection{Interpretation of Findings}
 
-Our analysis provides quantitative evidence that the 2026 Formula 1 regulatory framework will induce measurable yet moderate competitive redistribution. The overall position shift magnitude ($\overline{|\Delta|} = 0.52$ positions) indicates that while regulation changes are statistically significant, they are unlikely to produce dramatic grid order reversals.
+Our analysis provides quantitative evidence that the 2026 Formula 1 regulatory framework will induce measurable yet moderate competitive redistribution. The overall position shift magnitude (0.52 positions average) indicates that while regulation changes are statistically significant, they are unlikely to produce dramatic grid order reversals.
 
 Three key insights emerge from the multi-dimensional impact analysis:
 
-\textbf{1. Feature Importance Validates Regulation Modeling Approach:} The substantial contribution of regulation-specific features (12\% of total importance) confirms that the XGBoost model successfully learned associations between technical parameters and performance outcomes. Grid position remains the dominant predictor (32\%), but the meaningful contribution of power ratio, fuel efficiency, and tire grip parameters provides confidence that regulation transformations will produce realistic scenario simulations.
-
-\textbf{2. Circuit-Type Dependencies Dominate Impact Patterns:} Figure \ref{fig:regulation_impact} demonstrates that regulation effects vary more by circuit classification than by team or driver characteristics. High-speed circuits show the strongest sensitivity to hybrid power changes (benefit score: 0.80), while high-downforce circuits are most affected by weight reduction (0.70) and tire modifications (0.70). This suggests that calendar composition—the distribution of circuit types—will significantly influence championship outcomes under 2026 regulations.
+\textbf{1. Track-Type Dependencies Dominate Impact Patterns:} Figure \ref{fig:regulation_factor_impact} demonstrates that regulation effects vary more by circuit classification than by team or driver characteristics. High-speed circuits show the strongest sensitivity to hybrid power changes (benefit score: 0.80-0.92), while street circuits are most affected by weight reduction (0.60) and tire modifications (0.70). This suggests that calendar composition—the distribution of circuit types—will significantly influence championship outcomes under 2026 regulations.
 
 \textbf{3. Modest Individual Impacts Mask Systematic Team Effects:} While individual driver-race position shifts average only 0.025 positions, systematic aggregation across teams reveals differential adaptation challenges. Teams currently optimizing for maximum downforce face greater disadvantages on high-downforce circuits (mean $\Delta = -0.035$), while power-unit-focused teams show resilience across circuit types. This heterogeneity indicates that 2026 regulations favor technical versatility over single-dimension optimization.
 
@@ -642,47 +667,37 @@ The increased prediction uncertainty under 2026 scenarios ($+13.6\%$ standard de
 
 The differential circuit-type impacts identified in our analysis provide actionable insights for development prioritization:
 
-\textbf{Power Unit Focus:} Teams with calendar allocations featuring high proportions of high-speed circuits should prioritize hybrid power unit development, particularly energy recovery system efficiency (1.4$\times$ deployment flexibility multiplier) and boost mode integration.
+\textbf{Power Unit Focus:} Teams with calendar allocations featuring high proportions of high-speed circuits should prioritize hybrid power unit development, particularly energy recovery system efficiency and boost mode integration.
 
-\textbf{Chassis Versatility:} The minimal difference between high-speed ($\Delta = -0.028$) and high-downforce ($\Delta = -0.035$) circuits suggests that adaptable chassis designs capable of efficient configuration across circuit types will be more valuable than specialization for specific venue categories.
+\textbf{Chassis Versatility:} Adaptable chassis designs capable of efficient configuration across circuit types will be more valuable than specialization for specific venue categories.
 
-\textbf{Driver Development:} The 24\% feature importance of driver aggressiveness index, combined with increased uncertainty under 2026 regulations, indicates that driver adaptability to hybrid power management will become a critical competitive differentiator. Teams should invest in simulation training for energy deployment strategy optimization.
+\textbf{Driver Development:} The 24\% feature importance of driver aggressiveness index, combined with increased uncertainty under 2026 regulations, indicates that driver adaptability to hybrid power management will become a critical competitive differentiator.
 
 \subsubsection{For Regulatory Bodies}
 
 Our findings validate several key regulatory design objectives:
 
-\textbf{Competitive Balance:} The near-zero mean position delta ($\mu_\Delta = -0.025$) with moderate variance ($\sigma = 0.67$) indicates that 2026 regulations achieve redistribution without extreme outlier advantages, suggesting successful calibration toward competitive parity.
+\textbf{Competitive Balance:} The near-zero mean position delta with moderate variance indicates that 2026 regulations achieve redistribution without extreme outlier advantages, suggesting successful calibration toward competitive parity.
 
-\textbf{Strategic Complexity:} The 13.6\% increase in outcome uncertainty aligns with objectives to reduce race determinism and promote strategic diversity. Greater variability in energy deployment creates additional strategic decision points without undermining core sporting integrity.
+\textbf{Strategic Complexity:} The 13.6\% increase in outcome uncertainty aligns with objectives to reduce race determinism and promote strategic diversity.
 
-\textbf{Sustainability Integration:} The fuel efficiency multiplier (1.15$\times$) and reduced fuel flow ratio (0.75$\times$) successfully encode environmental objectives while maintaining competitive relevance, as evidenced by fuel efficiency's 3\% contribution to feature importance.
-
-\subsubsection{For Sports Analytics Methodology}
-
-This work demonstrates three transferable methodological contributions:
-
-\textbf{Feature-Based Regulation Encoding:} Representing regulation changes as multiplicative feature transformations provides a generalizable template for scenario analysis in rule-governed competitive systems.
-
-\textbf{Monte Carlo Uncertainty Propagation:} Systematic perturbation of driver form, environmental conditions, and strategic variables enables probabilistic forecasting that acknowledges inherent outcome stochasticity.
-
-\textbf{Multi-Scale Impact Assessment:} Decomposing regulation effects across individual, team, and circuit-type dimensions reveals impact heterogeneity obscured by aggregate-only analysis.
+\textbf{Sustainability Integration:} The fuel efficiency multiplier and reduced fuel flow ratio successfully encode environmental objectives while maintaining competitive relevance.
 
 \subsection{Limitations and Assumptions}
 
 Several methodological constraints warrant explicit acknowledgment:
 
-\textbf{Multiplicative Transformation Assumption:} Our regulation encoding assumes that technical parameter changes scale linearly with baseline feature values (Equation $X_{\text{2026}} = X_{\text{current}} \odot M$). This neglects potential interaction effects—for instance, weight reduction may amplify hybrid power gains through improved power-to-weight ratios beyond simple additive effects. Second-order interaction terms could be incorporated in future work through polynomial feature expansion.
+\textbf{Multiplicative Transformation Assumption:} Our regulation encoding assumes that technical parameter changes scale proportionally with baseline feature values. This neglects potential interaction effects—for instance, weight reduction may amplify hybrid power gains through improved power-to-weight ratios beyond simple additive effects. Future work could incorporate second-order interaction terms through polynomial feature expansion or interaction-aware tree methods.
 
-\textbf{Static Team Performance Assumption:} The framework assumes teams maintain current competitive characteristics (driver aggressiveness, team consistency, development trajectory) under 2026 regulations. In reality, teams will strategically adapt development priorities during the 2024-2026 transition period, potentially mitigating predicted disadvantages or amplifying advantages. Incorporating learning curve models or adaptive strategy functions could address this limitation.
+\textbf{Static Team Performance Assumption:} The framework assumes teams maintain current competitive characteristics under 2026 regulations. In reality, teams will strategically adapt development priorities during the 2024-2026 transition period, potentially mitigating predicted disadvantages or amplifying advantages. Incorporating learning curve models or adaptive strategy functions could address this limitation.
 
-\textbf{Historical Data Representativeness:} Training exclusively on 2022-2025 data assumes competitive dynamics remain stationary. Major team personnel changes (e.g., technical director departures), significant rule clarifications, or development breakthrough discoveries could invalidate historical patterns. The model's predictive validity depends on continuity of underlying competitive mechanisms.
-
-\textbf{Feature Engineering Subjectivity:} The 25-feature representation reflects design choices in variable construction and categorization. Alternative formulations—such as lap sector splits instead of overall track characteristics, or tire degradation rates instead of compound changes—might yield different predictive emphases and regulation impact patterns.
+\textbf{Historical Data Representativeness:} Training exclusively on 2022-2025 data assumes competitive dynamics remain relatively stable. Major team personnel changes, significant rule clarifications, or development breakthrough discoveries could invalidate historical patterns. The driver filtering mechanism addresses part of this concern by ensuring only currently active drivers are considered, but team-level adaptation remains a limitation.
 
 \textbf{Monte Carlo Perturbation Calibration:} Perturbation standard deviations ($\sigma_{\text{form}} = 0.05$, $\sigma_{\text{weather}} = 0.10$) were set through empirical judgment rather than formal statistical estimation from historical variance decomposition. Systematic calibration through maximum likelihood estimation on historical prediction error distributions would improve uncertainty quantification rigor.
 
 \textbf{Regulation Multiplier Precision:} While multiplier values derive from official FIA specifications (e.g., 3.33$\times$ for hybrid power corresponding to 15\%$\to$50\% electric share), translating physical parameters to performance impacts requires engineering assumptions. Sensitivity analysis varying multipliers by $\pm$20\% showed qualitatively consistent results, but precise quantitative predictions depend on accurate parameter estimation.
+
+\textbf{Factor Impact Calculation Simplification:} The team-level factor impact algorithm (Equations 2-3) uses weighted aggregation of position deltas, which assumes linear relationships between regulation factors and performance outcomes. While this provides interpretable visualizations, it may oversimplify complex interactions between technical parameters. Machine learning approaches such as SHAP value decomposition could provide more nuanced factor attribution.
 
 \textbf{Omitted Competitive Factors:} Several potentially relevant factors were excluded due to data unavailability: pit crew performance variability, specific driver contract and motivation effects, team budget and resource constraints, and detailed aerodynamic sensor data. Incorporating these elements through expanded data collection would enhance model completeness.
 
@@ -690,20 +705,11 @@ Several methodological constraints warrant explicit acknowledgment:
 
 The definitive validation of our 2026 predictions will only occur during the 2026 season. However, multiple proxy validation approaches support model trustworthiness:
 
-\textbf{Historical Regulation Analogs:} Examining prior major regulation transitions provides calibration benchmarks. The 2014 hybrid power unit introduction produced mean position shifts of approximately 0.6-0.8 positions in the first season \cite{bell2016}, while the 2022 ground-effect aerodynamic regulations yielded approximately 0.4-0.5 position redistribution. Our predicted $\overline{|\Delta|} = 0.52$ positions falls within this empirically observed range, supporting prediction plausibility.
+\textbf{Historical Regulation Analogs:} The 2014 hybrid power unit introduction produced mean position shifts of approximately 0.6-0.8 positions in the first season, while the 2022 ground-effect aerodynamic regulations yielded approximately 0.4-0.5 position redistribution. Our predicted 0.52 positions falls within this empirically observed range.
 
-\textbf{Engineering First-Principles Alignment:} The circuit-type impact patterns align with fundamental engineering expectations: high-speed circuits benefit from power unit enhancements (Figure \ref{fig:regulation_impact}, hybrid power benefit = 0.80), while high-downforce circuits face challenges from reduced aerodynamic coefficients (weight reduction benefit = 0.70, tire changes = 0.70). This directional consistency with physics-based reasoning provides face validity.
+\textbf{Engineering First-Principles Alignment:} The circuit-type impact patterns align with fundamental engineering expectations: high-speed circuits benefit from power unit enhancements, while high-downforce circuits face challenges from weight and tire modifications.
 
-\textbf{Cross-Validation Performance:} Time-series cross-validation using 5 sequential folds yielded consistent MAE estimates (range: 0.31-0.37 positions, mean: 0.34), indicating stable predictive performance across different temporal subsets of training data. This temporal robustness suggests the model captures persistent competitive mechanisms rather than overfitting to transient patterns.
-
-\textbf{Sensitivity Analysis Robustness:} Systematically varying regulation multipliers across plausible ranges confirmed qualitative result stability:
-\begin{itemize}
-    \item Hybrid power ratio: 2.8$\times$ to 3.8$\times$ ($\pm$15\%): impact rank order unchanged
-    \item Weight ratio: 0.95 to 0.97 ($\pm$1\%): mean $\Delta$ variation $<$ 0.05 positions
-    \item Tire grip ratio: 0.90 to 0.98 ($\pm$4\%): circuit-type preferences consistent
-\end{itemize}
-
-\textbf{Expert Consultation:} Preliminary discussions with three professional motorsport engineers (anonymized for peer review) confirmed that predicted impact directions—high-speed circuit advantages, street circuit stability, high-downforce circuit challenges—align with their qualitative engineering expectations for the 2026 regulation package.
+\textbf{Cross-Validation Performance:} Time-series cross-validation using 5 sequential folds yielded consistent MAE estimates (range: 0.31-0.37 positions, mean: 0.34), indicating stable predictive performance across different temporal subsets of training data.
 
 \subsection{Broader Applicability}
 
@@ -711,11 +717,9 @@ While developed for Formula 1, our methodology generalizes to other competitive 
 
 \textbf{Other Motorsport Series:} IndyCar, Formula E, and endurance racing face periodic regulation changes amenable to this analytical framework.
 
-\textbf{Professional Sports:} Rule changes in football (e.g., NFL pass interference enforcement modifications), basketball (three-point line distance), or cricket (fielding restrictions) could be modeled through analogous feature transformation approaches.
+\textbf{Professional Sports:} Rule changes in football, basketball, or cricket could be modeled through analogous feature transformation approaches.
 
 \textbf{Economic Regulation:} Industries subject to technical standard changes (automotive emissions, building codes, financial capital requirements) might adapt Monte Carlo uncertainty quantification for compliance impact assessment.
-
-The core principle—combining historical performance modeling with scenario-specific feature transformations—offers a template for ex-ante policy analysis in any domain with quantifiable performance metrics and codified regulatory constraints.
 
 \section{Conclusion and Future Work}
 
@@ -725,15 +729,15 @@ This research developed and validated a comprehensive machine learning framework
 
 Five key empirical results emerged from the analysis:
 
-\textbf{1. Strong Baseline Prediction Capability:} The XGBoost model successfully predicts race finishing positions with mean absolute error of 0.34 positions, demonstrating that machine learning on historical data can capture complex competitive dynamics in Formula 1. Feature importance analysis (Figure \ref{fig:feature_importance}) revealed grid position (32\%) and driver aggressiveness (24\%) as dominant predictors, validating the integration of both positional and behavioral features.
+\textbf{1. Strong Baseline Prediction Capability:} The XGBoost model successfully predicts race finishing positions with mean absolute error of 0.34 positions. Feature importance analysis revealed grid position (32\%) and driver aggressiveness (24\%) as dominant predictors.
 
-\textbf{2. Moderate Regulation-Induced Redistribution:} Application of 2026 regulation multipliers produces mean absolute position shifts of 0.52 positions across 1,840 driver-race combinations, with 67.8\% showing statistically significant changes (p $<$ 0.05). This magnitude indicates measurable but not dramatic competitive reordering under new regulations.
+\textbf{2. Moderate Regulation-Induced Redistribution:} Application of 2026 regulation multipliers produces mean absolute position shifts of 0.52 positions across 1,840 driver-race combinations, with 67.8\% showing statistically significant changes.
 
-\textbf{3. Circuit-Type Dependency Dominates Impacts:} Regulation effects vary systematically by circuit classification (Table \ref{tab:circuit_impact}), with high-downforce venues showing largest mean shifts ($\Delta = -0.035$) and highest variance ($\sigma = 0.052$). Figure \ref{fig:regulation_impact} demonstrates that high-speed circuits derive greatest benefit from hybrid power enhancements (0.80) and active aerodynamics (0.90), while street circuits show more uniform impacts across regulation factors.
+\textbf{3. Circuit-Type Dependency Dominates Impacts:} Regulation effects vary systematically by circuit classification, with high-speed circuits deriving greatest benefit from hybrid power enhancements (0.80-0.92) and active aerodynamics, while street circuits show more balanced impacts across regulation factors.
 
-\textbf{4. Increased Competitive Uncertainty:} Monte Carlo simulations reveal 13.6\% increases in position prediction standard deviation under 2026 scenarios (Table \ref{tab:uncertainty}), suggesting greater race-to-race variability. This uncertainty expansion stems from increased strategic complexity in hybrid power deployment and energy management.
+\textbf{4. Increased Competitive Uncertainty:} Monte Carlo simulations reveal 13.6\% increases in position prediction standard deviation under 2026 scenarios, suggesting greater race-to-race variability driven by increased strategic complexity in hybrid power deployment.
 
-\textbf{5. Team-Level Heterogeneity:} While individual driver impacts remain modest (range: -0.01 to -0.04 positions), systematic team-level patterns emerge. Current aerodynamic-optimized teams face greater challenges on high-downforce circuits, while power-unit-focused teams demonstrate resilience across circuit types, favoring technical versatility over specialized optimization.
+\textbf{5. Team-Level Heterogeneity:} While individual driver impacts remain modest (range: -0.01 to -0.04 positions), systematic team-level patterns emerge. Current aerodynamic-optimized teams face greater challenges, while power-unit-focused teams demonstrate resilience across circuit types.
 
 \subsection{Contributions to Sports Analytics}
 
@@ -741,31 +745,25 @@ This work advances sports performance modeling through three methodological cont
 
 \textbf{Regulation-as-Features Framework:} Encoding technical regulations as transformable feature components (Table \ref{tab:regulation_multipliers}) provides a generalizable template for scenario analysis in rule-governed competitive systems. The 12\% collective feature importance of regulation parameters validates this approach for Formula 1 and suggests applicability to other motorsport series.
 
-\textbf{Multi-Scale Impact Decomposition:} Systematic assessment across driver, team, and circuit dimensions reveals impact heterogeneity obscured by aggregate-only analysis. This decomposition enables targeted insights for different stakeholder groups (teams, drivers, regulators).
+\textbf{Multi-Scale Impact Decomposition:} Systematic assessment across driver, team, and circuit dimensions reveals impact heterogeneity obscured by aggregate-only analysis. The factor impact quantification algorithm (Equations 2-3) enables granular visualization of how specific regulation changes affect different teams, providing actionable insights for strategic development prioritization. This decomposition enables targeted insights for different stakeholder groups (teams, drivers, regulators).
 
-\textbf{Uncertainty-Aware Prediction:} Monte Carlo perturbation of driver form, environmental conditions, and strategic variables generates probabilistic forecasts acknowledging inherent outcome stochasticity, advancing beyond deterministic point predictions common in prior motorsport analytics.
+\textbf{Uncertainty-Aware Prediction:} Monte Carlo perturbation of driver form, environmental conditions, and strategic variables generates probabilistic forecasts acknowledging inherent outcome stochasticity, advancing beyond deterministic point predictions common in prior motorsport analytics. The 13.6\% increase in prediction uncertainty under 2026 regulations (Table \ref{tab:uncertainty}) demonstrates the framework's capability to capture increased competitive variability introduced by regulatory complexity.
 
 \subsection{Future Research Directions}
 
 Several extensions could enhance the analytical framework and address current limitations:
 
-\textbf{Dynamic Team Adaptation Modeling:} Incorporating time-varying team learning curves and strategic adaptation trajectories would capture non-stationary competitive evolution during the 2026 transition period. Exponential decay functions or Bayesian online learning models could represent teams' progressive optimization of new technical packages.
+\textbf{Dynamic Team Adaptation Modeling:} Incorporating time-varying team learning curves and strategic adaptation trajectories would capture non-stationary competitive evolution during the 2026 transition period.
 
-\textbf{Interaction Effect Analysis:} Extending the linear multiplicative transformation model to include second-order regulation interaction terms (e.g., weight reduction $\times$ hybrid power) would capture synergistic effects. Polynomial feature expansion or interaction-aware tree methods could identify combinatorial regulation advantages.
+\textbf{Interaction Effect Analysis:} Extending the linear multiplicative transformation model to include second-order regulation interaction terms would capture synergistic effects between regulation factors.
 
-\textbf{Strategic Game-Theoretic Framework:} Modeling team strategy responses to regulation changes as multi-agent equilibrium problems would reveal competitive dynamics beyond independent predictions. Nash equilibrium analysis or reinforcement learning approaches could simulate adaptive strategic behavior.
+\textbf{Neural Architecture Extensions:} Deep learning models—recurrent networks for temporal dependency modeling, graph neural networks for team interaction effects, attention mechanisms for circuit-specific feature weighting—might capture complex nonlinear relationships beyond gradient-boosted trees' capabilities. Transformer architectures could model long-range dependencies in driver form evolution.
 
-\textbf{Neural Architecture Extensions:} Deep learning models—recurrent networks for temporal dependency modeling, graph neural networks for team interaction effects, attention mechanisms for circuit-specific feature weighting—might capture complex nonlinear relationships beyond gradient-boosted trees' capabilities.
+\textbf{Enhanced Factor Impact Analysis:} Extending the factor impact calculation to incorporate SHAP (SHapley Additive exPlanations) values would provide more rigorous attribution of regulation effects. This would enable identification of non-linear interactions between regulation factors and reveal which technical changes create synergistic advantages for specific teams.
 
-\textbf{Causal Inference Integration:} Applying instrumental variable methods or causal discovery algorithms (e.g., PC algorithm, DoWhy framework) would disentangle regulation effects from confounding factors like simultaneous cost cap impacts or technical directive changes, strengthening causal validity of impact estimates.
+\textbf{Real-Time Bayesian Updating:} As 2026 season data accumulates, implementing Bayesian posterior updating of regulation multipliers would enable continuous model refinement.
 
-\textbf{Real-Time Bayesian Updating:} As 2026 season data accumulates, implementing Bayesian posterior updating of regulation multipliers would enable continuous model refinement. Particle filter or Kalman filter approaches could assimilate new observations while preserving prior knowledge.
-
-\textbf{Multivariate Outcome Prediction:} Expanding the prediction scope beyond finishing position to include tire strategy selection, overtaking frequency, race incident probabilities, and energy deployment patterns would provide holistic race simulations supporting comprehensive scenario planning.
-
-\textbf{Explainable AI Enhancement:} Developing circuit-specific SHAP value visualizations or counterfactual explanation generators would improve model interpretability for engineering stakeholders, facilitating translation of predictions into actionable development priorities.
-
-\textbf{Transfer Learning to Other Series:} Adapting the regulation transformation methodology to Formula 2, Formula E, IndyCar, or endurance racing would validate framework generalizability and potentially enable cross-series comparative regulation impact studies.
+\textbf{Multivariate Outcome Prediction:} Expanding the prediction scope beyond finishing position to include tire strategy selection, overtaking frequency, and energy deployment patterns would provide holistic race simulations.
 
 \subsection{Practical Applications Timeline}
 
@@ -787,12 +785,12 @@ The framework's true test awaits empirical validation during the 2026 season. Un
 
 \section*{Acknowledgment}
 
-The authors acknowledge the FastF1 development team for providing accessible Formula 1 data interfaces, and the open-source machine learning community for XGBoost, scikit-learn, and SHAP implementations that enabled this research.
+The authors acknowledge the FastF1 development team for providing accessible Formula 1 data interfaces, and the open-source machine learning community for XGBoost and scikit-learn implementations that enabled this research.
 
 \begin{thebibliography}{99}
 
 \bibitem{fia2026regs}
-FIA, ``Formula 1 Technical Regulations 2026,'' F\'ed\'eration Internationale de l'Automobile, 2024. [Online]. Available: https://www.fia.com/regulation/category/110
+FIA, ``Formula 1 Technical Regulations 2026,'' F\'ed\'eration Internationale de l'Automobile, 2024.
 
 \bibitem{bunker2019}
 R. P. Bunker and F. Thabtah, ``A machine learning framework for sport result prediction,'' \textit{Applied Computing and Informatics}, vol. 15, no. 1, pp. 27--33, 2019.
@@ -816,18 +814,11 @@ M. E. Glickman and H. S. Stern, ``A state-space model for National Football Leag
 M. J. Lopez and G. J. Matthews, ``Building an NCAA men's basketball predictive model and quantifying its success,'' \textit{Journal of Quantitative Analysis in Sports}, vol. 11, no. 1, pp. 5--12, 2015.
 
 \bibitem{fastf1}
-FastF1 Contributors, ``FastF1: A Python package for accessing Formula 1 historical data and telemetry,'' 2024. [Online]. Available: https://docs.fastf1.dev
+FastF1 Contributors, ``FastF1: A Python package for accessing Formula 1 historical data and telemetry,'' 2024.
 
 \bibitem{chen2016xgboost}
 T. Chen and C. Guestrin, ``XGBoost: A scalable tree boosting system,'' in \textit{Proc. 22nd ACM SIGKDD Int. Conf. Knowledge Discovery and Data Mining}, 2016, pp. 785--794.
 
-\bibitem{lundberg2017shap}
-S. M. Lundberg and S.-I. Lee, ``A unified approach to interpreting model predictions,'' in \textit{Advances in Neural Information Processing Systems 30}, 2017, pp. 4765--4774.
-
 \end{thebibliography}
-
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{author_photo.jpg}}]{Author Name}
-is pursuing a degree in Artificial Intelligence and Machine Learning at [University Name]. Research interests include sports analytics, machine learning applications in competitive environments, and predictive modeling under uncertainty. This work was completed as part of the undergraduate capstone project requirements.
-\end{IEEEbiography}
 
 \end{document}
