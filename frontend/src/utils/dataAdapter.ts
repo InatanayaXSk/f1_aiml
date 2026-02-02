@@ -72,10 +72,10 @@ export const KEY_REGULATION_FEATURES = [
 ];
 
 /**
- * Load Monte Carlo results from outputs/monte_carlo_results.json
+ * Load Monte Carlo results from outputs/monte_carlo_results_calibrated_0.12.json
  */
 export async function loadMonteCarloResults(): Promise<Record<string, any>> {
-  const response = await fetch('/outputs/monte_carlo_results.json');
+  const response = await fetch('/outputs/monte_carlo_results_calibrated_0.12.json');
   return response.json();
 }
 
@@ -150,13 +150,19 @@ export function extractTeamPerformance(
     drivers: Set<string>;
   }> = {};
 
+  const driverStats: Record<string, {
+    baseline: number[];
+    predicted: number[];
+  }> = {};
+
   // Aggregate across all races
   Object.values(monteCarloResults).forEach((race: any) => {
     const current = race.current || {};
     const future = race['2026'] || {};
 
     Object.keys(current).forEach(driverName => {
-      const teamName = extractTeamName(driverName); // Implement team extraction
+      const normalizedName = normalizeDriverName(driverName);
+      const teamName = extractTeamName(normalizedName);
       
       if (!teamStats[teamName]) {
         teamStats[teamName] = {
@@ -166,10 +172,57 @@ export function extractTeamPerformance(
         };
       }
 
+      if (!driverStats[normalizedName]) {
+        driverStats[normalizedName] = {
+          baseline: [],
+          predicted: []
+        };
+      }
+
       teamStats[teamName].baseline.push(current[driverName].mean);
       teamStats[teamName].predicted.push(future[driverName]?.mean || current[driverName].mean);
-      teamStats[teamName].drivers.add(driverName);
+      teamStats[teamName].drivers.add(normalizedName);
+
+      driverStats[normalizedName].baseline.push(current[driverName].mean);
+      driverStats[normalizedName].predicted.push(future[driverName]?.mean || current[driverName].mean);
     });
+  });
+
+  // F1 Points system (2024 onwards)
+  const pointsForPosition = (pos: number): number => {
+    const points: Record<number, number> = {
+      1: 25, 2: 18, 3: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1
+    };
+    return points[Math.round(pos)] || 0;
+  };
+
+  // Calculate total championship points for each driver
+  const driverPoints: Record<string, { baseline: number; predicted: number }> = {};
+  Object.entries(driverStats).forEach(([name, stats]) => {
+    driverPoints[name] = {
+      baseline: stats.baseline.reduce((sum, pos) => sum + pointsForPosition(pos), 0),
+      predicted: stats.predicted.reduce((sum, pos) => sum + pointsForPosition(pos), 0)
+    };
+  });
+
+  // Sort drivers by total points to assign championship positions
+  const baselineSorted = Object.entries(driverPoints)
+    .sort((a, b) => b[1].baseline - a[1].baseline) // Higher points = better position
+    .map(([name], idx) => ({ name, position: idx + 1 }));
+  
+  const predictedSorted = Object.entries(driverPoints)
+    .sort((a, b) => b[1].predicted - a[1].predicted) // Higher points = better position
+    .map(([name], idx) => ({ name, position: idx + 1 }));
+
+  const baselinePositions: Record<string, number> = {};
+  const predictedPositions: Record<string, number> = {};
+  
+  baselineSorted.forEach(({ name, position }) => {
+    baselinePositions[name] = position;
+  });
+  
+  predictedSorted.forEach(({ name, position }) => {
+    predictedPositions[name] = position;
   });
 
   // Convert to TeamPerformance array
@@ -184,8 +237,8 @@ export function extractTeamPerformance(
       name: name as string,
       number: idx + 1,
       teamId: teamName.toLowerCase().replace(/\s+/g, '-'),
-      baseline2025Position: 10,
-      predicted2026Position: 10,
+      baseline2025Position: baselinePositions[name as string] || 20,
+      predicted2026Position: predictedPositions[name as string] || 20,
       confidence: 0.85
     })),
     factorImpacts: {}
@@ -272,22 +325,44 @@ const DRIVER_TEAM_MAP: Record<string, string> = {
   // AlphaTauri / RB
   'Yuki Tsunoda': 'RB',
   'Nyck de Vries': 'RB',
+  'Nyck De Vries': 'RB',
   'Liam Lawson': 'RB',
+  'Isack Hadjar': 'RB',
   // Alfa Romeo / Sauber
   'Valtteri Bottas': 'Sauber',
   'Guanyu Zhou': 'Sauber',
+  'Nico Hulkenberg': 'Sauber',
+  'Gabriel Bortoleto': 'Sauber',
   // Haas
   'Kevin Magnussen': 'Haas',
   'Mick Schumacher': 'Haas',
-  'Nico Hulkenberg': 'Haas',
+  'Oliver Bearman': 'Haas',
+  'Esteban Ocon': 'Haas',
   // Williams
   'Alexander Albon': 'Williams',
   'Nicholas Latifi': 'Williams',
   'Logan Sargeant': 'Williams',
+  'Franco Colapinto': 'Williams',
+  'Carlos Sainz': 'Williams',
+  // Mercedes (2025-2026)
+  'Kimi Antonelli': 'Mercedes',
+  'Andrea Kimi Antonelli': 'Mercedes',
+  // Alpine
+  'Jack Doohan': 'Alpine',
 };
 
 export function getTeamNameForDriver(driverName: string): string {
-  return DRIVER_TEAM_MAP[driverName] || 'Unknown Team';
+  const normalizedName = normalizeDriverName(driverName);
+  return DRIVER_TEAM_MAP[normalizedName] || 'Unknown Team';
+}
+
+function normalizeDriverName(driverName: string): string {
+  // Handle known name variations/duplicates
+  const nameMap: Record<string, string> = {
+    'Andrea Kimi Antonelli': 'Kimi Antonelli',
+    'Nyck De Vries': 'Nyck de Vries',
+  };
+  return nameMap[driverName] || driverName;
 }
 
 function extractTeamName(driverName: string): string {

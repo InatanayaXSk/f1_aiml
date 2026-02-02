@@ -40,13 +40,13 @@ export const TeamProfile = ({ team }: TeamProfileProps) => {
         <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">2025 Baseline</p>
           <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {team.baseline2025}
+            {team.baseline2025.toFixed(4)}
           </p>
         </div>
         <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">2026 Predicted</p>
           <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {team.predicted2026}
+            {team.predicted2026.toFixed(4)}
           </p>
         </div>
       </div>
