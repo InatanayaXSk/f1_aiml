@@ -155,10 +155,3 @@ export const TopMoversTable: React.FC<TopMoversProps> = ({
   );
 };
 
-// HOW TO USE:
-// 1. Save this file as: frontend/src/components/TopMoversTable.tsx
-// 2. In PresentationSummary.tsx, add import:
-//    import { TopMoversTable } from '../components/TopMoversTable';
-//    import monteCarloData from '../../../outputs/monte_carlo_results.json';
-// 3. Add component anywhere in the return():
-//    <TopMoversTable monteCarloData={monteCarloData} topCount={5} />

@@ -15,17 +15,28 @@ interface DriverStats {
 }
 
 const TEAM_COLORS: Record<string, string> = {
+  // Red Bull Racing
   'Verstappen': '#3671C6', 'Perez': '#3671C6',
-  'Hamilton': '#27F4D2', 'Russell': '#27F4D2',
-  'Leclerc': '#E8002D', 'Sainz': '#E8002D',
+  // Mercedes
+  'Hamilton': '#27F4D2', 'Russell': '#27F4D2', 'Antonelli': '#27F4D2',
+  // Ferrari
+  'Leclerc': '#E8002D', 'Sainz': '#E8002D', 'Bearman': '#E8002D',
+  // McLaren
   'Norris': '#FF8000', 'Piastri': '#FF8000',
-  'Alonso': '#229971', 'Stroll': '#229971',
-  'Gasly': '#6692FF', 'Ocon': '#6692FF',
-  'Bottas': '#52E252', 'Zhou': '#52E252',
-  'Magnussen': '#B6BABD', 'Hulkenberg': '#B6BABD',
-  'Tsunoda': '#6692FF', 'Ricciardo': '#6692FF',
-  'Albon': '#64C4FF', 'Sargeant': '#64C4FF',
-  'Bearman': '#E8002D', 'Lawson': '#6692FF',
+  // Aston Martin
+  'Alonso': '#229971', 'Stroll': '#229971', 'Vettel': '#229971',
+  // Alpine
+  'Gasly': '#6692FF', 'Ocon': '#6692FF', 'Doohan': '#6692FF',
+  // Sauber/Alfa Romeo
+  'Bottas': '#52E252', 'Zhou': '#52E252', 'Bortoleto': '#52E252',
+  // Haas
+  'Magnussen': '#B6BABD', 'Hulkenberg': '#B6BABD', 'Bearman': '#B6BABD',
+  // Racing Bulls/AlphaTauri
+  'Tsunoda': '#5E8FAA', 'Ricciardo': '#5E8FAA', 'Lawson': '#5E8FAA', 'Hadjar': '#5E8FAA',
+  // Williams
+  'Albon': '#64C4FF', 'Sargeant': '#64C4FF', 'Colapinto': '#64C4FF',
+  // Other drivers
+  'Schumacher': '#B6BABD', 'Latifi': '#64C4FF', 'Vries': '#6692FF',
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -62,7 +73,7 @@ export function DriverPositionDistribution() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/monte_carlo_results.json')
+    fetch('/monte_carlo_results_calibrated_0.12.json')
       .then(res => res.json())
       .then(result => {
         setData(result);
@@ -124,8 +135,7 @@ export function DriverPositionDistribution() {
         };
       })
       .sort((a, b) => a.mean - b.mean) // Sort by mean position (lower is better)
-      .slice(0, 15); // Top 15 drivers
-
+      .slice(0, 15);
     return formatted;
   }, [data, scenario]);
 
@@ -182,7 +192,7 @@ export function DriverPositionDistribution() {
 
       {/* Box Plot Style Chart */}
       <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-        <ResponsiveContainer width="100%" height={500}>
+        <ResponsiveContainer width="100%" height={Math.max(500, driverStats.length * 35)}>
           <BarChart
             data={driverStats}
             margin={{ top: 20, right: 30, left: 50, bottom: 80 }}

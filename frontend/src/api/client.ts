@@ -17,7 +17,7 @@ const TRACK_DATA_MODULES = import.meta.glob('../../../track_data_*.json', {
   eager: true,
 }) as Record<string, JsonModule>;
 
-const MONTE_CARLO_RESULTS = import('../../../outputs/monte_carlo_results.json').then(
+const MONTE_CARLO_RESULTS = import('../../../outputs/monte_carlo_results_calibrated_0.12.json').then(
   (mod) => (mod as JsonModule).default || mod
 );
 
@@ -26,30 +26,30 @@ const REGULATION_FACTORS = import(
 ).then((mod) => (mod as JsonModule).default || mod);
 
 const SIMULATION_MAPPING: Record<string, string> = {
-  australia: '2022_R01',
-  china: '2022_R02',
-  japan: '2022_R03',
-  bahrain: '2022_R04',
-  'saudi-arabia': '2022_R05',
-  miami: '2022_R06',
-  'emilia-romagna': '2022_R07',
-  monaco: '2022_R08',
-  spain: '2022_R09',
-  canada: '2022_R10',
-  austria: '2022_R11',
-  'great-britain': '2022_R12',
-  belgium: '2022_R13',
-  hungary: '2022_R14',
-  netherlands: '2022_R15',
-  italy: '2022_R16',
-  azerbaijan: '2022_R17',
-  singapore: '2022_R18',
-  'united-states': '2022_R19',
-  mexico: '2022_R20',
-  brazil: '2022_R21',
-  'las-vegas': '2022_R22',
-  qatar: '2022_R23',
-  'abu-dhabi': '2022_R24',
+  australia: '2025_R01',
+  china: '2025_R02',
+  japan: '2025_R03',
+  bahrain: '2025_R04',
+  'saudi-arabia': '2025_R05',
+  miami: '2025_R06',
+  'emilia-romagna': '2025_R07',
+  monaco: '2025_R08',
+  spain: '2025_R09',
+  canada: '2025_R10',
+  austria: '2025_R11',
+  'great-britain': '2025_R12',
+  belgium: '2025_R13',
+  hungary: '2025_R14',
+  netherlands: '2025_R15',
+  italy: '2025_R16',
+  azerbaijan: '2025_R17',
+  singapore: '2025_R18',
+  'united-states': '2025_R19',
+  mexico: '2025_R20',
+  brazil: '2025_R21',
+  'las-vegas': '2025_R22',
+  qatar: '2025_R23',
+  'abu-dhabi': '2025_R24',
 };
 
 async function fetchJson<T>(endpoint: string): Promise<T> {

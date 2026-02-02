@@ -107,10 +107,10 @@ export const Home = () => {
               {topTeam.teamName}
             </p>
             <p className="text-xl text-gray-700 dark:text-gray-300">
-              {topTeam.predicted2026} points
+              {topTeam.predicted2026.toFixed(4)} points
             </p>
             <span className="text-sm text-gray-600 dark:text-gray-400">
-              (+{topTeam.predicted2026 - topTeam.baseline2025} from 2025)
+              (+{(topTeam.predicted2026 - topTeam.baseline2025).toFixed(4)} from 2025)
             </span>
           </div>
         </div>

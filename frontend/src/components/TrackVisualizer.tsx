@@ -585,25 +585,25 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
           ))}
         </div>
 
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4">
+        <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4 min-w-[140px]">
             <p className="text-gray-400 text-xs mb-1">Track Type</p>
             <p className="text-white font-bold text-lg">{trackData.characteristics.track_type_name}</p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4 min-w-[140px]">
             <p className="text-gray-400 text-xs mb-1">Total Corners</p>
             <p className="text-white font-bold text-lg">{trackData.characteristics.corners}</p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4 min-w-[140px]">
             <p className="text-gray-400 text-xs mb-1">Straight Fraction</p>
             <p className="text-white font-bold text-lg">{(trackData.characteristics.straight_fraction * 100).toFixed(1)}%</p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4">
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4 min-w-[140px]">
             <p className="text-gray-400 text-xs mb-1">Overtaking</p>
             <p className="text-white font-bold text-lg">{trackData.characteristics.overtaking_difficulty}/5</p>
           </div>
           {simData?.overtaking && (
-            <div className="bg-gray-800/50 rounded-lg border-2 border-emerald-700 p-4">
+            <div className="bg-gray-800/50 rounded-lg border-2 border-emerald-700 p-4 min-w-[140px]">
               <p className="text-gray-400 text-xs mb-1">2026 Overtaking</p>
               <p className="text-emerald-400 font-bold text-lg">
                 +{simData.overtaking.overtake_increase_pct.toFixed(1)}%
@@ -611,13 +611,13 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
             </div>
           )}
           {simData?.overtaking && (
-            <div className="bg-gray-800/50 rounded-lg border border-blue-700 p-4">
+            <div className="bg-gray-800/50 rounded-lg border border-blue-700 p-4 min-w-[140px]">
               <p className="text-gray-400 text-xs mb-1">Current Overtakes</p>
               <p className="text-white font-bold text-lg">{simData.overtaking.current_avg_overtakes.toFixed(0)}</p>
             </div>
           )}
           {simData?.overtaking && (
-            <div className="bg-gray-800/50 rounded-lg border border-green-700 p-4">
+            <div className="bg-gray-800/50 rounded-lg border border-green-700 p-4 min-w-[140px]">
               <p className="text-gray-400 text-xs mb-1">2026 Overtakes</p>
               <p className="text-green-400 font-bold text-lg">{simData.overtaking['2026_avg_overtakes'].toFixed(0)}</p>
             </div>
