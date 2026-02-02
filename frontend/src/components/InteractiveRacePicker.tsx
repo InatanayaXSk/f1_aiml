@@ -74,7 +74,7 @@ export function InteractiveRacePicker() {
   const [viewMode, setViewMode] = useState<'top10' | 'comparison'>('top10');
 
   useEffect(() => {
-    fetch('/monte_carlo_results.json')
+    fetch('/monte_carlo_results_calibrated_0.12.json')
       .then(res => res.json())
       .then(result => {
         setData(result);

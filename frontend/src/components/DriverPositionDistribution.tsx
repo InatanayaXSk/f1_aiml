@@ -88,6 +88,13 @@ export function DriverPositionDistribution() {
   const driverStats = useMemo(() => {
     if (!data) return [];
 
+    // Helper function to normalize driver names
+    const normalizeDriverName = (name: string): string => {
+      // Remove "Andrea" from "Andrea Kimi Antonelli" to match "Kimi Antonelli"
+      if (name === 'Andrea Kimi Antonelli') return 'Kimi Antonelli';
+      return name;
+    };
+
     const allDriverStats: Record<string, { totalMean: number; totalStd: number; count: number; min: number; max: number; p5: number; p95: number }> = {};
 
     // Aggregate across all races
@@ -96,8 +103,9 @@ export function DriverPositionDistribution() {
       if (!raceData) return;
 
       Object.entries(raceData).forEach(([driver, stats]: [string, any]) => {
-        if (!allDriverStats[driver]) {
-          allDriverStats[driver] = {
+        const normalizedDriver = normalizeDriverName(driver);
+        if (!allDriverStats[normalizedDriver]) {
+          allDriverStats[normalizedDriver] = {
             totalMean: 0,
             totalStd: 0,
             count: 0,
@@ -107,13 +115,13 @@ export function DriverPositionDistribution() {
             p95: 0
           };
         }
-        allDriverStats[driver].totalMean += stats.mean;
-        allDriverStats[driver].totalStd += stats.std;
-        allDriverStats[driver].count += 1;
-        allDriverStats[driver].min = Math.min(allDriverStats[driver].min, stats.min);
-        allDriverStats[driver].max = Math.max(allDriverStats[driver].max, stats.max);
-        allDriverStats[driver].p5 += stats.percentile_5;
-        allDriverStats[driver].p95 += stats.percentile_95;
+        allDriverStats[normalizedDriver].totalMean += stats.mean;
+        allDriverStats[normalizedDriver].totalStd += stats.std;
+        allDriverStats[normalizedDriver].count += 1;
+        allDriverStats[normalizedDriver].min = Math.min(allDriverStats[normalizedDriver].min, stats.min);
+        allDriverStats[normalizedDriver].max = Math.max(allDriverStats[normalizedDriver].max, stats.max);
+        allDriverStats[normalizedDriver].p5 += stats.percentile_5;
+        allDriverStats[normalizedDriver].p95 += stats.percentile_95;
       });
     });
 

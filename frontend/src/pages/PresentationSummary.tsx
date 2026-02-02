@@ -67,8 +67,15 @@ export function PresentationSummary() {
           : 0;
         
         // Load monte carlo results to compute driver-specific changes
-        const monteCarloModule = await import('../../../outputs/monte_carlo_results.json');
+        const monteCarloModule = await import('../../../outputs/monte_carlo_results_calibrated_0.12.json');
         const monteCarlo = monteCarloModule.default || monteCarloModule;
+        
+        // Helper function to normalize driver names
+        const normalizeDriverName = (name: string): string => {
+          // Remove "Andrea" from "Andrea Kimi Antonelli" to match "Kimi Antonelli"
+          if (name === 'Andrea Kimi Antonelli') return 'Kimi Antonelli';
+          return name;
+        };
         
         // Compute driver changes across all races
         const driverChanges = new Map<string, { currentSum: number, futureSum: number, count: number }>();
@@ -81,11 +88,12 @@ export function PresentationSummary() {
             const future = raceData['2026'][driverName]?.mean;
             
             if (current !== undefined && future !== undefined) {
-              const existing = driverChanges.get(driverName) || { currentSum: 0, futureSum: 0, count: 0 };
+              const normalizedName = normalizeDriverName(driverName);
+              const existing = driverChanges.get(normalizedName) || { currentSum: 0, futureSum: 0, count: 0 };
               existing.currentSum += current;
               existing.futureSum += future;
               existing.count += 1;
-              driverChanges.set(driverName, existing);
+              driverChanges.set(normalizedName, existing);
             }
           });
         });

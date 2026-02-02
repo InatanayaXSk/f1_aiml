@@ -195,33 +195,30 @@ export function extractTeamPerformance(
     const overallChange = avgPredicted - avgBaseline; // Negative is better (lower position)
     
     // Calculate impact scores for each regulation factor
-    // These are relative impacts based on team performance change
+    // Use absolute value - we show magnitude of impact regardless of direction
+    const absChange = Math.abs(overallChange);
+    
+    // Scale factor: amplify small changes for visibility (0.01 position change -> 0.2 scale factor)
+    // This makes the heatmap show relative impacts even when absolute changes are minimal
+    const scaleFactor = Math.min(1, absChange*10);
+    
     const impacts: Record<string, number> = {};
     
-    // Power ratio impact (ERS/Hybrid power) - biggest factor
-    // Teams that benefit more from power see larger position improvements
-    const powerImpact = overallChange < 0 ? Math.abs(overallChange) * 0.40 : 0;
-    impacts['power_ratio'] = Math.max(0, Math.min(1, powerImpact / 2)); // Normalize to 0-1
+    // Use IDs that match regulation_factors_breakdown.json
+    // Hybrid Power - biggest factor (40% weight from impact_score 0.4)
+    impacts['hybrid_power'] = scaleFactor * 0.40;
     
-    // Aero impact - medium factor
-    const aeroImpact = overallChange < 0 ? Math.abs(overallChange) * 0.25 : 0;
-    impacts['aero_coeff'] = Math.max(0, Math.min(1, aeroImpact / 2));
+    // Boost Mode - second biggest factor (35% weight from impact_score 0.35)
+    impacts['boost_mode'] = scaleFactor * 0.35;
     
-    // Weight impact - smaller factor
-    const weightImpact = overallChange < 0 ? Math.abs(overallChange) * 0.15 : 0;
-    impacts['weight_ratio'] = Math.max(0, Math.min(1, weightImpact / 2));
+    // Chassis - weight reduction (15% weight from impact_score 0.15)
+    impacts['chassis'] = scaleFactor * 0.15;
     
-    // Fuel flow impact
-    const fuelImpact = overallChange < 0 ? Math.abs(overallChange) * 0.10 : 0;
-    impacts['fuel_flow_ratio'] = Math.max(0, Math.min(1, fuelImpact / 2));
+    // Fuel - efficiency improvements (8% weight from impact_score 0.08)
+    impacts['fuel'] = scaleFactor * 0.08;
     
-    // Tire grip impact - smallest factor
-    const tireImpact = overallChange < 0 ? Math.abs(overallChange) * 0.05 : 0;
-    impacts['tire_grip_ratio'] = Math.max(0, Math.min(1, tireImpact / 2));
-    
-    // Driver form impact (not a regulation factor, but included for completeness)
-    const driverFormImpact = overallChange < 0 ? Math.abs(overallChange) * 0.05 : 0;
-    impacts['avg_pos_last5'] = Math.max(0, Math.min(1, driverFormImpact / 2));
+    // Tyres - grip changes (2% weight from impact_score 0.02)
+    impacts['tyres'] = scaleFactor * 0.02;
     
     return impacts;
   };

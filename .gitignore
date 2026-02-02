@@ -113,3 +113,5 @@ desktop.ini
 # ✅ README.md (create one for GitHub)
 *.docx
 cache/
+
+outputs/json/track_sector_analysis_*.json
