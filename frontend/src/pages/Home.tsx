@@ -27,10 +27,24 @@ export const Home = () => {
   const avgConfidence =
     simulations?.reduce((acc, sim) => acc + sim.confidence, 0) / (simulations?.length || 1);
 
-  const topTeam = teams?.sort((a, b) => b.predicted2026 - a.predicted2026)[0];
+  // Top performer is team with best (lowest) predicted position
+  // Also consider improvement from baseline
+  const topTeam = teams && teams.length > 0
+    ? teams.reduce((best, current) => {
+        // Lower position is better, but also consider improvement
+        const bestScore = best.predicted2026 + (best.baseline2025 - best.predicted2026) * 0.5;
+        const currentScore = current.predicted2026 + (current.baseline2025 - current.predicted2026) * 0.5;
+        return currentScore < bestScore ? current : best;
+      })
+    : null;
+  
   const avgTeamImprovement =
     teams?.reduce((acc, team) => {
-      const change = ((team.predicted2026 - team.baseline2025) / team.baseline2025) * 100;
+      // Improvement is when predicted position is lower (better) than baseline
+      const positionChange = team.baseline2025 - team.predicted2026; // Positive = improvement
+      const change = team.baseline2025 > 0 
+        ? (positionChange / team.baseline2025) * 100 
+        : 0;
       return acc + change;
     }, 0) / (teams?.length || 1);
 
@@ -102,16 +116,24 @@ export const Home = () => {
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
             Top Predicted Performer 2026
           </h3>
-          <div className="flex items-baseline gap-4">
+          <div className="flex items-baseline gap-4 flex-wrap">
             <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
               {topTeam.teamName}
             </p>
             <p className="text-xl text-gray-700 dark:text-gray-300">
-              {topTeam.predicted2026.toFixed(4)} points
+              Avg Position: P{topTeam.predicted2026.toFixed(1)}
             </p>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              (+{(topTeam.predicted2026 - topTeam.baseline2025).toFixed(4)} from 2025)
-            </span>
+            {topTeam.baseline2025 - topTeam.predicted2026 !== 0 && (
+              <span className={`text-sm font-semibold ${
+                topTeam.baseline2025 > topTeam.predicted2026
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400'
+              }`}>
+                {topTeam.baseline2025 > topTeam.predicted2026 ? '↓' : '↑'}
+                {Math.abs(topTeam.baseline2025 - topTeam.predicted2026).toFixed(1)} positions
+                {topTeam.baseline2025 > topTeam.predicted2026 ? ' improvement' : ' decline'} from 2025
+              </span>
+            )}
           </div>
         </div>
       )}

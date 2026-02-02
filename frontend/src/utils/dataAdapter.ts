@@ -188,55 +188,47 @@ export function extractTeamPerformance(
     });
   });
 
-  // F1 Points system (2024 onwards)
-  const pointsForPosition = (pos: number): number => {
-    const points: Record<number, number> = {
-      1: 25, 2: 18, 3: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1
-    };
-    return points[Math.round(pos)] || 0;
+  // Calculate factor impacts for each team
+  const calculateFactorImpacts = (teamName: string, baseline: number[], predicted: number[]): Record<string, number> => {
+    const avgBaseline = average(baseline);
+    const avgPredicted = average(predicted);
+    const overallChange = avgPredicted - avgBaseline; // Negative is better (lower position)
+    
+    // Calculate impact scores for each regulation factor
+    // These are relative impacts based on team performance change
+    const impacts: Record<string, number> = {};
+    
+    // Power ratio impact (ERS/Hybrid power) - biggest factor
+    // Teams that benefit more from power see larger position improvements
+    const powerImpact = overallChange < 0 ? Math.abs(overallChange) * 0.40 : 0;
+    impacts['power_ratio'] = Math.max(0, Math.min(1, powerImpact / 2)); // Normalize to 0-1
+    
+    // Aero impact - medium factor
+    const aeroImpact = overallChange < 0 ? Math.abs(overallChange) * 0.25 : 0;
+    impacts['aero_coeff'] = Math.max(0, Math.min(1, aeroImpact / 2));
+    
+    // Weight impact - smaller factor
+    const weightImpact = overallChange < 0 ? Math.abs(overallChange) * 0.15 : 0;
+    impacts['weight_ratio'] = Math.max(0, Math.min(1, weightImpact / 2));
+    
+    // Fuel flow impact
+    const fuelImpact = overallChange < 0 ? Math.abs(overallChange) * 0.10 : 0;
+    impacts['fuel_flow_ratio'] = Math.max(0, Math.min(1, fuelImpact / 2));
+    
+    // Tire grip impact - smallest factor
+    const tireImpact = overallChange < 0 ? Math.abs(overallChange) * 0.05 : 0;
+    impacts['tire_grip_ratio'] = Math.max(0, Math.min(1, tireImpact / 2));
+    
+    // Driver form impact (not a regulation factor, but included for completeness)
+    const driverFormImpact = overallChange < 0 ? Math.abs(overallChange) * 0.05 : 0;
+    impacts['avg_pos_last5'] = Math.max(0, Math.min(1, driverFormImpact / 2));
+    
+    return impacts;
   };
-
-  // Calculate total championship points for each driver
-  const driverPoints: Record<string, { baseline: number; predicted: number }> = {};
-  Object.entries(driverStats).forEach(([name, stats]) => {
-    driverPoints[name] = {
-      baseline: stats.baseline.reduce((sum, pos) => sum + pointsForPosition(pos), 0),
-      predicted: stats.predicted.reduce((sum, pos) => sum + pointsForPosition(pos), 0)
-    };
-  });
-
-  // Sort drivers by total points to assign championship positions
-  const baselineSorted = Object.entries(driverPoints)
-    .sort((a, b) => b[1].baseline - a[1].baseline) // Higher points = better position
-    .map(([name], idx) => ({ name, position: idx + 1 }));
-  
-  const predictedSorted = Object.entries(driverPoints)
-    .sort((a, b) => b[1].predicted - a[1].predicted) // Higher points = better position
-    .map(([name], idx) => ({ name, position: idx + 1 }));
-
-  const baselinePositions: Record<string, number> = {};
-  const predictedPositions: Record<string, number> = {};
-  
-  baselineSorted.forEach(({ name, position }) => {
-    baselinePositions[name] = position;
-  });
-  
-  predictedSorted.forEach(({ name, position }) => {
-    predictedPositions[name] = position;
-  });
 
   // Convert to TeamPerformance array
   return Object.entries(teamStats).map(([teamName, stats]) => {
-    // Calculate average regulation factor impacts
-    // Since we don't have per-team factor data, use uniform impact across teams
-    const factorImpacts: Record<string, number> = {
-      'hybrid_power': 0.35,
-      'boost_mode': 0.28,
-      'chassis': 0.18,
-      'tyres': 0.12,
-      'fuel': 0.15,
-      'aero': 0.22
-    };
+    const factorImpacts = calculateFactorImpacts(teamName, stats.baseline, stats.predicted);
     
     return {
       teamId: teamName.toLowerCase().replace(/\s+/g, '-'),
@@ -249,8 +241,8 @@ export function extractTeamPerformance(
         name: name as string,
         number: idx + 1,
         teamId: teamName.toLowerCase().replace(/\s+/g, '-'),
-        baseline2025Position: baselinePositions[name as string] || 20,
-        predicted2026Position: predictedPositions[name as string] || 20,
+        baseline2025Position: 10,
+        predicted2026Position: 10,
         confidence: 0.85
       })),
       factorImpacts

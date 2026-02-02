@@ -104,9 +104,18 @@ def load_f1_data(
     *,
     force_refresh: bool = False,
     cache_path: Optional[Path] = None,
-    circuits_path: Optional[Path] = None
+    circuits_path: Optional[Path] = None,
+    filter_retired_drivers: bool = True
 ) -> pd.DataFrame:
-    """Load race results for given seasons from FastF1 and enrich with metadata."""
+    """Load race results for given seasons from FastF1 and enrich with metadata.
+    
+    Args:
+        seasons: List of seasons to load
+        force_refresh: Force refresh of cached data
+        cache_path: Optional path to cache file
+        circuits_path: Optional path to circuits metadata
+        filter_retired_drivers: If True, filter out retired/inactive drivers
+    """
 
     if fastf1 is None:
         raise ImportError("FastF1 is required. Install with 'pip install fastf1'.")
@@ -119,7 +128,10 @@ def load_f1_data(
 
     if cache_file.exists() and not force_refresh:
         LOGGER.info("Loading cached race dataset from %s", cache_file)
-        return pd.read_csv(cache_file)
+        dataset = pd.read_csv(cache_file)
+        if filter_retired_drivers:
+            dataset = _filter_retired_drivers(dataset)
+        return dataset
 
     circuits_meta = load_circuits_metadata(circuits_path)
     circuits_meta = circuits_meta.drop_duplicates(subset=["circuit_key"])
@@ -167,6 +179,10 @@ def load_f1_data(
         raise RuntimeError("No race data retrieved from FastF1.")
 
     dataset = pd.concat(all_results, ignore_index=True)
+    
+    if filter_retired_drivers:
+        dataset = _filter_retired_drivers(dataset)
+    
     dataset.to_csv(cache_file, index=False)
     LOGGER.info("Saved race dataset to %s", cache_file)
     return dataset
@@ -308,6 +324,33 @@ def _timedelta_to_seconds(value) -> Optional[float]:
         return float(pd.to_timedelta(value).total_seconds())
     except Exception:  # pragma: no cover - defensive
         return None
+
+
+def _filter_retired_drivers(dataset: pd.DataFrame) -> pd.DataFrame:
+    """Filter out retired/inactive drivers from dataset."""
+    try:
+        from .driver_status import is_driver_active
+        
+        if "driver_name" not in dataset.columns:
+            LOGGER.warning("driver_name column not found, skipping driver filtering")
+            return dataset
+        
+        initial_count = len(dataset)
+        dataset = dataset[dataset["driver_name"].apply(is_driver_active)]
+        filtered_count = len(dataset)
+        
+        if initial_count != filtered_count:
+            LOGGER.info(
+                "Filtered out %d rows from retired/inactive drivers (%d remaining)",
+                initial_count - filtered_count,
+                filtered_count
+            )
+    except ImportError:
+        LOGGER.warning("driver_status module not available, skipping driver filtering")
+    except Exception as e:
+        LOGGER.warning(f"Error filtering retired drivers: {e}, continuing without filter")
+    
+    return dataset
 
 
 __all__ = [

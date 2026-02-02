@@ -43,7 +43,7 @@ export const CircuitAnalyzer = () => {
               <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{track.name}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">{track.country}</p>
             </div>
-            {Math.abs(impactDelta) >= 0.05 && (
+            {Math.abs(impactDelta) > 0.01 && (
               <div
                 className={`flex items-center gap-1 px-3 py-1 rounded-full ${impactDelta > 0
                   ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
