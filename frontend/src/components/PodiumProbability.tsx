@@ -79,7 +79,7 @@ export const PodiumProbability: React.FC = () => {
     if (!monteCarloData) return [];
     return Object.entries(monteCarloData).map(([key, data]) => ({
       key,
-      label: `${data.event_name} (${key.replace('_', ' ')})`
+      label: data.event_name || key.replace('_', ' ').replace(/(\d{4})_R(\d+)/, '$1 Round $2')
     }));
   }, [monteCarloData]);
 

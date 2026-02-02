@@ -43,26 +43,24 @@ export const CircuitAnalyzer = () => {
               <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{track.name}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">{track.country}</p>
             </div>
-            <div
-              className={`flex items-center gap-1 px-3 py-1 rounded-full ${impactDelta > 0
-                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                : impactDelta < 0
-                  ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-                }`}
-            >
-              {impactDelta > 0 ? (
-                <TrendingUp className="w-4 h-4" />
-              ) : impactDelta < 0 ? (
-                <TrendingDown className="w-4 h-4" />
-              ) : (
-                <Activity className="w-4 h-4" />
-              )}
-              <span className="text-sm font-semibold">
-                {impactDelta > 0 ? '+' : ''}
-                {impactDelta.toFixed(1)}%
-              </span>
-            </div>
+            {Math.abs(impactDelta) > 0.01 && (
+              <div
+                className={`flex items-center gap-1 px-3 py-1 rounded-full ${impactDelta > 0
+                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                  : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                  }`}
+              >
+                {impactDelta > 0 ? (
+                  <TrendingUp className="w-4 h-4" />
+                ) : (
+                  <TrendingDown className="w-4 h-4" />
+                )}
+                <span className="text-sm font-semibold">
+                  {impactDelta > 0 ? '+' : ''}
+                  {impactDelta.toFixed(1)}%
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3 mb-4">

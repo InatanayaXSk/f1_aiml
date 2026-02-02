@@ -172,24 +172,66 @@ export function extractTeamPerformance(
     });
   });
 
+  // Calculate factor impacts for each team
+  const calculateFactorImpacts = (teamName: string, baseline: number[], predicted: number[]): Record<string, number> => {
+    const avgBaseline = average(baseline);
+    const avgPredicted = average(predicted);
+    const overallChange = avgPredicted - avgBaseline; // Negative is better (lower position)
+    
+    // Calculate impact scores for each regulation factor
+    // These are relative impacts based on team performance change
+    const impacts: Record<string, number> = {};
+    
+    // Power ratio impact (ERS/Hybrid power) - biggest factor
+    // Teams that benefit more from power see larger position improvements
+    const powerImpact = overallChange < 0 ? Math.abs(overallChange) * 0.40 : 0;
+    impacts['power_ratio'] = Math.max(0, Math.min(1, powerImpact / 2)); // Normalize to 0-1
+    
+    // Aero impact - medium factor
+    const aeroImpact = overallChange < 0 ? Math.abs(overallChange) * 0.25 : 0;
+    impacts['aero_coeff'] = Math.max(0, Math.min(1, aeroImpact / 2));
+    
+    // Weight impact - smaller factor
+    const weightImpact = overallChange < 0 ? Math.abs(overallChange) * 0.15 : 0;
+    impacts['weight_ratio'] = Math.max(0, Math.min(1, weightImpact / 2));
+    
+    // Fuel flow impact
+    const fuelImpact = overallChange < 0 ? Math.abs(overallChange) * 0.10 : 0;
+    impacts['fuel_flow_ratio'] = Math.max(0, Math.min(1, fuelImpact / 2));
+    
+    // Tire grip impact - smallest factor
+    const tireImpact = overallChange < 0 ? Math.abs(overallChange) * 0.05 : 0;
+    impacts['tire_grip_ratio'] = Math.max(0, Math.min(1, tireImpact / 2));
+    
+    // Driver form impact (not a regulation factor, but included for completeness)
+    const driverFormImpact = overallChange < 0 ? Math.abs(overallChange) * 0.05 : 0;
+    impacts['avg_pos_last5'] = Math.max(0, Math.min(1, driverFormImpact / 2));
+    
+    return impacts;
+  };
+
   // Convert to TeamPerformance array
-  return Object.entries(teamStats).map(([teamName, stats]) => ({
-    teamId: teamName.toLowerCase().replace(/\s+/g, '-'),
-    teamName,
-    constructor: teamName,
-    baseline2025: average(stats.baseline),
-    predicted2026: average(stats.predicted),
-    drivers: Array.from(stats.drivers).map((name, idx) => ({
-      id: `${teamName}-${idx}`,
-      name: name as string,
-      number: idx + 1,
+  return Object.entries(teamStats).map(([teamName, stats]) => {
+    const factorImpacts = calculateFactorImpacts(teamName, stats.baseline, stats.predicted);
+    
+    return {
       teamId: teamName.toLowerCase().replace(/\s+/g, '-'),
-      baseline2025Position: 10,
-      predicted2026Position: 10,
-      confidence: 0.85
-    })),
-    factorImpacts: {}
-  }));
+      teamName,
+      constructor: teamName,
+      baseline2025: average(stats.baseline),
+      predicted2026: average(stats.predicted),
+      drivers: Array.from(stats.drivers).map((name, idx) => ({
+        id: `${teamName}-${idx}`,
+        name: name as string,
+        number: idx + 1,
+        teamId: teamName.toLowerCase().replace(/\s+/g, '-'),
+        baseline2025Position: 10,
+        predicted2026Position: 10,
+        confidence: 0.85
+      })),
+      factorImpacts
+    };
+  });
 }
 
 /**
