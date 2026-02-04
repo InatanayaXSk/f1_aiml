@@ -3,11 +3,10 @@ import { KEY_REGULATION_FEATURES } from '../utils/dataAdapter';
 
 const FEATURE_ICONS = {
   power_ratio: Zap,
-  aero_coeff: Activity,
+  boost_mode: Activity,
   weight_ratio: Weight,
-  fuel_flow_ratio: Fuel,
   tire_grip_ratio: Disc,
-  avg_pos_last5: TrendingUp,
+  fuel_flow_ratio: Fuel,
 };
 
 interface FeatureCardProps {
@@ -65,10 +64,10 @@ export function RegulationFeatures() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          2026 Regulation Key Features
+          2026 FIA Regulation Changes
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          These 6 features drive the Monte Carlo simulation predictions for 2026 regulation impacts
+          Five key technical modifications that form the basis of our Monte Carlo simulation analysis
         </p>
       </div>
 
@@ -80,37 +79,37 @@ export function RegulationFeatures() {
 
       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
         <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
-          How These Features Work
+          2026 Regulation Technical Details
         </h3>
         <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
           <li className="flex items-start">
-            <span className="mr-2">•</span>
+            <span className="mr-2">1.</span>
             <span>
-              <strong>ERS Power Split</strong>: The biggest change - electric power increases from 15% to 50% of total power output
+              <strong>Hybrid Power Enhancement (3.33× multiplier)</strong>: Electric power contribution increases from 15% to 50% of total power output, fundamentally altering power unit architecture and energy deployment strategies
             </span>
           </li>
           <li className="flex items-start">
-            <span className="mr-2">•</span>
+            <span className="mr-2">2.</span>
             <span>
-              <strong>Active Aero</strong>: Movable aerodynamic elements adjust in real-time for optimal efficiency
+              <strong>Active Aerodynamics & Boost (1.25× multiplier)</strong>: Driver-activated boost systems provide additional power for overtaking maneuvers, replacing the fixed DRS zones with flexible energy deployment
             </span>
           </li>
           <li className="flex items-start">
-            <span className="mr-2">•</span>
+            <span className="mr-2">3.</span>
             <span>
-              <strong>Weight Reduction</strong>: 30kg lighter cars improve acceleration and cornering performance
+              <strong>Chassis Weight Reduction (0.962× multiplier)</strong>: Minimum chassis weight decreases from 798 kg to 768 kg, improving power-to-weight ratio and potentially enhancing cornering performance
             </span>
           </li>
           <li className="flex items-start">
-            <span className="mr-2">•</span>
+            <span className="mr-2">4.</span>
             <span>
-              <strong>Fuel Flow</strong>: Reduced flow rate pushes teams toward maximum efficiency strategies
+              <strong>Tire Grip Reduction (0.94× multiplier)</strong>: New tire compounds with reduced contact patch area decrease mechanical grip, placing greater emphasis on aerodynamic efficiency
             </span>
           </li>
           <li className="flex items-start">
-            <span className="mr-2">•</span>
+            <span className="mr-2">5.</span>
             <span>
-              <strong>Tire Spec</strong>: New low-profile tires slightly reduce mechanical grip
+              <strong>Sustainable Fuel Limitation (0.75× multiplier)</strong>: Sustainable fuel mandates with reduced flow rates emphasize energy efficiency over peak power delivery
             </span>
           </li>
         </ul>

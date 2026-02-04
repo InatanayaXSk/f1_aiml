@@ -25,6 +25,7 @@ export interface RegulationFactor {
   impact: number;
   category: 'power' | 'aero' | 'weight' | 'tire' | 'fuel';
   description: string;
+  multiplier: number;
 }
 
 export interface TeamPerformance {

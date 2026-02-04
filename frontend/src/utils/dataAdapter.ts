@@ -13,63 +13,77 @@ import type {
   CircuitComparison 
 } from '../types';
 
-// === TOP 6 FEATURES TO DISPLAY ===
+// === 2026 REGULATION FACTORS (FROM RESEARCH PAPER) ===
 export const KEY_REGULATION_FEATURES = [
   {
     id: 'power_ratio',
-    name: 'ERS Power Split',
+    name: 'Hybrid Power Enhancement',
     category: 'power' as const,
-    description: '50% electric power (up from 15%)',
+    description: 'Electric power contribution increases from 15% to 50% of total power output, fundamentally altering power unit architecture',
     baseline: 0.15,
     target2026: 0.50,
     multiplier: 3.33
   },
   {
-    id: 'aero_coeff',
-    name: 'Active Aerodynamics',
+    id: 'boost_mode',
+    name: 'Active Aerodynamics & Boost',
     category: 'aero' as const,
-    description: 'Movable aero elements for efficiency',
+    description: 'Driver-activated boost systems provide additional power for overtaking, replacing fixed DRS zones',
     baseline: 1.00,
-    target2026: 1.05,
-    multiplier: 1.05
+    target2026: 1.25,
+    multiplier: 1.25
   },
   {
     id: 'weight_ratio',
-    name: 'Chassis Weight',
+    name: 'Chassis Weight Reduction',
     category: 'weight' as const,
-    description: '768kg minimum (down from 798kg)',
-    baseline: 1.00,
-    target2026: 0.962,
+    description: 'Minimum chassis weight decreases from 798 kg to 768 kg, improving power-to-weight ratio',
+    baseline: 798,
+    target2026: 768,
     multiplier: 0.962
   },
   {
-    id: 'fuel_flow_ratio',
-    name: 'Fuel Flow Limit',
-    category: 'fuel' as const,
-    description: 'Reduced flow rate with efficiency focus',
-    baseline: 1.00,
-    target2026: 0.75,
-    multiplier: 0.75
-  },
-  {
     id: 'tire_grip_ratio',
-    name: 'Tire Specification',
+    name: 'Tire Grip Reduction',
     category: 'tire' as const,
-    description: 'New 18-inch low-profile tires',
+    description: 'New tire compounds with reduced contact patch area decrease mechanical grip',
     baseline: 1.00,
     target2026: 0.94,
     multiplier: 0.94
   },
   {
-    id: 'avg_pos_last5',
-    name: 'Driver Form',
-    category: 'power' as const,
-    description: 'Average position over last 5 races',
-    baseline: 10.0,
-    target2026: 10.0,
-    multiplier: 1.0
+    id: 'fuel_flow_ratio',
+    name: 'Sustainable Fuel Limitation',
+    category: 'fuel' as const,
+    description: 'Sustainable fuel mandates with reduced flow rates emphasize energy efficiency over peak power',
+    baseline: 1.00,
+    target2026: 0.75,
+    multiplier: 0.75
   }
 ];
+
+// === TEAM HEATMAP MULTIPLIERS ===
+const REGULATION_MULTIPLIERS: Record<string, Record<string, number>> = {
+  hybrid_power: {
+    power_ratio: 3.33
+  },
+  boost_mode: {
+    power_ratio: 1.25,
+    fuel_efficiency_rating: 1.05,
+    overtake_power_boost: 1.15,
+    ers_deployment_flexibility: 1.4
+  },
+  chassis: {
+    weight_ratio: 0.962
+  },
+  tyres: {
+    tire_grip_ratio: 0.94
+  },
+  fuel: {
+    fuel_flow_ratio: 0.75,
+    fuel_efficiency_rating: 1.15
+  }
+};
 
 /**
  * Load Monte Carlo results from outputs/monte_carlo_results_calibrated_0.12.json
@@ -155,6 +169,16 @@ export function extractTeamPerformance(
     predicted: number[];
   }> = {};
 
+  const driverPoints: Record<string, { baseline: number; predicted: number }> = {};
+
+  // F1 Points system (2024 onwards)
+  const pointsForPosition = (pos: number): number => {
+    const points: Record<number, number> = {
+      1: 25, 2: 18, 3: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1
+    };
+    return points[pos] || 0;
+  };
+
   // Aggregate across all races
   Object.values(monteCarloResults).forEach((race: any) => {
     const current = race.current || {};
@@ -179,6 +203,13 @@ export function extractTeamPerformance(
         };
       }
 
+      if (!driverPoints[normalizedName]) {
+        driverPoints[normalizedName] = {
+          baseline: 0,
+          predicted: 0
+        };
+      }
+
       teamStats[teamName].baseline.push(current[driverName].mean);
       teamStats[teamName].predicted.push(future[driverName]?.mean || current[driverName].mean);
       teamStats[teamName].drivers.add(normalizedName);
@@ -186,6 +217,57 @@ export function extractTeamPerformance(
       driverStats[normalizedName].baseline.push(current[driverName].mean);
       driverStats[normalizedName].predicted.push(future[driverName]?.mean || current[driverName].mean);
     });
+
+    // Award points based on per-race ranking (lower mean = better finish)
+    const baselineOrder = Object.keys(current)
+      .map(name => ({
+        name: normalizeDriverName(name),
+        value: current[name].mean
+      }))
+      .sort((a, b) => a.value - b.value);
+
+    baselineOrder.forEach((entry, idx) => {
+      const pos = idx + 1;
+      if (!driverPoints[entry.name]) {
+        driverPoints[entry.name] = { baseline: 0, predicted: 0 };
+      }
+      driverPoints[entry.name].baseline += pointsForPosition(pos);
+    });
+
+    const predictedOrder = Object.keys(current)
+      .map(name => ({
+        name: normalizeDriverName(name),
+        value: (future[name]?.mean ?? current[name].mean)
+      }))
+      .sort((a, b) => a.value - b.value);
+
+    predictedOrder.forEach((entry, idx) => {
+      const pos = idx + 1;
+      if (!driverPoints[entry.name]) {
+        driverPoints[entry.name] = { baseline: 0, predicted: 0 };
+      }
+      driverPoints[entry.name].predicted += pointsForPosition(pos);
+    });
+  });
+
+  // Sort drivers by total points to assign championship positions
+  const baselineSorted = Object.entries(driverPoints)
+    .sort((a, b) => b[1].baseline - a[1].baseline)
+    .map(([name], idx) => ({ name, position: idx + 1 }));
+
+  const predictedSorted = Object.entries(driverPoints)
+    .sort((a, b) => b[1].predicted - a[1].predicted)
+    .map(([name], idx) => ({ name, position: idx + 1 }));
+
+  const baselinePositions: Record<string, number> = {};
+  const predictedPositions: Record<string, number> = {};
+
+  baselineSorted.forEach(({ name, position }) => {
+    baselinePositions[name] = position;
+  });
+
+  predictedSorted.forEach(({ name, position }) => {
+    predictedPositions[name] = position;
   });
 
   // Calculate factor impacts for each team
@@ -203,23 +285,14 @@ export function extractTeamPerformance(
     const scaleFactor = Math.min(1, absChange*10);
     
     const impacts: Record<string, number> = {};
-    
-    // Use IDs that match regulation_factors_breakdown.json
-    // Hybrid Power - biggest factor (40% weight from impact_score 0.4)
-    impacts['hybrid_power'] = scaleFactor * 0.40;
-    
-    // Boost Mode - second biggest factor (35% weight from impact_score 0.35)
-    impacts['boost_mode'] = scaleFactor * 0.35;
-    
-    // Chassis - weight reduction (15% weight from impact_score 0.15)
-    impacts['chassis'] = scaleFactor * 0.15;
-    
-    // Fuel - efficiency improvements (8% weight from impact_score 0.08)
-    impacts['fuel'] = scaleFactor * 0.08;
-    
-    // Tyres - grip changes (2% weight from impact_score 0.02)
-    impacts['tyres'] = scaleFactor * 0.02;
-    
+
+    // Map to KEY_REGULATION_FEATURES IDs
+    KEY_REGULATION_FEATURES.forEach((feature) => {
+      // Normalize the multiplier to a 0-1 scale for heatmap visualization
+      const normalizedImpact = Math.abs(feature.multiplier - 1) / 2.5; // Divide by 2.5 to normalize 3.33 to ~0.93
+      impacts[feature.id] = scaleFactor * normalizedImpact;
+    });
+
     return impacts;
   };
 
@@ -238,8 +311,8 @@ export function extractTeamPerformance(
         name: name as string,
         number: idx + 1,
         teamId: teamName.toLowerCase().replace(/\s+/g, '-'),
-        baseline2025Position: 10,
-        predicted2026Position: 10,
+        baseline2025Position: baselinePositions[name as string] || 20,
+        predicted2026Position: predictedPositions[name as string] || 20,
         confidence: 0.85
       })),
       factorImpacts

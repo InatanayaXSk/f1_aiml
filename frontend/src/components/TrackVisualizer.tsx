@@ -118,21 +118,16 @@ const getTrackZones = (trackId: string, totalPoints: number): TrackZone[] => {
   }
 };
 
+// 2025 Season Circuit Mappings (using official track IDs)
 const SIMULATION_MAPPING: Record<string, string> = {
-  // Legacy mappings
-  monza: "2025_R16",
-  monaco: "2025_R08",
-  silverstone: "2025_R12",
-  spa: "2025_R13",
-  bahrain: "2025_R04",
-
-  // Full 2025 Season Mappings
   'australia': "2025_R01",
   'china': "2025_R02",
   'japan': "2025_R03",
+  'bahrain': "2025_R04",
   'saudi-arabia': "2025_R05",
   'miami': "2025_R06",
   'emilia-romagna': "2025_R07",
+  'monaco': "2025_R08",
   'spain': "2025_R09",
   'canada': "2025_R10",
   'austria': "2025_R11",
@@ -481,7 +476,7 @@ const F1TrackVisualization: React.FC<TrackVisualizerProps> = ({ trackId = 'monza
                 <div className="mt-4 pt-3 border-t-2 border-dashed border-blue-500/30 bg-blue-500/5 p-3 rounded-md">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-blue-400 text-xs font-bold uppercase tracking-wider">Simulation Insights</span>
-                    <span className="bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded text-[10px] uppercase">10k Runs</span>
+                    <span className="bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded text-[10px] uppercase">2000 Runs</span>
                   </div>
 
                   {trackData.characteristics.sector_details?.[hoveredSector] && (

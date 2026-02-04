@@ -61,17 +61,17 @@ export const Home = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
-          title="Total Simulations"
-          value={simulations?.length || 0}
+          title="Total Simulation per track"
+          value={2000}
           icon={Activity}
           description="Monte Carlo simulation runs"
         />
-        <MetricCard
+        {/* <MetricCard
           title="Average Confidence"
           value={`${(avgConfidence * 100).toFixed(1)}%`}
           icon={TrendingUp}
           description="Prediction accuracy"
-        />
+        /> */}
         <MetricCard
           title="Circuits Analyzed"
           value={tracks?.length || 0}

@@ -13,6 +13,7 @@ const HAS_API = Boolean(API_BASE_URL);
 
 type JsonModule = { default: any };
 
+// Load track data files (only from root, not public folder to avoid duplicates)
 const TRACK_DATA_MODULES = import.meta.glob('../../../track_data_*.json', {
   eager: true,
 }) as Record<string, JsonModule>;
@@ -25,6 +26,7 @@ const REGULATION_FACTORS = import(
   '../../../outputs/json/regulation_factors_breakdown.json'
 ).then((mod) => (mod as JsonModule).default || mod);
 
+// 2025 Season Circuit Mappings (using official track IDs)
 const SIMULATION_MAPPING: Record<string, string> = {
   australia: '2025_R01',
   china: '2025_R02',
@@ -112,26 +114,26 @@ const TRACK_METADATA: Record<string, { length: number; laps: number }> = {
 };
 
 function mapTrackDataToTrack(trackId: string, data: any): Track {
-    const metadata = TRACK_METADATA[trackId] || { length: 0, laps: 0 };
+  const metadata = TRACK_METADATA[trackId] || { length: 0, laps: 0 };
 
   // Calculate features based on track characteristics
   const corners = data.characteristics?.corners ?? 10;
   const straightFraction = data.characteristics?.straight_fraction ?? 0.5;
   const overtakingDifficulty = data.characteristics?.overtaking_difficulty ?? 3;
   const trackType = data.characteristics?.track_type_name?.toLowerCase() || '';
-  
+
   // Calculate sector difficulties based on track type and characteristics
   // Street circuits: higher difficulty, High-speed: lower difficulty
   const baseDifficulty = trackType.includes('street') || trackType.includes('tight') ? 7.5 :
-                         trackType.includes('high-speed') ? 3.5 : 5;
-  
+    trackType.includes('high-speed') ? 3.5 : 5;
+
   // Add variation to sector difficulties (not all sectors are equal)
   const sector1Difficulty = Math.min(10, Math.max(1, baseDifficulty + (corners > 15 ? 1 : -0.5)));
   const sector2Difficulty = Math.min(10, Math.max(1, baseDifficulty));
   const sector3Difficulty = Math.min(10, Math.max(1, baseDifficulty + (straightFraction > 0.4 ? -1 : 0.5)));
-  
+
   // Calculate degradation: more corners + street circuits = higher degradation
-  const degradation = Math.min(10, Math.max(1, 
+  const degradation = Math.min(10, Math.max(1,
     (trackType.includes('street') ? 7 : 4) + (corners > 16 ? 2 : corners > 12 ? 1 : 0)
   ));
 
@@ -234,13 +236,17 @@ export const api = {
       return fetchJson('/api/regulations');
     }
 
-    const data = await REGULATION_FACTORS;
-    return (data.factors || []).map((factor: any) => ({
-      id: factor.factor_id,
-      name: factor.factor_name,
-      impact: factor.impact_score,
-      category: getCategoryFromFactorId(factor.factor_id),
-      description: factor.description,
+    // Import KEY_REGULATION_FEATURES from dataAdapter
+    const { KEY_REGULATION_FEATURES } = await import('../utils/dataAdapter');
+    
+    // Use the curated features from dataAdapter which match the research paper
+    return KEY_REGULATION_FEATURES.map((feature) => ({
+      id: feature.id,
+      name: feature.name,
+      impact: Math.abs(feature.multiplier - 1), // Convert multiplier to impact score
+      category: feature.category,
+      description: feature.description,
+      multiplier: feature.multiplier,
     }));
   },
 
@@ -274,16 +280,31 @@ export const api = {
         const raceData = monteCarlo[simKey];
         if (!raceData?.current) return null;
 
-        const drivers = Object.entries(raceData.current)
+        const top5Drivers = Object.entries(raceData.current)
           .map(([driverName, stats]: [string, any]) => ({
             driverName,
             mean: stats.mean,
+            std: stats.std,
+            top1Prob: stats.top1_probability,
+            top3Prob: stats.top3_probability,
           }))
           .sort((a, b) => a.mean - b.mean)
           .slice(0, 5);
 
-        const winnerMean = drivers[0]?.mean ?? 0;
-        const confidence = clamp(1 - stdDev(drivers.map((d) => d.mean)) / 20, 0.5, 0.95);
+        const winner = top5Drivers[0];
+        const winnerMean = winner?.mean ?? 0;
+
+        // Refined Confidence Logic:
+        // Use a non-linear scaling of the standard deviation (stability)
+        // stdScore maps: 0 -> 1.0, 0.5 -> 0.66, 1.0 -> 0.5, 2.0 -> 0.33
+        const stdScore = 1 / (1 + (winner?.std ?? 0.5));
+
+        // Base confidence starts at 60%, boosted by stability (up to 35%) and probability (up to 5%)
+        const confidence = clamp(
+          0.60 + (stdScore * 0.35) + ((winner?.top1Prob ?? winner?.top3Prob ?? 0.5) * 0.05),
+          0.65,
+          0.98
+        );
 
         return {
           id: simKey,
@@ -292,7 +313,7 @@ export const api = {
           date: new Date(2026, 0, index + 1).toISOString(),
           confidence,
           regulationFactors: [],
-          results: drivers.map((driver, position) => {
+          results: top5Drivers.map((driver, position) => {
             const teamName = getTeamNameForDriver(driver.driverName);
             return {
               position: position + 1,

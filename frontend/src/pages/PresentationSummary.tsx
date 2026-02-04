@@ -185,7 +185,6 @@ export function PresentationSummary() {
           value={stats.avgPositionChange.toFixed(3)}
           icon={stats.avgPositionChange > 0 ? TrendingUp : TrendingDown}
           description="Mean position change"
-          change={stats.avgPositionChange}
         />
         <MetricCard
           title="Most Impacted"
@@ -252,7 +251,8 @@ export function PresentationSummary() {
         <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-lg">
           <p className="text-sm text-gray-700 dark:text-gray-300">
             💡 <strong>Key Insight:</strong> The 2026 regulations create minimal competitive advantage because all teams must comply equally. 
-            The biggest impacts occur on power-sensitive tracks where the tripled ERS power (50% vs 15%) matters most.
+            The biggest impacts occur on power-sensitive tracks where the increased hybrid power (15% to 50% electric contribution) and 
+            driver-activated boost systems matter most.
           </p>
         </div>
       </div>

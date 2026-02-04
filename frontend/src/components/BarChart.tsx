@@ -64,7 +64,7 @@ export const BarChart = ({ data, height = 400, onBarClick }: BarChartProps) => {
       .text((d) => String(d));
 
     g.append('g')
-      .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.0%')))
+      .call(d3.axisLeft(y).ticks(5).tickFormat((d) => `${d}×`))
       .style('font-size', '12px');
 
     g.append('text')
@@ -74,7 +74,7 @@ export const BarChart = ({ data, height = 400, onBarClick }: BarChartProps) => {
       .attr('text-anchor', 'middle')
       .style('font-size', '12px')
       .style('fill', 'currentColor')
-      .text('Impact Factor');
+      .text('Regulation Multiplier');
 
     const bars = g
       .selectAll('.bar')

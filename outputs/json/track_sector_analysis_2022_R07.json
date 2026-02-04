@@ -1,56 +1,56 @@
 {
-  "circuit_name": "2022_R07",
+  "circuit_name": "Monaco Grand Prix",
   "circuit_key": "2022_R07",
-  "circuit_type": "mixed",
-  "boost_effectiveness": 0.5,
+  "circuit_type": "street",
+  "boost_effectiveness": 0.25,
   "lap_summary": {
-    "current_avg_lap_time": 9.817,
-    "2026_avg_lap_time": 9.818,
-    "delta_seconds": 0.001,
-    "improvement_pct": 0.01,
-    "boost_contribution": 0.3
+    "current_avg_lap_time": 9.72,
+    "2026_avg_lap_time": 9.718,
+    "delta_seconds": -0.003,
+    "improvement_pct": -0.03,
+    "boost_contribution": 0.15
   },
   "driver_impacts": [
     {
       "driver": "Max Verstappen",
-      "current_avg_position": 2.03,
-      "2026_avg_position": 2.03,
+      "current_avg_position": 2.13,
+      "2026_avg_position": 2.13,
       "position_change": 0.0,
       "improvement": true
     },
     {
       "driver": "Daniel Ricciardo",
-      "current_avg_position": 12.56,
-      "2026_avg_position": 12.58,
+      "current_avg_position": 12.65,
+      "2026_avg_position": 12.67,
       "position_change": -0.02,
       "improvement": false
     },
     {
       "driver": "Lando Norris",
-      "current_avg_position": 5.39,
-      "2026_avg_position": 5.35,
-      "position_change": 0.03,
+      "current_avg_position": 5.35,
+      "2026_avg_position": 5.34,
+      "position_change": 0.01,
       "improvement": true
     },
     {
       "driver": "Sebastian Vettel",
-      "current_avg_position": 9.06,
-      "2026_avg_position": 9.03,
-      "position_change": 0.03,
+      "current_avg_position": 8.89,
+      "2026_avg_position": 8.89,
+      "position_change": 0.01,
       "improvement": true
     },
     {
       "driver": "Nicholas Latifi",
-      "current_avg_position": 14.23,
-      "2026_avg_position": 14.33,
-      "position_change": -0.1,
+      "current_avg_position": 13.7,
+      "2026_avg_position": 13.74,
+      "position_change": -0.04,
       "improvement": false
     },
     {
       "driver": "Pierre Gasly",
-      "current_avg_position": 10.1,
-      "2026_avg_position": 10.06,
-      "position_change": 0.04,
+      "current_avg_position": 10.33,
+      "2026_avg_position": 10.25,
+      "position_change": 0.09,
       "improvement": true
     },
     {
@@ -58,28 +58,28 @@
       "current_avg_position": 1.0,
       "2026_avg_position": 1.0,
       "position_change": 0.0,
-      "improvement": false
+      "improvement": true
     },
     {
       "driver": "Fernando Alonso",
-      "current_avg_position": 6.44,
-      "2026_avg_position": 6.51,
-      "position_change": -0.06,
-      "improvement": false
+      "current_avg_position": 6.56,
+      "2026_avg_position": 6.54,
+      "position_change": 0.01,
+      "improvement": true
     },
     {
       "driver": "Charles Leclerc",
-      "current_avg_position": 4.06,
-      "2026_avg_position": 3.91,
-      "position_change": 0.15,
+      "current_avg_position": 4.14,
+      "2026_avg_position": 4.01,
+      "position_change": 0.13,
       "improvement": true
     },
     {
       "driver": "Lance Stroll",
-      "current_avg_position": 13.07,
-      "2026_avg_position": 13.09,
-      "position_change": -0.02,
-      "improvement": false
+      "current_avg_position": 12.98,
+      "2026_avg_position": 12.97,
+      "position_change": 0.01,
+      "improvement": true
     }
   ]
 }

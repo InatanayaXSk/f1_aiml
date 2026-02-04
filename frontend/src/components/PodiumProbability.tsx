@@ -79,7 +79,12 @@ export const PodiumProbability: React.FC = () => {
     if (!monteCarloData) return [];
     return Object.entries(monteCarloData).map(([key, data]) => ({
       key,
-      label: data.event_name || key.replace('_', ' ').replace(/(\d{4})_R(\d+)/, '$1 Round $2')
+      label: (() => {
+        const baseLabel = data.event_name || key.replace('_', ' ').replace(/(\d{4})_R(\d+)/, '$1 Round $2');
+        const yearMatch = key.match(/^(\d{4})_R\d+/);
+        const year = yearMatch?.[1];
+        return year ? `${baseLabel} (${year})` : baseLabel;
+      })()
     }));
   }, [monteCarloData]);
 
@@ -171,6 +176,7 @@ export const PodiumProbability: React.FC = () => {
               <option key={key} value={key}>{label}</option>
             ))}
           </select>
+          <p className="mt-1 text-xs text-gray-500">Races shown: 2023–2025 seasons</p>
         </div>
 
         {/* Regulation Toggle */}

@@ -3,16 +3,16 @@
   "factors": [
     {
       "factor_id": "hybrid_power",
-      "factor_name": "Hybrid Power",
+      "factor_name": "Hybrid Power Enhancement",
       "multipliers": {
         "power_ratio": 3.33
       },
       "impact_score": 0.4,
-      "description": "100% hybrid power (up from 30%)"
+      "description": "Electric power contribution increases from 15% to 50% of total power output"
     },
     {
       "factor_id": "boost_mode",
-      "factor_name": "Boost Mode",
+      "factor_name": "Boost Button & Overtake Mode",
       "multipliers": {
         "power_ratio": 1.25,
         "fuel_efficiency_rating": 1.05,
@@ -20,35 +20,35 @@
         "ers_deployment_flexibility": 1.4
       },
       "impact_score": 0.35,
-      "description": "Boost Button + Overtake Mode mechanics"
+      "description": "Driver-activated boost systems provide additional power for overtaking"
     },
     {
       "factor_id": "chassis",
-      "factor_name": "Chassis",
+      "factor_name": "Weight Reduction",
       "multipliers": {
         "weight_ratio": 0.962
       },
       "impact_score": 0.15,
-      "description": "Weight reduction to 768kg"
+      "description": "Minimum chassis weight decreases from 798 kg to 768 kg"
     },
     {
       "factor_id": "tyres",
-      "factor_name": "Tyres",
+      "factor_name": "Tire Grip Reduction",
       "multipliers": {
         "tire_grip_ratio": 0.94
       },
       "impact_score": 0.02,
-      "description": "Reduced tire grip"
+      "description": "New tire compounds with reduced contact patch area decrease mechanical grip"
     },
     {
       "factor_id": "fuel",
-      "factor_name": "Fuel",
+      "factor_name": "Fuel Flow Limitation",
       "multipliers": {
         "fuel_flow_ratio": 0.75,
         "fuel_efficiency_rating": 1.15
       },
       "impact_score": 0.08,
-      "description": "Improved fuel efficiency"
+      "description": "Sustainable fuel mandates with reduced flow rates emphasize energy efficiency"
     }
   ],
   "boost_mode_details": {

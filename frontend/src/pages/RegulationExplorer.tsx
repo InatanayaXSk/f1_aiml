@@ -8,11 +8,11 @@ import type { RegulationFactor } from '../types';
 import { Info } from 'lucide-react';
 
 const categoryLabels: Record<string, string> = {
-  power: 'Power Unit',
-  aero: 'Aerodynamics',
-  weight: 'Weight',
+  power: 'Hybrid Power',
+  aero: 'Active Aero',
+  weight: 'Chassis',
   tire: 'Tires',
-  fuel: 'Fuel',
+  fuel: 'Sustainable Fuel',
 };
 
 export const RegulationExplorer = () => {
@@ -36,7 +36,7 @@ export const RegulationExplorer = () => {
   const chartData =
     filteredRegulations?.map((r) => ({
       label: r.name,
-      value: r.impact,
+      value: r.multiplier || 1.0, // Use multiplier instead of impact
       category: r.category,
     })) || [];
 
@@ -46,10 +46,10 @@ export const RegulationExplorer = () => {
     <div className="space-y-8">
       <div>
         <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          Regulation Explorer
+          2026 Regulation Factor Analysis
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          Analyze the impact of 2026 F1 regulations on team performance
+          Impact analysis of five key technical modifications introduced by the 2026 FIA regulations
         </p>
       </div>
 
@@ -78,16 +78,16 @@ export const RegulationExplorer = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-4">
                   <div className="flex-1">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Impact Level</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Regulation Multiplier</p>
                     <div className="flex items-center gap-3">
                       <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                         <div
                           className="bg-blue-600 h-3 rounded-full transition-all duration-500"
-                          style={{ width: `${selectedFactor.impact * 100}%` }}
+                          style={{ width: `${Math.min((selectedFactor.multiplier || 1.0) / 3.5 * 100, 100)}%` }}
                         />
                       </div>
                       <span className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                        {(selectedFactor.impact * 100).toFixed(1)}%
+                        {(selectedFactor.multiplier || 1.0).toFixed(2)}×
                       </span>
                     </div>
                   </div>
@@ -130,11 +130,11 @@ export const RegulationExplorer = () => {
               <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div
                   className="bg-blue-600 h-2 rounded-full"
-                  style={{ width: `${regulation.impact * 100}%` }}
+                  style={{ width: `${Math.min((regulation.multiplier || 1.0) / 3.5 * 100, 100)}%` }}
                 />
               </div>
               <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                {(regulation.impact * 100).toFixed(0)}%
+                {(regulation.multiplier || 1.0).toFixed(2)}×
               </span>
             </div>
           </div>

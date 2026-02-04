@@ -84,6 +84,7 @@ def _summarise_predictions(predictions: np.ndarray, drivers: Iterable[str]) -> D
             "max": float(distribution.max()),
             "percentile_5": float(np.percentile(distribution, 5)),
             "percentile_95": float(np.percentile(distribution, 95)),
+            "top1_probability": float((distribution <= 1).mean()),
             "top3_probability": float((distribution <= 3).mean()),
             "top5_probability": float((distribution <= 5).mean())
         }
